@@ -45,7 +45,7 @@ function thrivehive_instrumentation() {
     $account_id = get_option('th_tracking_code');
 	echo <<<END
 	<script type="text/javascript">
-		var scripturl = (("https:" == document.location.protocol) ? "https://" : "http://") + "qa.thrivehive.com/content/WebTrack/catracker.js";
+		var scripturl = (("https:" == document.location.protocol) ? "https://" : "http://") + "my.thrivehive.com/content/WebTrack/catracker.js";
 		document.write(unescape("%3Cscript src='" + scripturl + "' type='text/javascript'%3E%3C/script%3E"));
 	</script>
 	<script type="text/javascript">
@@ -54,7 +54,7 @@ function thrivehive_instrumentation() {
 		cat.Pause = true; cat.TrackOutboundLinks(); cat.PageView();
 		} catch (err) {document.write("There has been an error initializing web tracking.");}
 	</script>
-	<noscript><img src='http://qa.thrivehive.com?noscript=1&aweid=$account_id&action=PageView'/></noscript>
+	<noscript><img src='http://my.thrivehive.com?noscript=1&aweid=$account_id&action=PageView'/></noscript>
 END;
 }
 add_action('wp_footer', 'thrivehive_instrumentation');
