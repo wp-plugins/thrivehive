@@ -12,7 +12,7 @@ This plugin will automatically instrument a side with ThriveHive's tracking code
 
 == Description ==
 
-This plugin will automatically instrument a side with ThriveHive's tracking code, insert a tracked phone number, and insert a tracked form.
+This plugin will automatically instrument a site with ThriveHive's tracking code, insert a tracked phone number, and insert a tracked form.
 
 == Installation ==
 
