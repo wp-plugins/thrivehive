@@ -39,7 +39,3 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 == Upgrade notice ==
 
-
-
-== Arbitrary section 1 ==
-
