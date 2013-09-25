@@ -1,1 +1,779 @@
-<?php   /*   Plugin Name: ThriveHive   Plugin URI: http://thrivehive.com   Description: A plugin to include ThriveHive's tracking code   Version: 0.4   Author: ThriveHive   Author URI: http://thrivehive.com   */// create menuadd_action('admin_menu', 'thrivehive_create_menu');function thrivehive_create_menu() {		//create new top-level menu	add_menu_page('ThriveHive Plugin Settings', 'ThriveHive', 'administrator', __FILE__, 'thrivehive_settings_page',plugins_url('/images/icon.png', __FILE__));	//call register settings function	add_action( 'admin_init', 'register_thrivehive_settings' );}function register_thrivehive_settings() {	//register settings	register_setting( 'thrivehive-settings-group', 'th_tracking_code' );	register_setting( 'thrivehive-settings-group', 'th_phone_number' );	register_setting( 'thrivehive-settings-group', 'th_form_html' );	register_setting( 'thrivehive-settings-group', 'th_landingform_id' );		register_setting( 'thrivehive-settings-group', 'th_landingform_showfields' );	}function thrivehive_settings_page() {?><div class="wrap"><h2>ThriveHive Settings</h2><p>Please fill out the following information to set up your site with basic tracking assets.</p><form method="post" action="options.php">    <?php settings_fields( 'thrivehive-settings-group' ); ?>    <?php do_settings_fields( 'thrivehive-settings-group', 'thrivehive-settings-group' ); ?>    <table class="form-table">        <tr valign="top">			<th scope="row">ThriveHive Account ID</th>			<td>				<input type="text" name="th_tracking_code" value="<?php echo get_option('th_tracking_code'); ?>" />			</td>        </tr>        <tr valign="top">			<th scope="row">ThriveHive Phone Number</th>			<td>				<input type="text" name="th_phone_number" value="<?php echo get_option('th_phone_number'); ?>" />			</td>			</tr>        <tr valign="top">        <th scope="row">ThriveHive Contact Us Form HTML</th>        <td>			<textarea rows="15" cols="100" name="th_form_html" /><?php echo htmlentities(get_option('th_form_html')); ?></textarea>		</td>        </tr>		<tr valign="top">			<th scope="row">ThriveHive Landing Page Form ID</th>			<td>				<input type="text" name="th_landingform_id" value="<?php echo get_option('th_landingform_id'); ?>" />			</td>		</tr>        <!--<tr valign="top">			<td>				<div class="checkboxes">					<input type="checkbox" name="th_landingform_showfields[0]" value="<?php echo get_option('th_landingform_showfields'); ?>" />					<label>First Name</label>				</div>			</td>		</tr>-->    </table>    <p class="submit">    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />    </p></form></div><?php } ?><?php// functionsfunction th_display_form( $atts ){ return get_option('th_form_html');}function th_display_phone( $atts ){ return get_option('th_phone_number');}//instrument sitefunction thrivehive_instrumentation() {    $account_id = get_option('th_tracking_code');	echo <<<END	<script type="text/javascript">		var scripturl = (("https:" == document.location.protocol) ? "https://" : "http://") + "my.thrivehive.com/content/WebTrack/catracker.js";		document.write(unescape("%3Cscript src='" + scripturl + "' type='text/javascript'%3E%3C/script%3E"));	</script>	<script type="text/javascript">		try {		var cat = new CATracker("$account_id");		cat.Pause = true; cat.TrackOutboundLinks(); cat.PageView();		} catch (err) {document.write("There has been an error initializing web tracking.");}	</script>	<noscript><img src='http://my.thrivehive.com?noscript=1&aweid=$account_id&action=PageView'/></noscript>END;}//shortcodes//[th_form]add_shortcode( 'th_form', 'th_display_form' );//[th_phone]add_shortcode( 'th_phone', 'th_display_phone' );// footer hook add_action('wp_footer', 'thrivehive_instrumentation');// admin messages hook!add_action('admin_notices', 'thrivehive_admin_msgs');?><?php /** * Helper function for creating admin messages * src: http://www.wprecipes.com/how-to-show-an-urgent-message-in-the-wordpress-admin-area * found at: http://wp.tutsplus.com/tutorials/using-the-settings-api-part-1-create-a-theme-options-page/ * * @param (string) $message The message to echo * @param (string) $msgclass The message class * @return echoes the message */	function thrivehive_show_msg($message, $msgclass = 'info') {	echo "<div id='message' class='$msgclass'>$message</div>";} /** * Callback function for displaying admin messages * * @return calls thrivehive_show_msg() */function thrivehive_admin_msgs() {	// check for our settings page - need this in conditional further down	$thrivehive_settings_pg = strpos($_GET['page'], thrivehive);	// collect setting errors/notices: //http://codex.wordpress.org/Function_Reference/get_settings_errors	$set_errors = get_settings_errors();	//display admin message only for the admin to see, only on our settings page and only when setting errors/notices are returned!	if(current_user_can ('manage_options') && $thrivehive_settings_pg !== FALSE && !empty($set_errors)){		// have our settings succesfully been updated?		if($set_errors[0]['code'] == 'settings_updated' && isset($_GET['settings-updated'])){			thrivehive_show_msg("<p>" . $set_errors[0]['message'] . "</p>", 'updated');		// have errors been found?		}else{			// there maybe more than one so run a foreach loop.			foreach($set_errors as $set_error){				// set the title attribute to match the error "setting title"				thrivehive_show_msg("<p class='setting-error-message' title='" . $set_error['setting'] . "'>" . $set_error['message'] . "</p>", 'error');			}		}	}}?>
+<?php
+
+   /*
+   Plugin Name: ThriveHive
+   Plugin URI: http://thrivehive.com
+   Description: A plugin to include ThriveHive's tracking code
+   Version: 0.5
+   Author: ThriveHive
+   Author URI: http://thrivehive.com
+   */
+
+// create menu
+add_action('admin_menu', 'thrivehive_create_menu');
+// Block direct requests
+if ( !defined('ABSPATH') )
+	die('-1');
+
+
+
+function register_logo_widget(){
+	register_widget('ThriveHiveLogo');
+}
+
+add_action( 'widgets_init', 'register_logo_widget');
+
+
+$dir = json_api_dir();
+@include_once "$dir/singletons/api.php";
+@include_once "$dir/singletons/query.php";
+@include_once "$dir/singletons/introspector.php";
+@include_once "$dir/singletons/response.php";
+@include_once "$dir/models/post.php";
+@include_once "$dir/models/comment.php";
+@include_once "$dir/models/category.php";
+@include_once "$dir/models/tag.php";
+@include_once "$dir/models/author.php";
+@include_once "$dir/models/attachment.php";
+
+
+
+
+function thrivehive_create_menu() {
+	
+	//create new top-level menu
+	add_menu_page('ThriveHive Plugin Settings', 'ThriveHive', 'administrator', __FILE__, 'thrivehive_settings_page',plugins_url('/images/icon.png', __FILE__));
+
+	//call register settings function
+	add_action( 'admin_init', 'register_thrivehive_settings' );
+
+}
+
+
+function register_thrivehive_settings() {
+	global $pagenow;
+	//register settings
+	register_setting( 'thrivehive-settings-group', 'th_tracking_code' );
+	register_setting( 'thrivehive-settings-group', 'th_phone_number' );
+	register_setting( 'thrivehive-settings-group', 'th_form_html' );
+	register_setting( 'thrivehive-settings-group', 'th_landingform_id' );
+	
+	register_setting( 'thrivehive-settings-group', 'th_landingform_showfields' );
+	register_setting( 'thrivehive-settings-group', 'th_site_logo');
+
+	add_settings_field('th_setting_logo', __('Logo', 'th'), 'th_setting_logo', $pagenow);
+}
+
+function th_setting_logo(){
+	?>
+		<input id="upload_logo_button" type="button" class="button" value="<?php _e('Upload Logo', 'th');?>"/>
+	<?php
+}
+
+function th_settings_enqueue_scripts(){
+	wp_register_script('th-options', plugins_url('resources/js/th-options.js', __FILE__),plugins_url('resources/js/image-widget.js', __FILE__), array('jquery', 'media-upload', 'thickbox'));
+
+	if(strpos(get_current_screen()->id, '/thrivehive') != ''){
+		wp_enqueue_script('thickbox');
+		wp_enqueue_style('thickbox');
+		wp_enqueue_script('th-options');
+	}
+}
+
+add_action('admin_enqueue_scripts', 'th_settings_enqueue_scripts');
+
+function th_settings_setup(){
+	global $pagenow;
+	if('media-upload.php' == $pagenow || 'async-upload.php' == $pagenow){
+		add_filter('gettext', 'replace_thickbox_text', 1, 2);
+	}
+}
+add_action('admin_init', 'th_settings_setup');
+function replace_thickbox_text($translated_text, $text){
+	if('Insert into Post' == $text){
+		$referer = strpos(wp_get_referer(), 'th-settings');
+		if($referer != ''){
+			return __('Set Logo', 'th');
+		}
+	}
+	return $translated_text;
+}
+
+
+
+
+function thrivehive_settings_page() {
+?>
+
+<div class="wrap">
+<h2>ThriveHive Settings</h2>
+<p>Please fill out the following information to set up your site with basic tracking assets.</p>
+
+<form method="post" action="options.php">
+    <?php settings_fields( 'thrivehive-settings-group' ); ?>
+    <?php do_settings_fields( 'thrivehive-settings-group', 'thrivehive-settings-group' ); ?>
+
+    <table class="form-table">
+        <tr valign="top">
+			<th scope="row">ThriveHive Account ID</th>
+			<td>
+				<input type="text" name="th_tracking_code" value="<?php echo get_option('th_tracking_code'); ?>" />
+			</td>
+        </tr>
+        <tr valign="top">
+			<th scope="row">ThriveHive Phone Number</th>
+			<td>
+				<input type="text" name="th_phone_number" value="<?php echo get_option('th_phone_number'); ?>" />
+			</td>
+			</tr>
+        <tr valign="top">
+        <th scope="row">ThriveHive Contact Us Form HTML</th>
+        <td>
+			<textarea rows="15" cols="100" name="th_form_html" /><?php echo htmlentities(get_option('th_form_html')); ?></textarea>
+		</td>
+        </tr>
+		<tr valign="top">
+			<th scope="row">ThriveHive Landing Page Form ID</th>
+			<td>
+				<input type="text" name="th_landingform_id" value="<?php echo get_option('th_landingform_id'); ?>" />
+			</td>
+		</tr>		
+		<tr valign="top">
+			<th scope="row">Page Logo Url</th>
+			<td>
+				<input type="text" name="th_site_logo" id='site_logo' size=100 value="<?php echo get_option('th_site_logo'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"></th>
+			<td>
+				<input id="upload_logo_button" type="button" class="button" value="<?php _e('Upload Logo', 'th');?>"/>
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">Preview </th>
+			<td>
+				<img src="<?php echo get_option('th_site_logo'); ?>"/>
+			</td>
+		</tr>
+
+        <!--<tr valign="top">
+			<td>
+				<div class="checkboxes">
+					<input type="checkbox" name="th_landingform_showfields[0]" value="<?php echo get_option('th_landingform_showfields'); ?>" />
+					<label>First Name</label>
+				</div>
+			</td>
+		</tr>-->
+    </table>
+    <p class="submit">
+    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+    </p>
+</form>
+</div>
+
+<?php } ?>
+<?php
+// functions
+
+function th_display_form( $atts ){
+ return get_option('th_form_html');
+}
+
+function th_display_phone( $atts ){
+ return get_option('th_phone_number');
+}
+
+
+//shortcodes
+//[th_form]
+add_shortcode( 'th_form', 'th_display_form' );
+
+//[th_phone]
+add_shortcode( 'th_phone', 'th_display_phone' );
+
+//instrument site
+function thrivehive_instrumentation() {
+    $account_id = get_option('th_tracking_code');
+	echo <<<END
+	<script type="text/javascript">
+		var scripturl = (("https:" == document.location.protocol) ? "https://" : "http://") + "my.thrivehive.com/content/WebTrack/catracker.js";
+		document.write(unescape("%3Cscript src='" + scripturl + "' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+		try {
+		var cat = new CATracker("$account_id");
+		cat.Pause = true; cat.TrackOutboundLinks(); cat.PageView();
+		} catch (err) {document.write("There has been an error initializing web tracking.");}
+	</script>
+	<noscript><img src='http://my.thrivehive.com?noscript=1&aweid=$account_id&action=PageView'/></noscript>
+END;
+
+}
+register_activation_hook(__FILE__, 'th_activate');
+add_action('admin_init', 'th_redirect');
+
+function th_activate() {
+    add_option('thrivehive_do_activation_redirect', true);
+    add_option('thrivehive_do_activation_validation', true);
+}
+function file_get_contents_curl($url) {
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_HEADER, 0);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+      curl_setopt($ch, CURLOPT_URL, $url);
+      $data = curl_exec($ch);
+      curl_close($ch);
+      return $data;
+}
+function th_redirect() {
+	if(get_option('thrivehive_do_activation_validation', false)){
+		delete_option('thrivehive_do_activation_validation');
+		$url = get_bloginfo('url').'/api';
+		if(($html = file_get_contents_curl($url))){
+			$json = json_decode($html);
+		}
+
+
+		if(!$json){
+			$plugin = plugin_basename(__FILE__);
+			if(is_plugin_active($plugin)){
+				$html = '<div class="error">';
+        		$html .= '<p>';
+         		$html .= __( 'There was a problem activating the ThriveHive plugin. <br> 
+				      This is usually caused by a redirect set up in the WordPress .htaccess file or a similar plugin.' );
+         		$html .= __( '<br> Please try to remedy this to ensure that the plugin works smoothly' );
+        		$html .= '</p>';
+      			$html .= '</div><!-- /.updated -->';
+      			echo $html;
+      			//deactivate_plugins($plugin);
+      			return;
+			}
+		}
+
+	}
+    if (get_option('thrivehive_do_activation_redirect', false)) {
+        delete_option('thrivehive_do_activation_redirect');
+        wp_redirect(admin_url().'admin.php?page='.__DIR__.'/thrivehive.php');
+    }
+}
+
+
+// footer hook 
+add_action('wp_footer', 'thrivehive_instrumentation');
+
+// admin messages hook!
+add_action('admin_notices', 'thrivehive_admin_msgs');
+
+
+
+?>
+<?php
+
+
+ /**
+ * Helper function for creating admin messages
+ * src: http://www.wprecipes.com/how-to-show-an-urgent-message-in-the-wordpress-admin-area
+ * found at: http://wp.tutsplus.com/tutorials/using-the-settings-api-part-1-create-a-theme-options-page/
+ *
+ * @param (string) $message The message to echo
+ * @param (string) $msgclass The message class
+ * @return echoes the message
+ */
+
+	function thrivehive_show_msg($message, $msgclass = 'info') {
+	echo "<div id='message' class='$msgclass'>$message</div>";
+
+}
+
+
+
+ /**
+ * Callback function for displaying admin messages
+ *
+ * @return calls thrivehive_show_msg()
+ */
+
+function thrivehive_admin_msgs() {
+
+	// check for our settings page - need this in conditional further down
+	$thrivehive_settings_pg = strpos($_GET['page'], thrivehive);
+	// collect setting errors/notices: //http://codex.wordpress.org/Function_Reference/get_settings_errors
+	$set_errors = get_settings_errors();
+
+	//display admin message only for the admin to see, only on our settings page and only when setting errors/notices are returned!
+	if(current_user_can ('manage_options') && $thrivehive_settings_pg !== FALSE && !empty($set_errors)){
+
+		// have our settings succesfully been updated?
+		if($set_errors[0]['code'] == 'settings_updated' && isset($_GET['settings-updated'])){
+			thrivehive_show_msg("<p>" . $set_errors[0]['message'] . "</p>", 'updated');
+
+		// have errors been found?
+		}else{
+			// there maybe more than one so run a foreach loop.
+			foreach($set_errors as $set_error){
+				// set the title attribute to match the error "setting title"
+				thrivehive_show_msg("<p class='setting-error-message' title='" . $set_error['setting'] . "'>" . $set_error['message'] . "</p>", 'error');
+			}
+		}
+	}
+}
+
+/***********************************************************************************
+_________ _______  _______  _          _______  _______ _________   _______  _______  ______   _______ 
+\__    _/(  ____ \(  ___  )( (    /|  (  ___  )(  ____ )\__   __/  (  ____ \(  ___  )(  __  \ (  ____ \
+   )  (  | (    \/| (   ) ||  \  ( |  | (   ) || (    )|   ) (     | (    \/| (   ) || (  \  )| (    \/
+   |  |  | (_____ | |   | ||   \ | |  | (___) || (____)|   | |     | |      | |   | || |   ) || (__    
+   |  |  (_____  )| |   | || (\ \) |  |  ___  ||  _____)   | |     | |      | |   | || |   | ||  __)   
+   |  |        ) || |   | || | \   |  | (   ) || (         | |     | |      | |   | || |   ) || (      
+|\_)  )  /\____) || (___) || )  \  |  | )   ( || )      ___) (___  | (____/\| (___) || (__/  )| (____/\
+(____/   \_______)(_______)|/    )_)  |/     \||/       \_______/  (_______/(_______)(______/ (_______/
+
+************************************************************************************/
+
+
+function json_api_init() {
+  global $json_api;
+  if (phpversion() < 5) {
+    add_action('admin_notices', 'json_api_php_version_warning');
+    return;
+  }
+  if (!class_exists('JSON_API')) {
+    add_action('admin_notices', 'json_api_class_warning');
+    return;
+  }
+  add_filter('rewrite_rules_array', 'json_api_rewrites');
+  $json_api = new JSON_API();
+}
+
+function json_api_php_version_warning() {
+  echo "<div id=\"json-api-warning\" class=\"updated fade\"><p>Sorry, JSON API requires PHP version 5.0 or greater.</p></div>";
+}
+
+function json_api_class_warning() {
+  echo "<div id=\"json-api-warning\" class=\"updated fade\"><p>Oops, JSON_API class not found. If you've defined a JSON_API_DIR constant, double check that the path is correct.</p></div>";
+}
+
+function json_api_activation() {
+  // Add the rewrite rule on activation
+  global $wp_rewrite;
+  add_filter('rewrite_rules_array', 'json_api_rewrites');
+  $wp_rewrite->flush_rules();
+}
+
+function json_api_deactivation() {
+  // Remove the rewrite rule on deactivation
+  global $wp_rewrite;
+  $wp_rewrite->flush_rules();
+}
+
+function json_api_rewrites($wp_rules) {
+  $base = get_option('json_api_base', 'api');
+  if (empty($base)) {
+    return $wp_rules;
+  }
+  $json_api_rules = array(
+    "$base\$" => 'index.php?json=info',
+    "$base/(.+)\$" => 'index.php?json=$matches[1]'
+  );
+  return array_merge($json_api_rules, $wp_rules);
+}
+
+function json_api_dir() {
+  if (defined('JSON_API_DIR') && file_exists(JSON_API_DIR)) {
+    return JSON_API_DIR;
+  } else {
+    return dirname(__FILE__);
+  }
+}
+
+// Add initialization and activation hooks
+add_action('init', 'json_api_init');
+register_activation_hook("$dir/json-api.php", 'json_api_activation');
+register_deactivation_hook("$dir/json-api.php", 'json_api_deactivation');
+
+
+
+
+/****************************************************************
+
+ _        _______  _______  _______            _________ ______   _______  _______ _________   _______  _______  ______   _______ 
+( \      (  ___  )(  ____ \(  ___  )  |\     /|\__   __/(  __  \ (  ____ \(  ____ \\__   __/  (  ____ \(  ___  )(  __  \ (  ____ \
+| (      | (   ) || (    \/| (   ) |  | )   ( |   ) (   | (  \  )| (    \/| (    \/   ) (     | (    \/| (   ) || (  \  )| (    \/
+| |      | |   | || |      | |   | |  | | _ | |   | |   | |   ) || |      | (__       | |     | |      | |   | || |   ) || (__    
+| |      | |   | || | ____ | |   | |  | |( )| |   | |   | |   | || | ____ |  __)      | |     | |      | |   | || |   | ||  __)   
+| |      | |   | || | \_  )| |   | |  | || || |   | |   | |   ) || | \_  )| (         | |     | |      | |   | || |   ) || (      
+| (____/\| (___) || (___) || (___) |  | () () |___) (___| (__/  )| (___) || (____/\   | |     | (____/\| (___) || (__/  )| (____/\
+(_______/(_______)(_______)(_______)  (_______)\_______/(______/ (_______)(_______/   )_(     (_______/(_______)(______/ (_______/
+
+*****************************************************************/
+
+
+class ThriveHiveLogo extends WP_Widget {
+
+	public function __construct() {
+		parent::__construct(
+			'th_logo_widget', // Base ID
+			'ThriveHive Page Logo', // Name
+			array( 'description' => __( 'Displays your site logo in the widget area', 'text_domain' ), ));// Args
+	}
+
+	public function widget( $args, $instance ) {
+		// outputs the content of the widget
+		echo "<img src="; 
+		echo get_option('th_site_logo');
+		echo ">";
+	}
+
+ 	public function form( $instance ) {
+		// outputs the options form on admin
+		echo "<img src="; 
+		echo get_option('th_site_logo');
+		echo ">";
+	}
+
+	public function update( $new_instance, $old_instance ) {
+		// processes widget options to be saved
+	}
+
+}
+//Sidebar for Logo Widget
+if(!function_exists('custom_logo_create')){
+	add_action('genesis_site_title', 'custom_logo_create');
+		function custom_logo_create(){
+  		genesis_widget_area('mycustom-logo', array(
+    	'before' => '<div class="mycustom-logo">'));
+	}
+}
+
+/*****************************************************************************
+// PUBLIC PREVIEW CODE
+*/
+
+class DS_Public_Post_Preview {
+
+	/**
+	 * Hooks into 'pre_get_posts' to handle public preview, only nn-admin
+	 * Hooks into 'add_meta_boxes' to register the meta box.
+	 * Hooks into 'save_post' to handle the values of the meta box.
+	 * Hooks into 'admin_enqueue_scripts' to register JavaScript.
+	 *
+	 * @since 1.0.0
+	 */
+	public static function init() {
+		add_action( 'init', array( __CLASS__, 'load_textdomain' ) );
+
+		if ( ! is_admin() ) {
+			add_filter( 'pre_get_posts', array( __CLASS__, 'show_public_preview' ) );
+
+			add_filter( 'query_vars', array( __CLASS__, 'add_query_var' ) );
+		} else {
+			//add_action( 'post_submitbox_misc_actions', array( __CLASS__, 'post_submitbox_misc_actions' ) );
+
+			add_action( 'save_post', array( __CLASS__, 'register_public_preview' ), 20, 2 );
+
+			add_action( 'wp_ajax_public-post-preview', array( __CLASS__, 'ajax_register_public_preview' ) );
+
+			//add_action( 'admin_enqueue_scripts' , array( __CLASS__, 'enqueue_script' ) );
+		}
+	}
+
+	/**
+	 * Registers the textdomain.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function load_textdomain() {
+		return load_plugin_textdomain(
+			'ds-public-post-preview',
+			false,
+			dirname( plugin_basename( __FILE__ ) ) . '/lang'
+		);
+	}
+
+
+	/**
+	 * Returns the public preview link.
+	 *
+	 * The link is the permalink with these parameters:
+	 *  - preview, always true (query var for core)
+	 *  - _ppp, a custom nonce, see DS_Public_Post_Preview::create_nonce()
+	 *
+	 * @since  2.0.0
+	 *
+	 * @param  int    $post_id  The post id.
+	 * @return string           The generated public preview link.
+	 */
+	public static function get_preview_link( $post_id ) {
+		return add_query_arg(
+			array(
+				'preview' => true,
+				'_ppp'    => self::create_nonce( 'public_post_preview_' . $post_id ),
+			),
+			get_permalink( $post_id )
+		);
+	}
+
+	/**
+	 * (Un)Registers a post for a public preview.
+	 *
+	 * Don't runs on an autosave and ignores post revisions.
+	 *
+	 * @since  2.0.0
+	 *
+	 * @param  int    $post_id The post id.
+	 * @param  object $post    The post object.
+	 * @return bool            Returns false on a failure, true on a success.
+	 */
+	public static function register_public_preview( $post_id, $post ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+			return false;
+
+		if ( wp_is_post_revision( $post_id ) )
+			return false;
+
+		if ( empty( $_POST['public_post_preview_wpnonce'] ) || ! wp_verify_nonce( $_POST['public_post_preview_wpnonce'], 'public_post_preview' ) )
+			return false;
+
+		$preview_post_ids = self::get_preview_post_ids();
+		$preview_post_id  = $post->ID;
+
+		if ( empty( $_POST['public_post_preview'] ) && in_array( $preview_post_id, $preview_post_ids ) )
+			$preview_post_ids = array_diff( $preview_post_ids, (array) $preview_post_id );
+		elseif (
+				! empty( $_POST['public_post_preview'] ) &&
+				! empty( $_POST['original_post_status'] ) &&
+				'publish' != $_POST['original_post_status'] &&
+				'publish' == $post->post_status &&
+				in_array( $preview_post_id, $preview_post_ids )
+			)
+			$preview_post_ids = array_diff( $preview_post_ids, (array) $preview_post_id );
+		elseif ( ! empty( $_POST['public_post_preview'] ) && ! in_array( $preview_post_id, $preview_post_ids ) )
+			$preview_post_ids = array_merge( $preview_post_ids, (array) $preview_post_id );
+		else
+			return false; // Nothing changed.
+
+		return self::set_preview_post_ids( $preview_post_ids );
+	}
+
+
+
+	/**
+	 * Registers the new query var `_ppp`.
+	 *
+	 * @since  2.1
+	 *
+	 * @return array List of query variables.
+	 */
+	public static function add_query_var( $qv ) {
+		$qv[] = '_ppp';
+
+		return $qv;
+	}
+
+	/**
+	 * Registers the filter to handle a public preview.
+	 *
+	 * Filter will be set if it's the main query, a preview, a singular page
+	 * and the query var `_ppp` exists.
+	 *
+	 * @since  2.0.0
+	 *
+	 * @param  object $query The WP_Query object.
+	 * @return object        The WP_Query object, unchanged.
+	 */
+	public static function show_public_preview( $query ) {
+		if (
+			$query->is_main_query() &&
+			$query->is_preview() &&
+			$query->is_singular() &&
+			$query->get( '_ppp' )
+		)
+			add_filter( 'posts_results', array( __CLASS__, 'set_post_to_publish' ), 10, 2 );
+
+		return $query;
+	}
+
+	/**
+	 * Checks if a public preview is available and allowed.
+	 * Verifies the nonce and if the post id is registered for a public preview.
+	 *
+	 * @since  2.0.0
+	 *
+	 * @param  int   $post_id The post id.
+	 * @return bool           True if a public preview is allowed, false on a failure.
+	 */
+	private static function public_preview_available( $post_id ) {
+		if ( empty( $post_id ) )
+			return false;
+
+		if( ! self::verify_nonce( get_query_var( '_ppp' ), 'public_post_preview_' . $post_id ) )
+			wp_die( __( 'The link has been expired!', 'ds-public-post-preview' ) );
+
+/*		if ( ! in_array( $post_id, get_option( 'public_post_preview', array() ) ) )
+			wp_die( __( 'No Public Preview available!', 'ds-public-post-preview' ) );*/
+
+		return true;
+	}
+
+	/**
+	 * Sets the post status of the first post to publish, so we don't have to do anything
+	 * *too* hacky to get it to load the preview.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $posts The post to preview.
+	 */
+	public static function set_post_to_publish( $posts ) {
+		// Remove the filter again, otherwise it will be applied to other queries too.
+		remove_filter( 'posts_results', array( __CLASS__, 'set_post_to_publish' ), 10, 2 );
+
+		if ( empty( $posts ) )
+			return;
+
+		if ( self::public_preview_available( $posts[0]->ID ) )
+			$posts[0]->post_status = 'publish';
+
+		return $posts;
+	}
+
+	/**
+	 * Get the time-dependent variable for nonce creation.
+	 *
+	 * @see    wp_nonce_tick()
+	 *
+	 * @since  2.1
+	 *
+	 * @return int The time-dependent variable
+	 */
+	private static function nonce_tick() {
+		$nonce_life = apply_filters( 'ppp_nonce_life', 60 * 60 * 48 ); // 48 hours
+
+		return ceil( time() / ( $nonce_life / 2 ) );
+	}
+
+	/**
+	 * Verifies that correct nonce was used with time limit. Without an UID.
+	 *
+	 * @see    wp_verify_nonce()
+	 *
+	 * @since  1.0.0
+	 *
+	 * @param  string     $nonce  Nonce that was used in the form to verify
+	 * @param  string|int $action Should give context to what is taking place and be the same when nonce was created.
+	 * @return bool               Whether the nonce check passed or failed.
+	 */
+	private static function verify_nonce( $nonce, $action = -1 ) {
+		$i = self::nonce_tick();
+
+		// Nonce generated 0-12 hours ago
+		if ( substr( wp_hash( $i . $action, 'nonce' ), -12, 10 ) == $nonce )
+			return 1;
+
+		// Nonce generated 12-24 hours ago
+		if ( substr( wp_hash( ( $i - 1 ) . $action, 'nonce' ), -12, 10 ) == $nonce )
+			return 2;
+
+		// Invalid nonce
+		return false;
+	}
+
+	/**
+	 * Returns the post ids which are registered for a public preview.
+	 *
+	 * @since  2.0.0
+	 *
+	 * @return array The post ids. (Empty array if no ids are registered.)
+	 */
+	private static function get_preview_post_ids() {
+		return get_option( 'public_post_preview', array() );
+	}
+
+	/**
+	 * Saves the post ids which are registered for a public preview.
+	 *
+	 * @since  2.0.0
+	 *
+	 * @return array The post ids. (Empty array if no ids are registered.)
+	 */
+	private static function set_preview_post_ids( $post_ids = array( )) {
+		return update_option( 'public_post_preview', $post_ids );
+	}
+
+	/**
+	 * Small helper to get some plugin info.
+	 *
+	 * @since  2.0.0
+	 *
+	 * @param  string        $key The key to get the info from, see get_plugin_data().
+	 * @return string|bool        Either the value, or if the key doesn't exists false.
+	 */
+	private static function get_plugin_info( $key = null ) {
+		$plugin_data = get_plugin_data( __FILE__);
+		if ( array_key_exists( $key, $plugin_data ) )
+			return $plugin_data[ $key ];
+
+		return false;
+	}
+
+	/**
+	 * Delets the option 'public_post_preview' if the plugin will be uninstalled.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function uninstall() {
+		delete_option( 'public_post_preview' );
+	}
+}
+
+add_action( 'plugins_loaded', array( 'DS_Public_Post_Preview', 'init' ) );
+
+register_uninstall_hook( __FILE__, array( 'DS_Public_Post_Preview', 'uninstall' ) );
+
+
+// Register Custom Post Type
+function th_draft() {
+
+	$labels = array(
+		'name'                => _x( 'Drafts', 'Post Type General Name', 'text_domain' ),
+		'singular_name'       => _x( 'Draft', 'Post Type Singular Name', 'text_domain' ),
+		'menu_name'           => __( 'Product', 'text_domain' ),
+		'parent_item_colon'   => __( 'Parent Product:', 'text_domain' ),
+		'all_items'           => __( 'All Products', 'text_domain' ),
+		'view_item'           => __( 'View Product', 'text_domain' ),
+		'add_new_item'        => __( 'Add New Product', 'text_domain' ),
+		'add_new'             => __( 'New Product', 'text_domain' ),
+		'edit_item'           => __( 'Edit Product', 'text_domain' ),
+		'update_item'         => __( 'Update Product', 'text_domain' ),
+		'search_items'        => __( 'Search products', 'text_domain' ),
+		'not_found'           => __( 'No products found', 'text_domain' ),
+		'not_found_in_trash'  => __( 'No products found in Trash', 'text_domain' ),
+	);
+	$args = array(
+		'label'               => __( 'th_draft', 'text_domain' ),
+		'description'         => __( 'Product information pages', 'text_domain' ),
+		'labels'              => $labels,
+		'supports'            => array( ),
+		'taxonomies'          => array( 'category', 'post_tag' ),
+		'hierarchical'        => false,
+		'public'              => false,
+		'show_ui'             => false,
+		'show_in_menu'        => false,
+		'show_in_nav_menus'   => false,
+		'show_in_admin_bar'   => false,
+		'menu_position'       => 5,
+		'menu_icon'           => '',
+		'can_export'          => true,
+		'has_archive'         => true,
+		'exclude_from_search' => false,
+		'publicly_queryable'  => true,
+		'capability_type'     => 'page',
+	);
+	register_post_type( 'th_draft', $args );
+
+}
+
+// Hook into the 'init' action
+add_action( 'init', 'th_draft', 0 );
+
+?>
