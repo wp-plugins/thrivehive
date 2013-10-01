@@ -36,10 +36,7 @@ class JSON_API_Post {
   function create($values = null) {
     unset($values['id']);
     if (empty($values) || empty($values['title'])) {
-      $values = array(
-        'title' => 'Untitled',
-        'content' => ''
-      );
+      $values['title'] = 'Untitled';
     }
     return $this->save($values);
   }
