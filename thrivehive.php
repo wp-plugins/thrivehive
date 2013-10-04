@@ -246,7 +246,7 @@ function th_redirect() {
         		$html .= '</p>';
       			$html .= '</div><!-- /.updated -->';
       			echo $html;
-      			//deactivate_plugins($plugin);
+      			deactivate_plugins($plugin);
       			return;
 			}
 		}
