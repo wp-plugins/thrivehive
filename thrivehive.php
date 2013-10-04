@@ -4,7 +4,7 @@
    Plugin Name: ThriveHive
    Plugin URI: http://thrivehive.com
    Description: A plugin to include ThriveHive's tracking code
-   Version: 0.51
+   Version: 0.52
    Author: ThriveHive
    Author URI: http://thrivehive.com
    */
@@ -215,7 +215,7 @@ add_action('admin_init', 'th_redirect');
 
 function th_activate() {
     add_option('thrivehive_do_activation_redirect', true);
-    add_option('thrivehive_do_activation_validation', true);
+    //add_option('thrivehive_do_activation_validation', true);
 }
 function file_get_contents_curl($url) {
       $ch = curl_init();
@@ -254,7 +254,9 @@ function th_redirect() {
 	}
     if (get_option('thrivehive_do_activation_redirect', false)) {
         delete_option('thrivehive_do_activation_redirect');
-        wp_redirect(admin_url().'admin.php?page='.__DIR__.'/thrivehive.php');
+        if(defined(__DIR__)){
+        	wp_redirect(admin_url().'admin.php?page='.__DIR__.'/thrivehive.php');
+    	}
     }
 }
 
