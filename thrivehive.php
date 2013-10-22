@@ -4,7 +4,7 @@
    Plugin Name: ThriveHive
    Plugin URI: http://thrivehive.com
    Description: A plugin to include ThriveHive's tracking code
-   Version: 0.52
+   Version: 0.53
    Author: ThriveHive
    Author URI: http://thrivehive.com
    */
@@ -195,6 +195,7 @@ add_shortcode( 'th_phone', 'th_display_phone' );
 //instrument site
 function thrivehive_instrumentation() {
     $account_id = get_option('th_tracking_code');
+    if(isset($account_id) && !empty($account_id)){
 	echo <<<END
 	<script type="text/javascript">
 		var scripturl = (("https:" == document.location.protocol) ? "https://" : "http://") + "my.thrivehive.com/content/WebTrack/catracker.js";
@@ -208,6 +209,7 @@ function thrivehive_instrumentation() {
 	</script>
 	<noscript><img src='http://my.thrivehive.com?noscript=1&aweid=$account_id&action=PageView'/></noscript>
 END;
+}
 
 }
 register_activation_hook(__FILE__, 'th_activate');
