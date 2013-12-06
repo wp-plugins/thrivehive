@@ -4,7 +4,7 @@
    Plugin Name: ThriveHive
    Plugin URI: http://thrivehive.com
    Description: A plugin to include ThriveHive's tracking code
-   Version: 0.55
+   Version: 0.56
    Author: ThriveHive
    Author URI: http://thrivehive.com
    */
@@ -216,19 +216,38 @@ register_activation_hook(__FILE__, 'th_activate');
 add_action('admin_init', 'th_redirect');
 
 function th_activate() {
-	global $wp_rewrite;
+    global $wp_rewrite;
     add_option('thrivehive_do_activation_redirect', true);
-    add_filter('rewrite_rules_array', 'json_api_rewrites');
-    $perma = $wp_rewrite->permalink_structure;
+    #add_filter('rewrite_rules_array', 'json_api_rewrites');
+    
+    #flush_rewrite_rules();
+    #$wp_rewrite->generate_rewrite_rules();
+    //add_option('thrivehive_do_activation_validation', true);
+}
+function th_permalinks(){
+	global $wp_rewrite;
+	$home_path = get_home_path();
+	if(! file_exists($home_path . '.htaccess')){
+		file_put_contents($home_path . '.htaccess', 
+			"<IfModule mod_rewrite.c>
+			RewriteEngine On
+			RewriteBase /
+			RewriteRule ^index\.php$ - [L]
+			RewriteCond %{REQUEST_FILENAME} !-f
+			RewriteCond %{REQUEST_FILENAME} !-d
+			RewriteRule . /index.php [L]
+			</IfModule>
+			");
+	}
+	$perma = $wp_rewrite->permalink_structure;
     if($perma == ""){
-    $wp_rewrite->set_permalink_structure('/%postname%/');
+    $wp_rewrite->set_permalink_structure('/%year%/%monthnum%/%day%/%postname%/');
 	}
 	else{
 		$wp_rewrite->set_permalink_structure($perma);
 	}
     $wp_rewrite->flush_rules();
-    //flush_rewrite_rules();
-    //add_option('thrivehive_do_activation_validation', true);
+    add_filter('rewrite_rules_array', 'json_api_rewrites');
 }
 function file_get_contents_curl($url) {
       $ch = curl_init();
