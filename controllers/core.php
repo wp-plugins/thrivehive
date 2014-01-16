@@ -41,7 +41,8 @@ class JSON_API_Core_Controller {
     $posts = $json_api->introspector->get_posts();
     return $this->posts_result($posts);
   }
-  
+ 
+ /* 
   public function get_posts() {
     global $json_api;
     $url = parse_url($_SERVER['REQUEST_URI']);
@@ -59,6 +60,87 @@ class JSON_API_Core_Controller {
     $result = $this->posts_result($allposts);
     $result['query'] = $query;
     return $result;
+  }*/
+
+  public function get_posts() {
+    global $wpdb, $json_api;
+
+    if(!isset($_REQUEST['count']))
+    {
+      $json_api->error("You must specify the `count` for the posts");
+    }
+    $count = $_REQUEST['count'];
+
+    if(!isset($_REQUEST['offset']))
+    {
+      $json_api->error("You must specify the `offset` for the posts");
+    }
+    $offset = $_REQUEST['offset'];
+
+    if(!isset($_REQUEST['extra_type']))
+    {
+      $extra_type = null;
+    }
+    else
+    {
+      $extra_type = $_REQUEST['extra_type'];
+    }
+    if(!isset($_REQUEST['post_type']))
+    {
+      $post_type = "post";
+    }
+    else
+    {
+      $post_type = $_REQUEST['post_type'];
+    }
+    if(is_null($extra_type))
+    {
+      $res = $wpdb->get_results(
+          "
+          SELECT DISTINCT p.ID, p.post_title, p.post_type, p.post_status
+          FROM $wpdb->posts p
+          LEFT JOIN $wpdb->postmeta m ON p.ID = m.post_id AND m.meta_key LIKE 'th_extra_type'
+          WHERE p.post_type = '$post_type' 
+          AND p.post_status != 'auto-draft' 
+          AND p.post_status != 'trash'
+          AND m.meta_key is null
+          ORDER BY p.post_date DESC
+          LIMIT $count OFFSET $offset;
+          ", ARRAY_A
+        );
+    }
+    else
+    {
+        $res = $wpdb->get_results(
+          "
+          SELECT p.ID, p.post_title, p.post_type, p.post_status
+          FROM $wpdb->posts p
+          JOIN $wpdb->postmeta m ON p.ID = m.post_id
+          WHERE p.post_type = '$post_type' 
+          AND p.post_status != 'auto-draft' 
+          AND p.post_status != 'trash'
+          AND m.meta_key =  'th_extra_type'
+          AND m.meta_value = '$extra_type'
+          ORDER BY p.post_date DESC
+          LIMIT $count OFFSET $offset;
+          ", ARRAY_A
+        );
+    }
+    $newres = array();
+    foreach ($res as $retpost) {
+      $retpost['url'] = get_permalink($retpost['ID']);
+      $retpost['status'] = $retpost['post_status'];
+      $retpost['title'] = $retpost['post_title'];
+      $retpost['type'] = $retpost['post_type'];
+      $retpost['id'] = $retpost['ID'];
+      unset($retpost['post_status']);
+      unset($retpost['post_type']);
+      unset($retpost['post_title']);
+      unset($retpost['ID']);
+      array_push($newres, $retpost);
+    }
+    return array('posts'=>$newres);
+
   }
 
   private function remove_preview_drafts($posts)
