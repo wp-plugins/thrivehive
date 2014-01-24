@@ -308,7 +308,7 @@ class JSON_API_Posts_Controller {
       $json_api->error("You must include the 'post_id' of the post to access");
     }
 
-    if(!$json_api->query->nonce) {
+   /* if(!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to access the preview. Use the `get_nonce` core API method.");
     }
 
@@ -318,7 +318,8 @@ class JSON_API_Posts_Controller {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
-    $res =  $this->get_preview_link($_REQUEST['post_id']);
+    $res =  $this->get_preview_link($_REQUEST['post_id']);*/
+    $res = add_query_arg(array('preview' => true), get_permalink($_REQUEST['post_id']));
 
     return array('link' => $res);
   }
