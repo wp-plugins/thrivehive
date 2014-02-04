@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 0.59: Fixing but with getting blog post content
 V 0.58: Changing the method for getting public previews
 V 0.54: Added rewrite flushing on activation
 V 0.51: Bug fix for creating blog posts with no title having all content wiped out
