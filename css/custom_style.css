@@ -1,0 +1,45 @@
+
+
+.phone-number.widget .heading {
+	display: none;
+}
+
+.phone-number.widget .phone-number-text {
+	font-size: 28px;
+	text-shadow: none;
+}
+
+iframe {
+	padding: 0;
+	border-width: 0 !important;
+}
+
+.theme-name-outreach #header {
+	background-repeat: repeat-y !important;
+	background-position: center !important;
+	background-color: #090909 !important;
+}
+
+.theme-name-streamline .sidebar .social-widgets img {
+	border-width: 0;
+}
+
+@media only screen and (max-width: 340px) {
+	.phone-number.widget .phone-number-text {
+		font-size: 24px;
+	}
+}
+
+@media only screen and (max-width: 1024px) {
+	.phone-number.widget .heading {
+		display: block;
+		font-size: 18px;
+	}
+}
+
+@media only screen and (min-width: 1024px) {
+	.phone-number.widget .heading {
+		display: block;
+		font-size: 18px;
+	}
+}
