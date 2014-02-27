@@ -1,9 +1,13 @@
 <?php
-/*
-Controller name: Widgets
-Controller description: Retrieve sidebar widgets
+/**
+*Controller name: Widgets
+*Controller description: Retrieve sidebar widgets
 */
 
+/**
+*Class related to widget interactions
+*@package Controllers\Widgets
+*/
 class JSON_API_Widgets_Controller {
   
   function get_sidebar() {

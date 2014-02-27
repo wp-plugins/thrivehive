@@ -1,15 +1,45 @@
 <?php
-
+/**
+*File for Wordpress Comment handling
+**/
+/**
+*Data Object for a Wordpress comment
+*@package Models\Comment
+**/
 class JSON_API_Comment {
+  /**
+  *@var int $id ID of the comment
+  **/
+  var $id;      
+  /**
+  *@var string $name Comment poster name
+  **/
+  var $name;    
+  /**
+  *@var string $url URL for the comment
+  **/
+  var $url;     
+  /**
+  *@var string $date Comment date
+  **/
+  var $date;    
+  /**
+  *@var string $content Actual text content of the comment
+  **/
+  var $content; 
+  /**
+  *@var int $parent Parent ID of the post
+  **/
+  var $parent;  
+  /**
+  *@var object $author creator of the comment if logged into the system
+  **/
+  var $author;  
   
-  var $id;      // Integer
-  var $name;    // String
-  var $url;     // String
-  var $date;    // String
-  var $content; // String
-  var $parent;  // Integer
-  var $author;  // Object (only if the user was registered & logged in)
-  
+  /**
+  *Defaul constructor
+  *@param mixed[] $wp_comment optional comment to import
+  **/
   function JSON_API_Comment($wp_comment = null) {
     if ($wp_comment) {
       $this->import_wp_object($wp_comment);
@@ -37,6 +67,9 @@ class JSON_API_Comment {
     }
   }
   
+  /**
+  *Used to finally submit a comment
+  **/
   function handle_submission() {
     global $comment, $wpdb;
     add_action('comment_id_not_found', array(&$this, 'comment_id_not_found'));

@@ -19,6 +19,18 @@ class JSON_API_Introspector {
     }
       return $output;
   }
+
+  public function get_single_post($post_id)
+  {
+    global $wp_query, $wpdb;
+
+    $query = "
+              SELECT * from $wpdb->posts
+              WHERE ID = $post_id;
+              ";
+    $res = $wpdb->get_results($query, ARRAY_A);
+    return $res;
+  }
   
   public function get_date_archive_permalinks() {
     $archives = wp_get_archives('echo=0');

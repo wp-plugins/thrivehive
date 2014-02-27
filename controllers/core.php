@@ -1,11 +1,16 @@
 <?php
-/*
-Controller name: Core
-Controller description: Basic introspection methods
+/**
+*Controller name: Core
+*Controller description: Basic introspection methods
 */
-
+/**
+*Class for the core API actions
+*@package Controllers\Core
+*/
 class JSON_API_Core_Controller {
-  
+  /**
+  *@api
+  **/
   public function info() {
     global $json_api;
     $php = '';
@@ -35,47 +40,34 @@ class JSON_API_Core_Controller {
       );
     }
   }
-  
+
+  /**
+  *@api
+  **/
   public function get_recent_posts() {
     global $json_api;
     $posts = $json_api->introspector->get_posts();
     return $this->posts_result($posts);
   }
- 
- /* 
-  public function get_posts() {
-    global $json_api;
-    $url = parse_url($_SERVER['REQUEST_URI']);
-    $defaults = array(
-      'ignore_sticky_posts' => true
-    );
-    $query = wp_parse_args($url['query']);
-    unset($query['json']);
-   // unset($query['post_status']);
-    $query = array_merge($defaults, $query);
-    $posts = $json_api->introspector->get_posts($query);
-   
-
-    $allposts = $this->remove_preview_drafts($posts);
-    $result = $this->posts_result($allposts);
-    $result['query'] = $query;
-    return $result;
-  }*/
-
-  public function get_posts() {
+  
+  /**
+  *Grab all posts matching the desired parameters 
+  *@example URL - /core/get_posts/
+  *@api
+  *@return array containing all posts 
+  **/
+   public function get_posts() {
     global $wpdb, $json_api;
 
-    if(!isset($_REQUEST['count']))
+    if(isset($_REQUEST['count']))
     {
-      $json_api->error("You must specify the `count` for the posts");
+      $count = $_REQUEST['count'];
     }
-    $count = $_REQUEST['count'];
 
-    if(!isset($_REQUEST['offset']))
+    if(isset($_REQUEST['offset']))
     {
-      $json_api->error("You must specify the `offset` for the posts");
+      $offset = $_REQUEST['offset'];
     }
-    $offset = $_REQUEST['offset'];
 
     if(!isset($_REQUEST['extra_type']))
     {
@@ -95,8 +87,7 @@ class JSON_API_Core_Controller {
     }
     if(is_null($extra_type))
     {
-      $res = $wpdb->get_results(
-          "
+      $query = "
           SELECT DISTINCT p.ID, p.post_title, p.post_type, p.post_status
           FROM $wpdb->posts p
           LEFT JOIN $wpdb->postmeta m ON p.ID = m.post_id AND m.meta_key LIKE 'th_extra_type'
@@ -105,14 +96,16 @@ class JSON_API_Core_Controller {
           AND p.post_status != 'trash'
           AND m.meta_key is null
           ORDER BY p.post_date DESC
-          LIMIT $count OFFSET $offset;
-          ", ARRAY_A
-        );
+          ";
+      if($count != 0){
+        $query=$query."\nLIMIT $count OFFSET $offset";
+      }
+          $query=$query.";";
+      $res = $wpdb->get_results($query, ARRAY_A);
     }
     else
     {
-        $res = $wpdb->get_results(
-          "
+        $query = "
           SELECT p.ID, p.post_title, p.post_type, p.post_status
           FROM $wpdb->posts p
           JOIN $wpdb->postmeta m ON p.ID = m.post_id
@@ -122,9 +115,13 @@ class JSON_API_Core_Controller {
           AND m.meta_key =  'th_extra_type'
           AND m.meta_value = '$extra_type'
           ORDER BY p.post_date DESC
-          LIMIT $count OFFSET $offset;
-          ", ARRAY_A
-        );
+          ";
+        if($count != 0)
+        {
+          $query=$query."\nLIMIT $count OFFSET $offset";
+        }
+        $query=$query.";";
+        $res = $wpdb->get_results($query, ARRAY_A);
     }
     $newres = array();
     foreach ($res as $retpost) {
@@ -143,6 +140,10 @@ class JSON_API_Core_Controller {
 
   }
 
+  /**
+  *Removes all preview drafts from the given posts
+  *@param post[] posts - array of all posts
+  **/
   private function remove_preview_drafts($posts)
   {
     $count = count($posts);
@@ -179,6 +180,12 @@ class JSON_API_Core_Controller {
     return array_values($posts);
   }
 
+  /**
+  *Get all images uploaded to the media gallery
+  *@example URL - /core/get_gallery_images/
+  *@api
+  *@return array containing all `images`
+  **/
   public function get_gallery_images() {
     global $json_api;
 
@@ -200,14 +207,20 @@ class JSON_API_Core_Controller {
     foreach( $query_images->posts as $image) {
       $id = $image->ID;
       $imageurl = wp_get_attachment_url($id);
+      $src = wp_get_attachment_image_src($id, 'thumbnail');
       $alttext = get_post_meta($id, '_wp_attachment_image_alt', true);
 
-      $images[] = array('id' => $id, 'url' => $imageurl, 'alt_text' => $alttext);
+      $images[] = array('id' => $id, 'url' => $imageurl, 'alt_text' => $alttext, 'thumbnail' => $src[0]);
     }
     return array('images' => $images);
   }
   
-
+  /**
+  *login to the specified user account
+  *@example URL - /core/login
+  *@api
+  *@return array containing the user logged in
+  **/
   public function login(){
     global $json_api;
     $creds['user_login'] = $json_api->query->user;
@@ -221,6 +234,12 @@ class JSON_API_Core_Controller {
     return $user;
   }
   
+  /**
+  *Grab the post with the specified ID
+  *@example URL - /core/get_post/
+  *@api
+  *@return array containing the specified post 
+  **/
   public function get_post() {
     global $json_api, $post;
     $post = $json_api->introspector->get_current_post();
@@ -242,6 +261,12 @@ class JSON_API_Core_Controller {
     }
   }
 
+  /**
+  *Grab the page with the specified ID
+  *@example URL - /core/get_page/
+  *@api
+  *@return array containing the specified page 
+  **/
   public function get_page() {
     global $json_api;
     extract($json_api->query->get(array('id', 'slug', 'page_id', 'page_slug', 'children')));
@@ -290,6 +315,9 @@ class JSON_API_Core_Controller {
     }
   }
   
+  /**
+  *@api
+  **/
   public function get_date_posts() {
     global $json_api;
     if ($json_api->query->date) {
@@ -311,6 +339,9 @@ class JSON_API_Core_Controller {
     return $this->posts_result($posts);
   }
   
+  /**
+  *@api
+  **/
   public function get_category_posts() {
     global $json_api;
     $category = $json_api->introspector->get_current_category();
@@ -323,6 +354,9 @@ class JSON_API_Core_Controller {
     return $this->posts_object_result($posts, $category);
   }
   
+  /**
+  *@api
+  **/
   public function get_tag_posts() {
     global $json_api;
     $tag = $json_api->introspector->get_current_tag();
@@ -335,6 +369,9 @@ class JSON_API_Core_Controller {
     return $this->posts_object_result($posts, $tag);
   }
   
+  /**
+  *@api
+  **/
   public function get_author_posts() {
     global $json_api;
     $author = $json_api->introspector->get_current_author();
@@ -347,6 +384,9 @@ class JSON_API_Core_Controller {
     return $this->posts_object_result($posts, $author);
   }
   
+  /**
+  *@api
+  **/
   public function get_search_results() {
     global $json_api;
     if ($json_api->query->search) {
@@ -359,6 +399,9 @@ class JSON_API_Core_Controller {
     return $this->posts_result($posts);
   }
   
+  /**
+  *@api
+  **/
   public function get_date_index() {
     global $json_api;
     $permalinks = $json_api->introspector->get_date_archive_permalinks();
@@ -369,6 +412,9 @@ class JSON_API_Core_Controller {
     );
   }
   
+  /**
+  *@api
+  **/
   public function get_category_index() {
     global $json_api;
     $args = null;
@@ -384,6 +430,9 @@ class JSON_API_Core_Controller {
     );
   }
   
+  /**
+  *@api
+  **/
   public function get_tag_index() {
     global $json_api;
     $tags = $json_api->introspector->get_tags();
@@ -393,6 +442,9 @@ class JSON_API_Core_Controller {
     );
   }
   
+  /**
+  *@api
+  **/
   public function get_author_index() {
     global $json_api;
     $authors = $json_api->introspector->get_authors();
@@ -402,6 +454,9 @@ class JSON_API_Core_Controller {
     );
   }
   
+  /**
+  *@api
+  **/
   public function get_page_index() {
     global $json_api;
     $pages = array();
@@ -427,6 +482,9 @@ class JSON_API_Core_Controller {
     );
   }
   
+  /**
+  *@api
+  **/
   public function get_nonce() {
     global $json_api;
     extract($json_api->query->get(array('controller', 'method')));
@@ -497,7 +555,13 @@ class JSON_API_Core_Controller {
     );
   }
 
-  //Requires the all in one SEO plugin
+  /**
+  *Gets the values for formatting SEO options from the all-in-one SEO plugin
+  *@example URL - /api/core/get_seo_format_data
+  *@api
+  *@return array containing `post_title_format`, `blog_title`, `blog_description`, 
+  *`category_title`, `post_author_login`, `post_author_nicename`, `post_author_firstname`, `post_author_lastname`
+  **/
   public function get_seo_format_data()
   {
     global $aioseop_options, $json_api;
@@ -533,6 +597,55 @@ class JSON_API_Core_Controller {
       'post_author_firstname' => get_the_author_meta('first_name', $postdata['post_author']),
       'post_author_lastname' => get_the_author_meta('last_name', $postdata['post_author']),
       );
+  }
+
+  public function get_object_counts()
+  {
+    global $json_api, $wpdb;
+
+    $query = 
+    "
+      SELECT
+        (SELECT count(*) FROM wp_posts WHERE post_type = 'post' AND post_status = 'publish') as post_count,
+        (SELECT count(*)
+          FROM wp_posts p
+          LEFT JOIN wp_postmeta m ON p.ID = m.post_id AND m.meta_key LIKE 'th_extra_type'
+          WHERE p.post_type = 'page' 
+          AND p.post_status = 'publish' 
+          AND m.meta_key is null) as page_count,
+        (SELECT count(*) FROM wp_TH_buttons) as button_count;
+    ";
+    $res = $wpdb->get_results($query, OBJECT);
+    return $res[0];
+  }
+
+  public function get_installed_themes()
+  {
+    $theme_root = get_theme_root();
+
+    $directories = glob($theme_root . '/*' , GLOB_ONLYDIR);
+    $dirnames = [];
+
+    foreach($directories as $theme){
+      array_push($dirnames, basename($theme));
+    }
+
+    return $dirnames;
+  }
+
+  public function get_blog_info()
+  {
+    $title = get_bloginfo('name');
+
+    return array('title' => $title);
+  }
+
+  public function get_home_and_blog_pages()
+  {
+    $home = get_option('page_on_front');
+    $blog = get_option('page_for_posts');
+
+    return array('pages' => array('home_page' => $home, 'blog_page' => $blog));
   }
   
 }

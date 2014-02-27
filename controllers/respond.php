@@ -1,11 +1,19 @@
 <?php
-/*
-Controller name: Respond
-Controller description: Comment/trackback submission methods
+/**
+*Controller name: Respond
+*Controller description: Comment/trackback submission methods
 */
 
+/**
+*Class related to responses
+*@package Controllers\Respond
+*/
 class JSON_API_Respond_Controller {
   
+  /**
+  *Submit a comment on the specified post with the specified data
+  *@return array success or false
+  **/
   function submit_comment() {
     global $json_api;
     nocache_headers();

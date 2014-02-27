@@ -1,16 +1,44 @@
 <?php
 
+/**
+*Data object for a Wordpress attachment
+*@package Models\Attachment
+**/
 class JSON_API_Attachment {
+  /**
+  *@var int $id ID for the attachment
+  */
+  var $id;          
+  /**
+  *@var string $url URL of the attachment
+  **/
+  var $url;         
+  /**
+  *@var string $slug slug keyword of the attachment
+  **/
+  var $slug;        
+  /**
+  *@var string $title Title of the object
+  **/
+  var $title;       
+  /**
+  *@var string $description Description of the attachment
+  **/
+  var $description; 
+  /**
+  *@var string $caption Caption of the object
+  **/
+  var $caption;     
+  /**
+  *@var int $parent The post ID attached to
+  **/
+  var $parent;      
+  /**
+  *@var string $mime_type type of upload for the attachment
+  **/
+  var $mime_type;   
   
-  var $id;          // Integer
-  var $url;         // String
-  var $slug;        // String
-  var $title;       // String
-  var $description; // String
-  var $caption;     // String
-  var $parent;      // Integer
-  var $mime_type;   // String
-  
+  /**Basic constructor for an attachment**/
   function JSON_API_Attachment($wp_attachment = null) {
     if ($wp_attachment) {
       $this->import_wp_object($wp_attachment);

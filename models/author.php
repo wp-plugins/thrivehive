@@ -1,20 +1,46 @@
 <?php
-
+/**
+*Data oject for an author for wordpress posts
+*@package Models\Author
+**/
 class JSON_API_Author {
-  
-  var $id;          // Integer
-  var $slug;        // String
-  var $name;        // String
-  var $first_name;  // String
-  var $last_name;   // String
-  var $nickname;    // String
-  var $url;         // String
-  var $description; // String
+  /**
+  *@var int $id ID of the author 
+  **/
+  var $id;          
+  /**
+  *@var string $slug author keyword slug
+  **/
+  var $slug;        
+  /**
+  *@var string $name actual name of the author
+  **/
+  var $name;        
+  /**
+  *@var string $first_name first name of the author
+  **/
+  var $first_name;  
+  /**
+  *@var string $last_name last name of the author
+  **/
+  var $last_name;   
+  /**
+  *@var string nickname nickname of the author
+  **/
+  var $nickname;   
+  /**
+  *@var string $url url for the author in wordpress
+  **/
+  var $url;         
+  /**
+  *@var string $description description of the author
+  **/
+  var $description; 
   
   // Note:
   //   JSON_API_Author objects can include additional values by using the
   //   author_meta query var.
-  
+  /**Basic constructor for an author**/
   function JSON_API_Author($id = null) {
     if ($id) {
       $this->id = (int) $id;

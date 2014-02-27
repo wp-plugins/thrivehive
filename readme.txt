@@ -3,7 +3,7 @@ Contributors: thrivehive
 Donate link: 
 Tags: web analytics, tracking, thrivehive thrive hive
 Requires at least: 3
-Tested up to: 3.8
+Tested up to: 3.8.1
 Stable tag: .1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.00  MAJOR Release integrating with the new Thrivehive wordpress interface
 V 0.59: Fixing but with getting blog post content
 V 0.58: Changing the method for getting public previews
 V 0.54: Added rewrite flushing on activation

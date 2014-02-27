@@ -7,6 +7,7 @@ class JSON_API {
     $this->introspector = new JSON_API_Introspector();
     $this->response = new JSON_API_Response();
     add_action('template_redirect', array(&$this, 'template_redirect'));
+    $this->admin_options();
     add_action('admin_init', array(&$this, 'admin_options'));
     add_action('update_option_json_api_base', array(&$this, 'flush_rewrite_rules'));
     add_action('pre_update_option_json_api_controllers', array(&$this, 'update_controllers'));
@@ -73,9 +74,9 @@ class JSON_API {
   }
   
    function admin_options() {
-    if (!current_user_can('manage_options'))  {
+   /* if (!current_user_can('manage_options'))  {
       wp_die( __('You do not have sufficient permissions to access this page.') );
-    }
+    }*/
     
     $available_controllers = $this->get_controllers();
     $active_controllers = $available_controllers;//explode(',', get_option('json_api_controllers', 'core'));
@@ -84,7 +85,7 @@ class JSON_API {
       $active_controllers = array();
     }
     
-    $this->save_option('json_api_controllers', implode(',', $active_controllers));
+    update_option('json_api_controllers', implode(',', $active_controllers));
   }
   
   function print_controller_actions($name = 'action') {

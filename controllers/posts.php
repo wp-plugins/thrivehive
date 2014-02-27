@@ -1,28 +1,38 @@
 <?php
-/*
-Controller name: Posts
-Controller description: Data manipulation methods for posts
+/**
+*Controller name: Posts
+*Controller description: Data manipulation methods for posts
 */
 
+
+/**
+*Class for interactions related to posts
+*@package Controllers\Posts
+*/
 class JSON_API_Posts_Controller {
 
+  /**
+  *@api
+  **/
   public function create_post() {
     global $json_api;
 
-    if (!$json_api->query->nonce) {
+   /* if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to create posts. Use the `get_nonce` Core API method.");
-    }
-
+    }*/
 
     $nonce_id = $json_api->get_nonce_id('posts', 'create_post');
 
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
     if (!current_user_can('edit_posts')) {
       $json_api->error("You need to login with a user that has 'edit_posts' capacity.",'**auth**');
     }
+
     nocache_headers();
     $post = new JSON_API_Post();
 
@@ -30,23 +40,37 @@ class JSON_API_Posts_Controller {
     if (empty($id)) {
       $json_api->error("Could not create post.");
     }
+    if(isset($_REQUEST['extra_type']))
+    {
+      update_post_meta($id, 'th_extra_type', $_REQUEST['extra_type']);
+    }
+    if(isset($_REQUEST['th_data']))
+    {
+      update_post_meta($id, 'th_data', $_REQUEST['th_data']);
+    }
     return array(
       'post' => $post
     );
   }
   
+  /**
+  *@api
+  **/
   public function update_post() {
     global $json_api;
     $post = $json_api->introspector->get_current_post();
     if (empty($post)) {
       $json_api->error("Post not found.");
     }
-    if (!$json_api->query->nonce) {
+    /*if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to update posts. Use the `get_nonce` Core API method.");
-    }
+    }*/
 
     $nonce_id = $json_api->get_nonce_id('posts', 'update_post');
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
@@ -56,11 +80,18 @@ class JSON_API_Posts_Controller {
     nocache_headers();
     $post = new JSON_API_Post($post);
     $post->update($_REQUEST);
+    if(isset($_REQUEST['th_data']))
+    {
+      update_post_meta($_REQUEST['post_id'], 'th_data', $_REQUEST['th_data']);
+    }
     return array(
       'post' => $post
     );
   }
   
+  /**
+  *@api
+  **/
   public function delete_post() {
     global $json_api;
     $post = $json_api->introspector->get_current_post();
@@ -76,11 +107,14 @@ class JSON_API_Posts_Controller {
     if ($post->post_author != get_current_user_id() && !current_user_can('delete_other_posts')) {
       $json_api->error("You need to login with a user that has the 'delete_other_posts' capacity.", "**auth**");
     }
-    if (!$json_api->query->nonce) {
+    /*if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to update posts. Use the `get_nonce` Core API method.");
-    }
+    }*/
     $nonce_id = $json_api->get_nonce_id('posts', 'delete_post');
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
     nocache_headers();
@@ -88,16 +122,24 @@ class JSON_API_Posts_Controller {
     return array();
   }
 
+  /**
+  *Uploads an image into the wordpress media gallery
+  *@api
+  *@example URL - /api/posts/upload_image
+  *@return array containing the image `id`, `url`, and `thumbnail`
+  **/
   public function upload_image() {
     global $json_api;
 
-    if (!$json_api->query->nonce) {
+    /*if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to create posts. Use the `get_nonce` Core API method.");
-    }
+    }*/
 
     $nonce_id = $json_api->get_nonce_id('posts', 'upload_image');
 
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
@@ -135,6 +177,12 @@ class JSON_API_Posts_Controller {
     $json_api->error("You must specify an attachment");
   }
 
+  /**
+  *Updates the all text for a specified image
+  *@api
+  *@example URL - /api/posts/update_image_alt
+  *@return array containing the modified value
+  **/
   public function update_image_alt(){
     global $json_api;
 
@@ -148,13 +196,16 @@ class JSON_API_Posts_Controller {
       $json_api->error("You must include the 'alt_text' to include in the image post");
     }
 
-    if (!$json_api->query->nonce) {
+    /*if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to create posts. Use the `get_nonce` Core API method.");
     }
+    */
 
     $nonce_id = $json_api->get_nonce_id('posts', 'update_image_alt');
 
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
@@ -168,7 +219,13 @@ class JSON_API_Posts_Controller {
      return array('modified' => $res);
   }
 
-  //Requires the all-in-one-seo plugin
+  /**
+  *Updates the meta title for a given wordpress post requires the all-in-one SEO plugin'
+  *@api
+  *@example URL - /api/posts/update_post_meta_title
+  *@link http://wordpress.org/plugins/all-in-one-seo-pack/
+  *@return array containing the modified value
+  **/
   public function update_post_meta_title(){
     global $json_api;
 
@@ -182,13 +239,15 @@ class JSON_API_Posts_Controller {
       $json_api->error("You must include the 'title' to include in the image post");
     }
 
-    if (!$json_api->query->nonce) {
+    /*if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to create posts. Use the `get_nonce` Core API method.");
-    }
+    }*/
 
     $nonce_id = $json_api->get_nonce_id('posts', 'update_post_meta_title');
 
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
@@ -208,7 +267,12 @@ class JSON_API_Posts_Controller {
 
   }
 
-  //Requires the all-in-one-seo plugin
+  /**
+  *Gets the post meta title and description for a given post
+  *@api
+  *@example URL - /api/posts/get_post_meta
+  *@return array containing the title and desc for the post
+  **/
   public function get_post_meta(){
     global $json_api;
 
@@ -217,13 +281,15 @@ class JSON_API_Posts_Controller {
       $json_api->error("You must specify the 'post_id' to poll");
     }
 
-    if (!$json_api->query->nonce) {
+    /*if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to create posts. Use the `get_nonce` Core API method.");
-    }
+    }*/
 
     $nonce_id = $json_api->get_nonce_id('posts', 'get_post_meta');
 
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
@@ -233,6 +299,12 @@ class JSON_API_Posts_Controller {
     return array('title' => $title, 'desc' => $desc);
   }
 
+  /**
+  *Looks for the postpreview meta value to see if we have a preview available for a given post
+  *@api
+  *@example URL - /api/posts/get_preview_meta
+  *@return array containing the `postpreview` value
+  **/
   public function get_preview_meta(){
     global $json_api;
 
@@ -241,13 +313,15 @@ class JSON_API_Posts_Controller {
       $json_api->error("You must specify the 'post_id' to poll");
     }
 
-    if (!$json_api->query->nonce) {
+    /*if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to create posts. Use the `get_nonce` Core API method.");
-    }
+    }*/
 
     $nonce_id = $json_api->get_nonce_id('posts', 'get_preview_meta');
 
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
@@ -260,7 +334,13 @@ class JSON_API_Posts_Controller {
     return array('postpreview' => $postpreview);
   }
 
-  //Requires the all-in-one-seo plugin
+  /**
+  *Updates the meta description for a given post. Requires the all-in-one SEO plugin
+  *@api
+  *@example URL - /api/posts/update_post_meta_desc
+  *@link http://wordpress.org/plugins/all-in-one-seo-pack/
+  *@return array containing the modified value
+  **/
   public function update_post_meta_desc(){
     global $json_api;
 
@@ -274,13 +354,15 @@ class JSON_API_Posts_Controller {
       $json_api->error("You must include the 'title' to include in the image post");
     }
 
-    if (!$json_api->query->nonce) {
+    /*if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to create posts. Use the `get_nonce` Core API method.");
-    }
+    }*/
 
     $nonce_id = $json_api->get_nonce_id('posts', 'update_post_meta_desc');
 
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
@@ -300,6 +382,12 @@ class JSON_API_Posts_Controller {
 
   }
 
+  /**
+  *Gets the link to the preview version of a post 
+  *@api
+  *@example URL - /api/posts/get_post_preview
+  *@return array containing the `link` to the post preview
+  **/
   public function get_post_preview(){
     global $json_api;
 
@@ -318,13 +406,19 @@ class JSON_API_Posts_Controller {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
-    $res =  $this->get_preview_link($_REQUEST['post_id']);*/
-    $res = add_query_arg(array('preview' => true), get_permalink($_REQUEST['post_id']));
+    $res =  $this->get_preview_link($_REQUEST['post_id']);
+    $res = add_query_arg(array('preview' => true), get_permalink($_REQUEST['post_id']));*/
+    $res = site_url('/') . "?p=" . $_REQUEST['post_id'] . "&preview=true";
 
     return array('link' => $res);
   }
 
-  //This is only for public post preview, not for other API calls
+  /**
+  *Gets the preview link to the specified post
+  *@api
+  *@param int $post_id the id of the desired post
+  *@return string the permalink for the post
+  **/
   private function get_preview_link( $post_id ) {
     return add_query_arg(
       array(
@@ -335,7 +429,12 @@ class JSON_API_Posts_Controller {
     );
   }
 
-  //This is only for public post preview, not for other API calls
+  /**
+  *Creates a nonce for fetching the post preview
+  *@api
+  *@param string $action the action calling ('public_post_preview_')
+  *@return string the nonce value for the action -- lasts 48 hours
+  **/
   function create_nonce( $action ) {
     $nonce_life = apply_filters( 'ppp_nonce_life', 60 * 60 * 48 ); // 48 hours
     $i = ceil( time() / ( $nonce_life / 2 ) );
@@ -343,6 +442,12 @@ class JSON_API_Posts_Controller {
     return substr( wp_hash( $i . $action, 'nonce' ), -12, 10 );
   }
 
+  /**
+  *Updates the published preview meta value for the given post
+  *@api
+  *@example URL - /api/posts/update_published_preview_meta
+  *@return array containing the modified value
+  **/
   public function update_published_preview_meta(){
     global $json_api;
 
@@ -356,13 +461,15 @@ class JSON_API_Posts_Controller {
       $json_api->error("You must include the 'target_id' of the post to save as draft");
     }
 
-    if(!$json_api->query->nonce) {
+    /*if(!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to access the preview. Use the `get_nonce` core API method.");
-    }
+    }*/
 
     $nonce_id = $json_api->get_nonce_id('posts', 'update_published_preview_meta');
 
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
       $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     }
 
@@ -374,6 +481,74 @@ class JSON_API_Posts_Controller {
     $res =  update_post_meta($_REQUEST['post_id'], 'th-published-preview', $_REQUEST['target_id']);
 
     return array('modified' => $res);
+  }
+
+  /**
+  *Gets a list of all plugins active on the site
+  *@api
+  *@example URL - /api/posts/active_plugins
+  *@return array containing the list of plugins
+  **/
+  public function active_plugins(){
+    global $json_api;
+    $plugins = wp_get_active_and_valid_plugins();
+    return array('plugins' => $plugins);
+  }
+
+  public function get_page_template_files(){
+    global $json_api;
+  include_once ABSPATH . 'wp-admin/includes/theme.php';
+   
+  $templates = get_page_templates();
+
+  $newarray = array();
+  while($filename = current($templates))
+  {
+    array_push($newarray, array('name' => key($templates), 'file' => $filename));
+    next($templates);
+  }
+
+    return array('templates' => $newarray);
+  }
+
+   public function get_page_template_file(){
+    global $json_api;
+    if(!isset($_REQUEST['post_id']))
+    {
+      $json_api->error("You must specify the `post_id` of the page to retrieve");
+    }
+
+    $template = get_post_meta($_REQUEST['post_id'], '_wp_page_template', true);
+
+    return array('template' => $template);
+  }
+
+  public function set_page_template(){
+    global $json_api;
+    if(!isset($_REQUEST['post_id']))
+    {
+      $json_api->error("You must specify the `post_id` of the page to update");
+    }
+    if(!isset($_REQUEST['template']))
+    {
+      $json_api->error("You must specify the `template` to set");
+    }
+    /*if(!isset($_REQUEST['nonce']))
+    {
+      $json_api->error("You must specify the `nonce` value. Use get_nonce");
+    }*/
+
+    $nonce_id = $json_api->get_nonce_id('posts', 'set_page_template');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    update_post_meta($_REQUEST['post_id'], '_wp_page_template', $_REQUEST['template']);
+
+    return array();
   }
   
 }

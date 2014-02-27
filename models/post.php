@@ -1,31 +1,95 @@
 <?php
-
+/**
+*Data object for a wordpress post (also works for pages)
+*@package Models\Post
+**/
 class JSON_API_Post {
   
   // Note:
   //   JSON_API_Post objects must be instantiated within The Loop.
-  
-  var $id;              // Integer
-  var $type;            // String
-  var $slug;            // String
-  var $url;             // String
-  var $status;          // String ("draft", "published", or "pending")
-  var $title;           // String
-  var $title_plain;     // String
-  var $content;         // String (modified by read_more query var)
-  var $excerpt;         // String
-  var $date;            // String (modified by date_format query var)
-  var $modified;        // String (modified by date_format query var)
-  var $categories;      // Array of objects
-  var $tags;            // Array of objects
-  var $author;          // Object
-  var $comments;        // Array of objects
-  var $attachments;     // Array of objects
-  var $comment_count;   // Integer
+
+  /**
+  *@var int $id ID of the post
+  **/
+  var $id;              
+  /**
+  *@var string $type The type for the post IE page, post
+  **/
+  var $type;            
+  /**
+  *@var string $slug the keyword slug for the post
+  **/
+  var $slug;            
+  /**
+  *@var string $url The URL pointing at the post
+  **/
+  var $url;            
+  /**
+  *@var string $status The status of the post (draft, published, pending, ETC)
+  **/
+  var $status;          
+  /**
+  *@var string $title The title of the post
+  **/
+  var $title;           
+  /**
+  *@var string $title_plain The title of the post without formatting
+  **/
+  var $title_plain;     
+  /**
+  *@var string $content the text content of the post
+  **/
+  var $content;         
+  /**
+  *@var string $excerpt a sample of the post content
+  **/
+  var $excerpt;         
+  /**
+  *@var string $date the created date of this post
+  **/
+  var $date;            
+  /**
+  *@var string $modified the last modified date of this post
+  */
+  var $modified;        
+  /**
+  *@var Category[] $categories Array of categories assigned to this post
+  **/
+  var $categories;      
+  /**
+  *@var Tags[] $tags Array of tags assigned to this post
+  **/
+  var $tags;            
+  /**
+  *@var Author $author The author of the post
+  **/
+  var $author;          
+  /**
+  *@var Comment[] $comments Array of comments attached to this post
+  **/
+  var $comments;       
+  /**
+  *@var Attachment[] $attachments Array of attachments connected with this post
+  */
+  var $attachments;    
+  /**
+  *@var int $comment_count the number of comments attached to this post
+  */
+  var $comment_count;   
+  /**
+  *@var string $comment_status if the post is open for comments
+  **/
   var $comment_status;  // String ("open" or "closed")
-  var $thumbnail;       // String
-  var $custom_fields;   // Object (included by using custom_fields query var)
+  /**
+  *@var string $thumbnail The thumbnail url ??
+  **/
+  var $thumbnail;       
+  /**
+  *@var object $custom_fields any custom fields associated with the post
+  **/
+  var $custom_fields;   
   
+  /**basic constructor for a wordpress post**/
   function JSON_API_Post($wp_post = null) {
     if (!empty($wp_post)) {
       $this->import_wp_object($wp_post);
