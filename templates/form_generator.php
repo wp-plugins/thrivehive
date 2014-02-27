@@ -80,7 +80,7 @@ form.hiveform input.hivesubmit {
       <label for="input4-contactform">Email<span class="required-star">*</span></label><input type="text" name="list.email" id="input4-contactform" /> 
     <div id="input4-contactform-errors" class="error-block"></div> 
     
-    <input type="hidden" name="meta.redirectUrl" id="meta_redirectUrl" value="http://www.thrivehive.com/thank-you" /> 
+    <input type="hidden" name="meta.redirectUrl" id="meta_redirectUrl" value="/thank-you" /> 
     <input type="submit" value="Submit" class="hivesubmit"/> 
 </form> 
  
