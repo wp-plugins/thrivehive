@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.02	Adding validation for current PHP version
 V 1.00  MAJOR Release integrating with the new Thrivehive wordpress interface
 V 0.59: Fixing but with getting blog post content
 V 0.58: Changing the method for getting public previews

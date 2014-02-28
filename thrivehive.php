@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.01
+   *Version: 1.02
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -331,6 +331,14 @@ register_activation_hook(__FILE__, 'thrivehive_create_button_db');
 function th_activate() {
     global $wp_rewrite;
     add_option('thrivehive_do_activation_redirect', true);
+
+    if(version_compare(PHP_VERSION, '5.4', '<'))
+	{
+		deactivate_plugins(basename(__FILE__));
+
+		wp_die('<p>The <strong>Thrivehive</strong> plugin requires PHP version 5.4 or greater. </br> For help please contact <strong><a href="mailto:support@thrivehive.com">support@thrivehive.com</a></strong></p>',
+				'Plugin Activation Error',  array( 'response'=>200, 'back_link'=>TRUE ) );
+	}
     #add_filter('rewrite_rules_array', 'json_api_rewrites');
     
     #flush_rewrite_rules();
