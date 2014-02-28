@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.04 Updating social buttons to be optional
 V 1.03 changed social buttons to be echo'd to the page rather than written directly
 V 1.02	Adding validation for current PHP version
 V 1.00  MAJOR Release integrating with the new Thrivehive wordpress interface

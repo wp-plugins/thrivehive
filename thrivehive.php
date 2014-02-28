@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.03
+   *Version: 1.04
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -77,6 +77,8 @@ function register_thrivehive_settings() {
 	register_setting( 'thrivehive-settings-group', 'th_site_logo');
 	register_setting( 'thrivehive-settings-group', 'th_facebook');
 	register_setting( 'thrivehive-settings-group', 'th_twitter');
+	register_setting( 'thrivehive-settings-group', 'th_social_blogroll');
+	register_setting( 'thrivehive-settings-group', 'th_social_blog');
 
 	add_settings_field('th_setting_logo', __('Logo', 'th'), 'th_setting_logo', $pagenow);
 
@@ -186,6 +188,18 @@ function thrivehive_settings_page() {
 			<th scope="row">ThriveHive twitter Username/Userid</th>
 			<td>
 				<input type="text" name="th_twitter" value="<?php echo get_option('th_twitter'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">Show Social Buttons on Blogroll</th>
+			<td>
+				<input type="checkbox" value='any' name="th_social_blogroll" <?php if (get_option('th_social_blogroll')){?>checked<?php } ?> />
+			</td>
+		</tr>		
+		<tr valign="top">
+			<th scope="row">Show Social Buttons on Blog Entry</th>
+			<td>
+				<input type="checkbox" value='any' name="th_social_blog" <?php if (get_option('th_social_blog')){?>checked<?php } ?> />
 			</td>
 		</tr>		
 		<tr valign="top">
@@ -1252,22 +1266,29 @@ function renderSocialStuff($content){
 		
 		wp_enqueue_script( "twitter", "//platform.twitter.com/widgets.js");
 		wp_enqueue_script( "facebook", "//static.ak.fbcdn.net/connect.php/js/FB.Share");
-		echo  "";
-		echo "<div class='social-buttons' style='margin:5px 0'>";
-		echo "	<div id='twitterbutton' style='float:left'>";
-		echo "		<div>";
-		echo "			<a href='//twitter.com/share' class='twitter-share-button' data-url='$permalink' data-counturl='$permalink' data-text='$title' data-via='$twitter' data-related='$twitter' data-counturl='$permalink'>Tweet</a>";
-		echo "		</div>";
-		echo "	</div>";
-		echo "	<div id='likebutton' style='float:left'>";
-		echo "		<iframe src='//www.facebook.com/plugins/like.php?href=$encodedPermalink&layout=button_count&show_faces=false&width=100&action=like&font=verdana";
-		echo "		&colorscheme=light&height=21' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:100px; height:21px;' allowTransparency='true'>";
-		echo "		</iframe>";
-		echo "	</div>";
-		echo "	<div id='sharebutton' style='padding-top:1px;float:left;'>";
-		echo "	</div>";
-		echo "	<div style='clear: both;'></div>";
-		echo "</div>";
+		$blog_roll = get_option("th_social_blogroll");
+		$single = get_option("th_social_blog");
+		$show_blogroll = $blog_roll && !is_single();
+		$show_single = $single && is_single();
+		if($show_blogroll || $show_single)
+		{
+			echo  "";
+			echo "<div class='social-buttons' style='margin:5px 0'>";
+			echo "	<div id='twitterbutton' style='float:left'>";
+			echo "		<div>";
+			echo "			<a href='//twitter.com/share' class='twitter-share-button' data-url='$permalink' data-counturl='$permalink' data-text='$title' data-via='$twitter' data-related='$twitter' data-counturl='$permalink'>Tweet</a>";
+			echo "		</div>";
+			echo "	</div>";
+			echo "	<div id='likebutton' style='float:left'>";
+			echo "		<iframe src='//www.facebook.com/plugins/like.php?href=$encodedPermalink&layout=button_count&show_faces=false&width=100&action=like&font=verdana";
+			echo "		&colorscheme=light&height=21' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:100px; height:21px;' allowTransparency='true'>";
+			echo "		</iframe>";
+			echo "	</div>";
+			echo "	<div id='sharebutton' style='padding-top:1px;float:left;'>";
+			echo "	</div>";
+			echo "	<div style='clear: both;'></div>";
+			echo "</div>";
+		}
 		//$content = $smcontent.$content;
 	}
 	return $content;
