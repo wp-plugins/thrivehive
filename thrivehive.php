@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.02
+   *Version: 1.03
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -327,6 +327,8 @@ function add_theme_name_as_body_class() {
 register_activation_hook(__FILE__, 'th_activate');
 register_activation_hook(__FILE__, 'th_permalinks');
 register_activation_hook(__FILE__, 'thrivehive_create_button_db');
+
+
 
 function th_activate() {
     global $wp_rewrite;
@@ -1250,23 +1252,23 @@ function renderSocialStuff($content){
 		
 		wp_enqueue_script( "twitter", "//platform.twitter.com/widgets.js");
 		wp_enqueue_script( "facebook", "//static.ak.fbcdn.net/connect.php/js/FB.Share");
-		$smcontent = "";
-		$smcontent.="<div class='social-buttons' style='margin:5px 0'>";
-		$smcontent.="	<div id='twitterbutton' style='float:left'>";
-		$smcontent.="		<div>";
-		$smcontent.="			<a href='//twitter.com/share' class='twitter-share-button' data-url='$permalink' data-counturl='$permalink' data-text='$title' data-via='$twitter' data-related='$twitter' data-counturl='$permalink'>Tweet</a>";
-		$smcontent.="		</div>";
-		$smcontent.="	</div>";
-		$smcontent.="	<div id='likebutton' style='float:left'>";
-		$smcontent.="		<iframe src='//www.facebook.com/plugins/like.php?href=$encodedPermalink&layout=button_count&show_faces=false&width=100&action=like&font=verdana";
-		$smcontent.="		&colorscheme=light&height=21' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:100px; height:21px;' allowTransparency='true'>";
-		$smcontent.="		</iframe>";
-		$smcontent.="	</div>";
-		$smcontent.="	<div id='sharebutton' style='padding-top:1px;float:left;'>";
-		$smcontent.="	</div>";
-		$smcontent.="	<div style='clear: both;'></div>";
-		$smcontent.="</div>";
-		$content = $smcontent.$content;
+		echo  "";
+		echo "<div class='social-buttons' style='margin:5px 0'>";
+		echo "	<div id='twitterbutton' style='float:left'>";
+		echo "		<div>";
+		echo "			<a href='//twitter.com/share' class='twitter-share-button' data-url='$permalink' data-counturl='$permalink' data-text='$title' data-via='$twitter' data-related='$twitter' data-counturl='$permalink'>Tweet</a>";
+		echo "		</div>";
+		echo "	</div>";
+		echo "	<div id='likebutton' style='float:left'>";
+		echo "		<iframe src='//www.facebook.com/plugins/like.php?href=$encodedPermalink&layout=button_count&show_faces=false&width=100&action=like&font=verdana";
+		echo "		&colorscheme=light&height=21' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:100px; height:21px;' allowTransparency='true'>";
+		echo "		</iframe>";
+		echo "	</div>";
+		echo "	<div id='sharebutton' style='padding-top:1px;float:left;'>";
+		echo "	</div>";
+		echo "	<div style='clear: both;'></div>";
+		echo "</div>";
+		//$content = $smcontent.$content;
 	}
 	return $content;
 }
