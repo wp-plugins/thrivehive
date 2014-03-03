@@ -23,7 +23,7 @@ This plugin will automatically instrument a site with ThriveHive's tracking code
 
 == Frequently asked questions ==
 1. How do I get the assets to start using this plugin?
-Answer: To get started with ThriveHive, you'll need to create an account with ThriveHive at http://thrivehive.com/free-trial/signup. Once you have an account, go to the account page to get your tracking code (which containts your account ID). ThriveHive will help you get your form HTML and tracked phone lines as well.
+Answer: To get started with ThriveHive, you'll need to create an account with ThriveHive at http://thrivehive.com/free-trial/signup. Once you have an account, go to the account page to get your tracking code (which contains your account ID). ThriveHive will help you get your form HTML and tracked phone lines as well.
 2. How do I insert the phone number and form into my pages, posts, and templates?
 Answer: There are two ways to insert the forms and phone numbers. The first uses "shortcodes" which you can use in your pages and posts. Just type [th_form] or [th_phone] in a post or a page and it will pull in the appropriate asset (assuming you have set one up in the ThriveHive plugin settings page. To insert your phone number and form into your php template files, you will need to include <?php th_display_form(); ?> or <?php th_display_form(); >? in your template.
 
@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.05 Bug fix for PHP Version <5.4
 V 1.04 Updating social buttons to be optional
 V 1.03 changed social buttons to be echo'd to the page rather than written directly
 V 1.02	Adding validation for current PHP version

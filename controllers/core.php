@@ -624,7 +624,7 @@ class JSON_API_Core_Controller {
     $theme_root = get_theme_root();
 
     $directories = glob($theme_root . '/*' , GLOB_ONLYDIR);
-    $dirnames = [];
+    $dirnames = array();
 
     foreach($directories as $theme){
       array_push($dirnames, basename($theme));
