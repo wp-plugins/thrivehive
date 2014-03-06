@@ -34,16 +34,17 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
-V 1.05 Bug fix for PHP Version <5.4
-V 1.04 Updating social buttons to be optional
-V 1.03 changed social buttons to be echo'd to the page rather than written directly
+V 1.06  Bug fix for theme page templates not showing up
+V 1.05  Bug fix for PHP Version <5.4
+V 1.04  Updating social buttons to be optional
+V 1.03  changed social buttons to be echo'd to the page rather than written directly
 V 1.02	Adding validation for current PHP version
 V 1.00  MAJOR Release integrating with the new Thrivehive wordpress interface
 V 0.59: Fixing but with getting blog post content
 V 0.58: Changing the method for getting public previews
 V 0.54: Added rewrite flushing on activation
 V 0.51: Bug fix for creating blog posts with no title having all content wiped out
-V 0.5: Major update adding integration with ThriveHive to create and view blog posts as well as various usability enhancements
+V 0.5:  Major update adding integration with ThriveHive to create and view blog posts as well as various usability enhancements
 
 
 == Upgrade notice ==
