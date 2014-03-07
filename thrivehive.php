@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.05
+   *Version: 1.07
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -53,7 +53,7 @@ $dir = json_api_dir();
 function thrivehive_create_menu() {
 	
 	//create new top-level menu
-	add_menu_page('ThriveHive Plugin Settings', 'ThriveHive', 'administrator', __FILE__, 'thrivehive_settings_page',plugins_url('/images/icon.png', __FILE__));
+	add_menu_page('ThriveHive Plugin Settings', 'ThriveHive', 'administrator', __FILE__, 'thrivehive_settings_page',plugins_url('/images/icon.png', __FILE__, '999'));
 
 	//call register settings function
 	add_action( 'admin_init', 'register_thrivehive_settings' );
