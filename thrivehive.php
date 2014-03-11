@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.07
+   *Version: 1.08
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -389,7 +389,7 @@ function th_permalinks(){
     add_filter('rewrite_rules_array', 'json_api_rewrites');
     $wp_rewrite->flush_rules();
 }
-function file_get_contents_curl($url) {
+function th_file_get_contents_curl($url) {
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_HEADER, 0);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
@@ -405,7 +405,7 @@ function th_redirect() {
 	if(get_option('thrivehive_do_activation_validation', false)){
 		delete_option('thrivehive_do_activation_validation');
 		$url = get_bloginfo('url').'/api';
-		if(($html = file_get_contents_curl($url))){
+		if(($html = th_file_get_contents_curl($url))){
 			$json = json_decode($html);
 		}
 
