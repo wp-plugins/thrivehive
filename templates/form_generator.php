@@ -82,6 +82,7 @@ form.hiveform input.hivesubmit {
     
     <input type="hidden" name="meta.redirectUrl" id="meta_redirectUrl" value="/thank-you" /> 
     <input type="submit" value="Submit" class="hivesubmit"/> 
+    <div style="clear: both;"></div>
 </form> 
  
 <script type="text/javascript"> 
