@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.10 Fixed a bug for opening blog posts in thrivehive
 V 1.09 Styling fix on contact us form generator
 V 1.08  Function naming conflict issue with a specific theme
 V 1.07  Fix to make sure menu item shows up, and shows up last
