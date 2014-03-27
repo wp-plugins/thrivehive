@@ -34,10 +34,11 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.20 Major release supporting new shortcodes for youtube and image gallery, LinkedIn and Yelp widget buttons, 
 V 1.10 Fixed a bug for opening blog posts in thrivehive
 V 1.09 Styling fix on contact us form generator
 V 1.08  Function naming conflict issue with a specific theme
-V 1.07  Fix to make sure menu item shows up, and shows up last
+V 1.07 Fix to make sure menu item shows up, and shows up last
 V 1.06  Bug fix for theme page templates not showing up
 V 1.05  Bug fix for PHP Version <5.4
 V 1.04  Updating social buttons to be optional

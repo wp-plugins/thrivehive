@@ -1,13 +1,12 @@
 <?php
-
-   /**
-   *Plugin Name: ThriveHive
-   *Plugin URI: http://thrivehive.com
-   *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.10
-   *Author: ThriveHive
-   *Author URI: http://thrivehive.com
-   */
+/**
+	* Plugin Name: ThriveHive
+	* Plugin URI: http://thrivehive.com
+	* Description: A plugin to include ThriveHive's tracking code
+	* Version: 1.20
+	* Author: ThriveHive
+	* Author URI: http://thrivehive.com
+*/
 
 // create menu
 add_action('admin_menu', 'thrivehive_create_menu');
@@ -77,8 +76,11 @@ function register_thrivehive_settings() {
 	register_setting( 'thrivehive-settings-group', 'th_site_logo');
 	register_setting( 'thrivehive-settings-group', 'th_facebook');
 	register_setting( 'thrivehive-settings-group', 'th_twitter');
+	register_setting( 'thrivehive-settings-group', 'th_linkedin');
+	register_setting( 'thrivehive-settings-group', 'th_yelp');
 	register_setting( 'thrivehive-settings-group', 'th_social_blogroll');
 	register_setting( 'thrivehive-settings-group', 'th_social_blog');
+	register_setting( 'thrivehive-settings-group', 'th_social_sidebar');
 
 	add_settings_field('th_setting_logo', __('Logo', 'th'), 'th_setting_logo', $pagenow);
 
@@ -191,15 +193,33 @@ function thrivehive_settings_page() {
 			</td>
 		</tr>
 		<tr valign="top">
+			<th scope="row">ThriveHive LinkedIn Username/Userid</th>
+			<td>
+				<input type="text" name="th_linkedin" value="<?php echo get_option('th_linkedin'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">ThriveHive Yelp Username/Userid</th>
+			<td>
+				<input type="text" name="th_yelp" value="<?php echo get_option('th_yelp'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
 			<th scope="row">Show Social Buttons on Blogroll</th>
 			<td>
-				<input type="checkbox" value='any' name="th_social_blogroll" <?php if (get_option('th_social_blogroll')){?>checked<?php } ?> />
+				<input type="checkbox" value='True' name="th_social_blogroll" <?php if (get_option('th_social_blogroll') && get_option('th_social_blogroll') == "True"){?>checked<?php } ?> />
 			</td>
 		</tr>		
 		<tr valign="top">
 			<th scope="row">Show Social Buttons on Blog Entry</th>
 			<td>
-				<input type="checkbox" value='any' name="th_social_blog" <?php if (get_option('th_social_blog')){?>checked<?php } ?> />
+				<input type="checkbox" value='True' name="th_social_blog" <?php if (get_option('th_social_blog') && get_option('th_social_blog') == "True"){?>checked<?php } ?> />
+			</td>
+		</tr>	
+		<tr valign="top">
+			<th scope="row">Show Social Buttons on Sidebar</th>
+			<td>
+				<input type="checkbox" value='True' name="th_social_sidebar" <?php if (get_option('th_social_sidebar') && get_option('th_social_sidebar') == "True"){?>checked<?php } ?> />
 			</td>
 		</tr>		
 		<tr valign="top">
@@ -290,6 +310,59 @@ function th_map(){
   return "<img src='http://maps.google.com/maps/api/staticmap?size=375x205&amp;maptype=roadmap&amp;markers=size:mid%7Ccolor:red%7C$address&amp;sensor=false'>";
 }
 
+function th_display_gallery($atts){
+	$fake_shortcode = '[gallery';
+
+	foreach($atts as $attName => $attValue){
+		$fake_shortcode .= " $attName = \"$attValue\"";
+	}
+
+	$fake_shortcode .= ']';
+
+	return do_shortcode($fake_shortcode);
+}
+
+add_action('init', 'register_youtube_scripts');
+
+function register_youtube_scripts(){
+
+	$env = get_option('th_environment');
+
+	wp_register_script('thrivehive-youtube', "$env/content/WebTrack/thrivehive-youtube.js");
+	wp_register_script('thrivehive-youtube-iframes', "$env/content/WebTrack/thrivehive-youtube-iframe.js");
+	wp_register_script('youtube-api', '//www.youtube.com/iframe_api');
+}
+
+function th_display_youtube($atts){
+
+	wp_print_scripts('thrivehive-youtube');
+	wp_print_scripts('thrivehive-youtube-iframes');
+	wp_print_scripts('youtube-api');
+
+	if(isset($atts['id'])){
+		$id = $atts['id'];
+		$width = isset( $atts['width'] ) ? $atts['width'] : '100%';
+		$height = isset( $atts['height'] ) ? $atts['height'] : '315';
+		$allowfullscreen = isset( $atts['allowfullscreen'] ) && $atts['allowfullscreen'] == 'false' ? '' : 'allowfullscreen';
+		$autoplay = isset( $atts['autoplay']) && $atts['autoplay'] == "true" ? 1 : null;
+		$name = isset( $atts['name'] ) ? $atts['name'] : 'Video';
+		
+		$query = http_build_query(array(
+			'enablejsapi' => 1, // allow javascript api (for tracking)
+			'autoplay' => $autoplay, // user settable autoplay
+			'rel' => 0, // hide related videos
+			'modestbranding' => 1, // modest YouTube branding,
+			'origin' => get_bloginfo('url')
+		));
+
+		echo( "<iframe id='thrivehive-$id' width='$width' height='$height' src='//www.youtube.com/embed/$id?$query' frameborder='0' $allowfullscreen></iframe>");
+		echo("\n<script>cat.instrumentYouTubeIframe( document.getElementById('thrivehive-$id'), '$name' );</script>");
+	}
+
+	
+}
+
+
 //shortcodes
 //[th_form]
 add_shortcode( 'th_form', 'th_display_form' );
@@ -305,6 +378,12 @@ add_shortcode( 'th_address', 'th_display_address');
 
 //[th_map]
 add_shortcode( 'th_map', 'th_map');
+
+//[th_gallery]
+add_shortcode( 'th_gallery', 'th_display_gallery');
+
+//[th_youtube]
+add_shortcode( 'th_youtube', 'th_display_youtube' );
 
 //instrument site
 function thrivehive_instrumentation() {
@@ -369,7 +448,9 @@ function th_permalinks(){
 	$home_path = get_home_path();
 	if(! file_exists($home_path . '.htaccess')){
 		file_put_contents($home_path . '.htaccess', 
-			"<IfModule mod_rewrite.c>
+			"
+			#BEGIN WordPress
+			<IfModule mod_rewrite.c>
 			RewriteEngine On
 			RewriteBase /
 			RewriteRule ^index\.php$ - [L]
@@ -377,6 +458,7 @@ function th_permalinks(){
 			RewriteCond %{REQUEST_FILENAME} !-d
 			RewriteRule . /index.php [L]
 			</IfModule>
+			#END WordPress
 			");
 	}
 	$perma = $wp_rewrite->permalink_structure;
@@ -1210,23 +1292,37 @@ class ThriveHiveSocialButtons extends WP_Widget {
 	 * Register widget with WordPress.
 	 */
 	public function widget( $args, $instance ) {
-		$facebook = get_option('th_facebook');;
-		$twitter = get_option('th_twitter');;
-		if ($facebook || $twitter) {
-			echo $before_widget;
-			echo "<div class='social-widgets widget'>";
-			echo "<div class='widget-wrap'>";
-			    if($facebook){
-			    	$facebook_icon = plugins_url('/images/icon-facebook-32.png', __FILE__);
-			    	echo "<a href='https://www.facebook.com/$facebook'><img src='$facebook_icon' /></a>";
-				}
-				if($twitter){
-					$twitter_icon = plugins_url('/images/icon-twitter-32.png', __FILE__);
-					echo "<a href='https://twitter.com/$twitter' style='margin-left: 10px'><img src='$twitter_icon' /></a>";
-				}
-			echo "</div>";
-			echo "</div>";
-		    echo $after_widget;
+		$sidebar = get_option('th_social_sidebar');
+		if($sidebar == "True"){
+			$facebook = get_option('th_facebook');
+			$twitter = get_option('th_twitter');
+			$linkedin = get_option('th_linkedin');
+			$yelp = get_option('th_yelp');
+
+			if ($facebook || $twitter || $linkedin || $yelp) {
+				echo $before_widget;
+				echo "<div class='social-widgets widget'>";
+				echo "<div class='widget-wrap'>";
+				    if($facebook){
+				    	$facebook_icon = plugins_url('/images/icon-facebook-32.png', __FILE__);
+				    	echo "<a target='_blank' href='https://facebook.com/$facebook'><img src='$facebook_icon' /></a>";
+					}
+					if($twitter){
+						$twitter_icon = plugins_url('/images/icon-twitter-32.png', __FILE__);
+						echo "<a target='_blank' href='https://twitter.com/$twitter' style='margin-left: 10px'><img src='$twitter_icon' /></a>";
+					}
+					if($linkedin){
+						$linkedin_icon = plugins_url('/images/icon-linkedin-32.png', __FILE__);
+						echo "<a target='_blank' href='https://linkedin.com/company/$linkedin' style='margin-left: 10px'><img src='$linkedin_icon' /></a>";
+					}
+					if($yelp){
+						$yelp_icon = plugins_url('/images/icon-yelp-32.png', __FILE__);
+						echo "<a target='_blank' href='http://yelp.com/biz/$yelp' style='margin-left: 10px'><img src='$yelp_icon' /></a>";
+					}
+				echo "</div>";
+				echo "</div>";
+			    echo $after_widget;
+			}
 		}
 	}
 	/**
@@ -1268,8 +1364,8 @@ function renderSocialStuff($content){
 		wp_enqueue_script( "facebook", "//static.ak.fbcdn.net/connect.php/js/FB.Share");
 		$blog_roll = get_option("th_social_blogroll");
 		$single = get_option("th_social_blog");
-		$show_blogroll = $blog_roll && !is_single();
-		$show_single = $single && is_single();
+		$show_blogroll = $blog_roll == "True" && !is_single();
+		$show_single = $single == "True" && is_single();
 		if($show_blogroll || $show_single)
 		{
 			echo  "";

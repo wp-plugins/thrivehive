@@ -32,6 +32,12 @@ class JSON_API_Posts_Controller {
     if (!current_user_can('edit_posts')) {
       $json_api->error("You need to login with a user that has 'edit_posts' capacity.",'**auth**');
     }
+  
+    $categories = strtolower(str_replace('\\', '', $_REQUEST['categories']));
+    $categories = json_decode($categories);
+    $this->create_categories($categories);
+    $categories = implode(",", $categories);
+    $_REQUEST['categories'] = $categories;
 
     nocache_headers();
     $post = new JSON_API_Post();
@@ -77,6 +83,13 @@ class JSON_API_Posts_Controller {
     if (!current_user_can('edit_post', $post->ID)) {
       $json_api->error("You need to login with a user that has the 'edit_post' capacity for that post.", '**auth**');
     }
+
+    $categories = strtolower(str_replace('\\', '', $_REQUEST['categories']));
+    $categories = json_decode($categories);
+    $this->create_categories($categories);
+    $categories = implode(",", $categories);
+    $_REQUEST['categories'] = $categories;
+
     nocache_headers();
     $post = new JSON_API_Post($post);
     $post->update($_REQUEST);
@@ -94,7 +107,8 @@ class JSON_API_Posts_Controller {
   **/
   public function delete_post() {
     global $json_api;
-    $post = $json_api->introspector->get_current_post();
+    //$post = $json_api->introspector->get_current_post();
+    $post = get_post($_REQUEST['post_id']);
     if (empty($post)) {
       $json_api->error("Post not found.");
     }
@@ -549,6 +563,21 @@ class JSON_API_Posts_Controller {
     update_post_meta($_REQUEST['post_id'], '_wp_page_template', $_REQUEST['template']);
 
     return array();
+  }
+
+  private function create_categories($categories){
+    foreach ($categories as $cat) {
+      $cat_exists = get_term_by('name', $cat, 'category');
+      if(!$cat_exists)
+      {
+        wp_insert_term($cat, 'category', 
+          array(
+          'description'=>$cat,
+          'slug'=>sanitize_title($cat),
+          'parent'=>''
+          ));
+      }
+    }
   }
   
 }

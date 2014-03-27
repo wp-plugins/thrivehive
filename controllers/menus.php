@@ -153,17 +153,19 @@ class JSON_API_Menus_Controller {
 			foreach ($current_items as $current_item) {
 				if($item->ID == $current_item->ID)
 				{
-					$current_item->menu_order = $item->menu_order;
-					$current_item->menu_item_parent = $item->menu_item_parent;
-					$current_item->title = $item->title;
-					$current_item->url = $item->url;
+					$item_data = (array) wp_setup_nav_menu_item( get_post( $current_item->ID ) );
+					update_post_meta($current_item->ID, '_menu_item_menu_item_parent', (int) $item->menu_item_parent);
+					update_post_meta($current_item->ID, '_menu_item_url', $item->url);
+					$item_data['menu_order'] = $item->menu_order;
+					$item_data['title'] = $item->title;
+					wp_update_post($item_data);
 				}
 			}
 		}
-		foreach ($current_items as $an_item) {
+		/*foreach ($current_items as $an_item) {
 			$menu_item = $this->map_item($an_item);
 			wp_update_nav_menu_item($_REQUEST['menu_id'], $an_item->ID, $menu_item);
-		}
+		}*/
 
 		return array('saved_items' => $items, 'menu_id' => $_REQUEST['menu_id']);
 
@@ -951,6 +953,97 @@ class JSON_API_Menus_Controller {
 		}
 
 		return array();
+	}
+
+	public function set_social_widget_settings(){
+		global $json_api;
+		$res = array();
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_social_widget_settings');
+
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+		if(isset($_REQUEST['twitter'])){
+			$twitter = $_REQUEST['twitter'];
+		}
+		if(isset($_REQUEST['facebook'])){
+			$facebook = $_REQUEST['facebook'];
+		}
+		if(isset($_REQUEST['linkedin'])){
+			$linkedin = $_REQUEST['linkedin'];
+		}
+		if(isset($_REQUEST['yelp'])){
+			$yelp = $_REQUEST['yelp'];
+		}
+
+		if(isset($twitter)){
+			$url = parse_url($twitter);
+			$path = str_replace('/', '', $url['path']);
+			$res['twitter'] = update_option('th_twitter', $path);
+		}
+		if(isset($facebook)){
+			$url = parse_url($facebook);
+			$path = str_replace('/', '', $url['path']);
+			$res['facebook'] = update_option('th_facebook', $path);
+		}		
+		if(isset($linkedin)){
+			$url = parse_url($linkedin);
+			$path = str_replace('/', '', basename($url['path']));
+			$res['linkedin'] = update_option('th_linkedin', $path);
+		}
+		if(isset($yelp)){
+			$url = parse_url($yelp);
+			$path = str_replace('/', '', basename($url['path']));
+			$res['yelp'] = update_option('th_yelp', $path);
+		}
+
+		update_option('th_social_blogroll', $_REQUEST['blogroll']);
+	
+		update_option('th_social_blog', $_REQUEST['blog']);
+	
+		update_option('th_social_sidebar', $_REQUEST['sidebar']);
+
+		return array($res);
+	}
+
+	public function get_social_widget_settings(){
+		$settings = array('blogroll' => false, 'blog' => false, 'sidebar' => false);
+		$accounts = array('facebook' => '', 'twitter' => '', 'yelp' => '', 'linkedin' => '');
+		//Accounts
+		$twitter = get_option('th_twitter');
+		$facebook = get_option('th_facebook');
+		$linkedin = get_option('th_linkedin');
+		$yelp = get_option('th_yelp');
+		//Settings
+		$blogroll = get_option('th_social_blogroll');
+		$blog = get_option('th_social_blog');
+		$sidebar = get_option('th_social_sidebar');
+
+		if($twitter){
+			$accounts['twitter'] = $twitter;
+		}
+		if($facebook){
+			$accounts['facebook'] = $facebook;
+		}
+		if($linkedin){
+			$accounts['linkedin'] = $linkedin;
+		}
+		if($yelp){
+			$accounts['yelp'] = $yelp;
+		}
+
+		if($blogroll){
+			$settings['blogroll'] = $blogroll;
+		}
+		if($blog){
+			$settings['blog'] = $blog;
+		}
+		if($blog){
+			$settings['sidebar'] = $sidebar;
+		}
+		return array('accounts' => $accounts, 'settings' => $settings);
 	}
 
 }

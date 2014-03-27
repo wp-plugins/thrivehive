@@ -24,6 +24,11 @@ iframe {
 	border-width: 0;
 }
 
+/* hides big widget area: fixes https://www.pivotaltracker.com/story/show/68319426 */
+.theme-name-enterprise #home-top-bg {
+	display: none;
+}
+
 @media only screen and (max-width: 340px) {
 	.phone-number.widget .phone-number-text {
 		font-size: 24px;

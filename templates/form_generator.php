@@ -81,7 +81,7 @@ form.hiveform input.hivesubmit {
     <div id="input4-contactform-errors" class="error-block"></div> 
     
     <input type="hidden" name="meta.redirectUrl" id="meta_redirectUrl" value="/thank-you" /> 
-    <input type="submit" value="Submit" class="hivesubmit"/> 
+    <input type="submit" value="Submit" class="hivesubmit"/>
     <div style="clear: both;"></div>
 </form> 
  

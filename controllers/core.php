@@ -647,6 +647,33 @@ class JSON_API_Core_Controller {
 
     return array('pages' => array('home_page' => $home, 'blog_page' => $blog));
   }
+
+  public function get_categories()
+  {
+    $args = array(
+      'type'                     => 'post',
+      'child_of'                 => 0,
+      'parent'                   => '',
+      'orderby'                  => 'name',
+      'order'                    => 'ASC',
+      'hide_empty'               => 0,
+      'hierarchical'             => 1,
+      'exclude'                  => '',
+      'include'                  => '',
+      'number'                   => '',
+      'taxonomy'                 => 'category',
+      'pad_counts'               => false 
+    ); 
+    $categories = get_categories($args);
+
+    return array('categories' => $categories);
+  }
+
+  public function get_category(){
+    $cat = get_term_by('name', $_REQUEST['category'], 'category');
+
+    return array($cat);
+  }
   
 }
 
