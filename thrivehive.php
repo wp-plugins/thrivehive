@@ -3,7 +3,7 @@
 	* Plugin Name: ThriveHive
 	* Plugin URI: http://thrivehive.com
 	* Description: A plugin to include ThriveHive's tracking code
-	* Version: 1.20
+	* Version: 1.21
 	* Author: ThriveHive
 	* Author URI: http://thrivehive.com
 */
@@ -326,7 +326,7 @@ add_action('init', 'register_youtube_scripts');
 
 function register_youtube_scripts(){
 
-	$env = get_option('th_environment');
+	$env = "//" . get_option('th_environment');
 
 	wp_register_script('thrivehive-youtube', "$env/content/WebTrack/thrivehive-youtube.js");
 	wp_register_script('thrivehive-youtube-iframes', "$env/content/WebTrack/thrivehive-youtube-iframe.js");

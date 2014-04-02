@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.21 Fix for Youtube tracking environment url
 V 1.20 Major release supporting new shortcodes for youtube and image gallery, LinkedIn and Yelp widget buttons, 
 V 1.10 Fixed a bug for opening blog posts in thrivehive
 V 1.09 Styling fix on contact us form generator
