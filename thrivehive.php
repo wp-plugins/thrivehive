@@ -3,7 +3,7 @@
 	* Plugin Name: ThriveHive
 	* Plugin URI: http://thrivehive.com
 	* Description: A plugin to include ThriveHive's tracking code
-	* Version: 1.21
+	* Version: 1.22
 	* Author: ThriveHive
 	* Author URI: http://thrivehive.com
 */
@@ -355,8 +355,7 @@ function th_display_youtube($atts){
 			'origin' => get_bloginfo('url')
 		));
 
-		echo( "<iframe id='thrivehive-$id' width='$width' height='$height' src='//www.youtube.com/embed/$id?$query' frameborder='0' $allowfullscreen></iframe>");
-		echo("\n<script>cat.instrumentYouTubeIframe( document.getElementById('thrivehive-$id'), '$name' );</script>");
+		return( "<iframe id='thrivehive-$id' width='$width' height='$height' src='//www.youtube.com/embed/$id?$query' frameborder='0' $allowfullscreen></iframe>\n<script>cat.instrumentYouTubeIframe( document.getElementById('thrivehive-$id'), '$name' );</script>");
 	}
 
 	
