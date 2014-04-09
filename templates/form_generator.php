@@ -78,7 +78,10 @@ form.hiveform input.hivesubmit {
       <label for="input3-contactform">Phone</label><input type="text" name="list.phone" id="input3-contactform" /> 
     <div id="input3-contactform-errors" class="error-block"></div> 
       <label for="input4-contactform">Email<span class="required-star">*</span></label><input type="text" name="list.email" id="input4-contactform" /> 
-    <div id="input4-contactform-errors" class="error-block"></div> 
+    <div id="input4-contactform-errors" class="error-block"></div>
+
+    <label for="input5-contactform">Comments</label>
+    <textarea name="list.comments" id="input5-contactform"></textarea>
     
     <input type="hidden" name="meta.redirectUrl" id="meta_redirectUrl" value="/thank-you" /> 
     <input type="submit" value="Submit" class="hivesubmit"/>

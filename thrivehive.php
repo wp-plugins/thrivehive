@@ -3,7 +3,7 @@
 	* Plugin Name: ThriveHive
 	* Plugin URI: http://thrivehive.com
 	* Description: A plugin to include ThriveHive's tracking code
-	* Version: 1.22
+	* Version: 1.23
 	* Author: ThriveHive
 	* Author URI: http://thrivehive.com
 */
