@@ -158,6 +158,7 @@ class JSON_API_Menus_Controller {
 					update_post_meta($current_item->ID, '_menu_item_url', $item->url);
 					$item_data['menu_order'] = $item->menu_order;
 					$item_data['title'] = $item->title;
+					$item_data['post_title'] = $item->title;
 					wp_update_post($item_data);
 				}
 			}
