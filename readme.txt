@@ -34,7 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
-V 1.24 Fixing bug when editing a nav menu item from TH app
+V 1.24 Major release supporting forms, custom css/js, lightbox, categories, authors, background image
 V 1.23 Added comments field to default contact us form
 V 1.22 Fix for YouTube embed showing up at top of page/post
 V 1.21 Fix for Youtube tracking environment url

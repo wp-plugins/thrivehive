@@ -1,12 +1,34 @@
 <?php
-/**
-	* Plugin Name: ThriveHive
-	* Plugin URI: http://thrivehive.com
-	* Description: A plugin to include ThriveHive's tracking code
-	* Version: 1.24
-	* Author: ThriveHive
-	* Author URI: http://thrivehive.com
-*/
+
+   /**
+   *Plugin Name: ThriveHive
+   *Plugin URI: http://thrivehive.com
+   *Description: A plugin to include ThriveHive's tracking code
+   *Version: 1.24
+   *Author: ThriveHive
+   *Author URI: http://thrivehive.com
+   */
+
+/* hack in a cover image instead of a static, single bg image */
+/* if it's set to static, overwrite and set to cover */
+
+add_filter('body_class', 'bg_repeat_body_class');
+
+function bg_repeat_body_class($classes) {
+  	$bg_repeat = get_theme_mod('background_repeat');
+  
+  	if ($bg_repeat === 'no-repeat' || $bg_repeat === 'False') {
+		array_push($classes, 'use-cover-image-for-bg');
+	}
+  
+	return $classes;
+}
+
+add_action( 'wp_enqueue_scripts', 'add_custom_stylesheet' );
+function add_custom_stylesheet() {
+	// fourth argument is the version number for caching
+    wp_enqueue_style( 'custom-style', plugins_url('css/custom_style.css', __FILE__, false, 'v1') );
+}
 
 // create menu
 add_action('admin_menu', 'thrivehive_create_menu');
@@ -44,6 +66,7 @@ $dir = json_api_dir();
 @include_once "$dir/models/author.php";
 @include_once "$dir/models/attachment.php";
 @include_once dirname(__FILE__) . "/lib/thrivehive_buttons.php";
+@include_once dirname(__FILE__) . "/lib/thrivehive_forms.php";
 @include_once dirname(__FILE__) . "/templates/form_generator.php";
 
 /**
@@ -68,6 +91,8 @@ function register_thrivehive_settings() {
 	register_setting( 'thrivehive-settings-group', 'th_tracking_code' );
 	register_setting( 'thrivehive-settings-group', 'th_phone_number' );
 	register_setting( 'thrivehive-settings-group', 'th_form_html' );
+	register_setting( 'thrivehive-settings-group', 'th_javascript');
+	register_setting( 'thrivehive-settings-group', 'th_css');
 	register_setting( 'thrivehive-settings-group', 'th_landingform_id' );
 	register_setting( 'thrivehive-settings-group', 'th_contactform_id' );
 	register_setting( 'thrivehive-settings-group', 'th_company_address');
@@ -168,6 +193,18 @@ function thrivehive_settings_page() {
 			<textarea rows="15" cols="100" name="th_form_html" /><?php echo htmlentities(get_option('th_form_html')); ?></textarea>
 		</td>
         </tr>
+        <tr valign="top">
+	        <th scope="row">ThriveHive Custom Javascript</th>
+	        <td>
+				<textarea rows="15" cols="100" name="th_javascript" /><?php echo htmlentities(get_option('th_javascript')); ?></textarea>
+			</td>
+        </tr>
+         <tr valign="top">
+	        <th scope="row">ThriveHive Custom CSS</th>
+	        <td>
+				<textarea rows="15" cols="100" name="th_css" /><?php echo htmlentities(get_option('th_css')); ?></textarea>
+			</td>
+        </tr>
 		<tr valign="top">
 			<th scope="row">ThriveHive Contact Page Form ID</th>
 			<td>
@@ -264,14 +301,22 @@ function thrivehive_settings_page() {
 *@return string text containing the form html
 **/
 function th_display_form( $atts ){
- 	$contact_form_id = get_option('th_contactform_id');
 	$account_id = get_option('th_tracking_code');
+	if(!isset($atts['id'])){
+	 	$contact_form_id = get_option('th_contactform_id');
 
-	if( $contact_form_id ){
-		return formGenerator($contact_form_id, $account_id);
-	} else {
-		 return get_option('th_form_html');
+		if( $contact_form_id ){
+			return formGenerator($contact_form_id, $account_id);
+		} 
+		else {
+			 return get_option('th_form_html');
+		}
 	}
+	$id = $atts['id'];
+	$form = get_form_from_id($id);
+	$html = $form['html'];
+	return $html;
+	//return formGenerator($guid, $account_id);
 }
 
 /**
@@ -416,9 +461,24 @@ function add_theme_name_as_body_class() {
 	echo "<script type='text/javascript'>document.body.className += ' $class_name'</script>";
 }
 
+function thrivehive_custom_javascript(){
+	$js = get_option('th_javascript');
+	if($js){
+		echo "<script type='text/javascript'>$js</script>";
+	}
+}
+
+function thrivehive_custom_css(){
+	$css = get_option('th_css');
+	if($css){
+		echo "<style type='text/css'>$css</style>";
+	}
+}
+
 register_activation_hook(__FILE__, 'th_activate');
 register_activation_hook(__FILE__, 'th_permalinks');
 register_activation_hook(__FILE__, 'thrivehive_create_button_db');
+register_activation_hook(__FILE__, 'thrivehive_create_forms_db');
 
 
 
@@ -519,7 +579,9 @@ function th_redirect() {
 
 // footer hook 
 add_action('wp_footer', 'thrivehive_instrumentation');
+add_action('wp_footer', 'thrivehive_custom_javascript');
 add_action('wp_footer', 'add_theme_name_as_body_class');
+add_action('wp_head','thrivehive_custom_css');
 
 // admin messages hook!
 add_action('admin_notices', 'thrivehive_admin_msgs');
@@ -604,6 +666,21 @@ function thrivehive_create_button_db() {
 		dbDelta($sql);
 	}
 }
+function thrivehive_create_forms_db() {
+	global $wpdb;
+	$table_name = $wpdb->prefix . "TH_" . "forms";
+	$sql = "CREATE TABLE " . $table_name . " (
+			id INT NOT NULL AUTO_INCREMENT,
+			th_id INT NOT NULL,
+			html TEXT NULL,
+			PRIMARY KEY (id)
+			);";
+	if(!thrivehive_buttons_table_exists($table_name)){
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
+	}
+}
+
 /**
 *Checks to see if the thrivehive buttons table already exists
 *@return bool if the table was found or not
@@ -758,7 +835,7 @@ class ThriveHiveButton extends WP_Widget {
 			$text = stripslashes($buttonOptions['text']);
 			$url = stripslashes($buttonOptions['url']);
 		
-			echo "<a class='thrivehive-button' style='$css display: inline-block; float: right; margin-top: 5px;' href='$url'>$text</a>";
+			echo "<a class='thrivehive-button' style='$css' href='$url'>$text</a>";
 	 
 	    echo $after_widget;		
 	}
@@ -1387,11 +1464,6 @@ function renderSocialStuff($content){
 		//$content = $smcontent.$content;
 	}
 	return $content;
-}
-
-add_action( 'wp_enqueue_scripts', 'add_custom_stylesheet' );
-function add_custom_stylesheet() {
-    wp_enqueue_style( 'custom-style', plugins_url('css/custom_style.css', __FILE__) );
 }
 
 ?>

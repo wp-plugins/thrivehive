@@ -1,4 +1,12 @@
+/************************************
+*                                   *
+*       General Styles              *
+*                                   *
+*************************************/
 
+body.use-cover-image-for-bg {
+	background-size: cover;
+}
 
 .phone-number.widget .heading {
 	display: none;
@@ -14,10 +22,500 @@ iframe {
 	border-width: 0 !important;
 }
 
+/************************************
+*                                   *
+*       Custom Theme Styles         *
+*                                   *
+*************************************/
+
+/************************************
+*       All themes                  *
+*************************************/
+
+@media only screen and (max-width: 480px) {
+  	/* make the button wide for mobile */
+	.thrivehive-button {
+		width: 84%;
+		padding: 20px !important;
+		text-align: center;
+	}
+}
+
+/* this needs to be after the 480 definition */	
+@media only screen and (max-width: 380px) {
+	/* fixes layout of mobile TH CTA */
+	.thrivehive-button {
+		width: 80%;
+	}
+}
+
+/************************************
+*       Adorable                    *
+*************************************/
+
+/* fixes submit button from being too pale to see */
+.theme-name-adorable form.hiveform input.hivesubmit {
+	color: #333;
+}
+
+.theme-name-adorable .phone-number.widget .phone-number-text {
+	text-align: center;
+}
+
+.theme-name-adorable .phone-number + .featuredpage .page {
+	padding-top: 15px;
+}
+
+/* make sure logo isn't cropped, but rather resized */
+.theme-name-adorable #header {
+	background-size: contain !important;
+}
+	
+/* resizing the logo area to be bigger than the header right widget area so larger site titles fit on one line */
+.theme-name-adorable #header #title-area {
+	width: 60%;
+}
+.theme-name-adorable #header .header-widget-area {
+	width: 40%;
+}
+	
+@media only screen and (max-width: 800px) {
+	.theme-name-adorable .menu-primary {
+		border-bottom: #ddd double;
+	}
+
+	.theme-name-adorable #nav {
+		border: none;
+	}		
+}
+	
+@media only screen and (max-width: 980px) {
+	.theme-name-adorable #header {
+		width: 100%;
+	}
+}
+		
+@media only screen and (max-width: 970px) {
+	.theme-name-adorable #header .wrap {
+		width: 100%;
+	}
+}
+		
+
+/************************************
+*       Agency Pro                  *
+*************************************/
+
+/* height overrides default */
+.theme-name-agency-pro .site-header {
+	height: 120px;
+	min-height: 120px;
+}
+
+/* padding pushes content below header */
+.theme-name-agency-pro .site-container {
+	padding-top: 120px;
+}
+
+/* makes it so the logo isn't cropped */
+.theme-name-agency-pro.header-image .site-title a {
+	background-size: contain !important;
+	height: 110px;
+	min-height: 0;
+}
+
+/* resizing the logo area to be bigger than the header right widget area so larger site titles fit on one line */
+.theme-name-agency-pro .site-header .title-area {
+	width: 60%;
+}
+.theme-name-agency-pro .site-header .header-widget-area {
+	width: 40%;
+}
+
+@media only screen and (max-width: 680px) {
+  	/* fixes extra space */
+	.theme-name-agency-pro .site-container {
+		padding-top: 0;
+	}
+}
+
+@media only screen and (max-width: 1023px) {
+	.theme-name-agency-pro.header-image .site-title a {
+		background-position: left top !important;
+	}
+}
+
+/* needs to be below the 1023px media query for the background position of the logo */
+@media only screen and (max-width: 480px) {
+	.theme-name-agency-pro .site-header .title-area {
+		width: 100%;
+	}
+
+	.theme-name-agency-pro .site-header .header-widget-area {
+		width: 100%;
+	}
+  	
+  	/* sets this back to default */
+	.theme-name-agency-pro.header-image .site-title a {
+		background-position: center !important;
+	}
+	  
+	.theme-name-agency-pro .thrivehive-button {
+		width: 95%;
+	}
+}
+
+/************************************
+*       Decor                       *
+*************************************/
+
+/* fixes submit button from being too pale to see */
+.theme-name-decor form.hiveform input.hivesubmit {
+	color: #333;
+}
+.theme-name-decor form.hiveform input.hivesubmit:hover {
+	background: #eeeeee; /* Old browsers */
+	background: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #eeeeee 0%,#cccccc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #eeeeee 0%,#cccccc 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+}
+		
+.theme-name-decor.header-image #title a {
+	background-size: contain !important;
+	margin-bottom: 40px;
+}
+			
+.theme-name-decor form.hiveform {
+	width: 400px;
+}
+				
+.theme-name-decor form.hiveform input[type=text] {
+	margin-top: 0px;
+}
+
+/* resizing the logo area to be bigger than the header right widget area so larger site titles fit on one line */
+.theme-name-decor #header #title-area {
+	width: 60%;
+}
+.theme-name-decor #header .header-widget-area {
+	width: 40%;
+}
+
+@media only screen and (max-width: 998px) {
+	/* resizing the logo area to be bigger than the header right widget area so larger site titles fit on one line */
+	.theme-name-decor #header #title-area {
+		width: 100%;
+	}
+	.theme-name-decor #header .header-widget-area {
+		width: 100%;
+	}	
+
+	.theme-name-decor .thrivehive-button {
+		float: none !important;
+	  	display: inline-block;
+	  	margin-left: auto;
+	  	margin-right: auto;
+	}	
+}
+  
+@media only screen and (max-width: 480px) {
+	.theme-name-decor .thrivehive-button {
+		float: right !important;
+	  	margin-left: 0;
+	  	margin-right: 0;
+	}	
+}
+	
+/************************************
+*       Executive                   *
+*************************************/
+	
+@media only screen and (max-width: 998px) {
+	.theme-name-executive #header {
+		margin-bottom: 100px;
+		position: relative;
+		overflow: visible;
+	}
+		  
+	.theme-name-executive .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: -100px;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-executive .thrivehive-button {
+		width: 75%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-executive .thrivehive-button {
+		width: 66%;
+	}
+}
+					
+/************************************
+*       Going Green Pro             *
+*************************************/
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-going-green-pro .thrivehive-button {
+		width: 96%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-going-green-pro .thrivehive-button {
+		width: 95%;
+	}
+}
+							
+@media only screen and (max-width: 340px) {
+	.theme-name-going-green-pro form.hiveform input[type=text], .theme-name-modernbloggerpro form.hiveform textarea {
+		width: 190px;
+	}
+}
+								
+/************************************
+*       Lifestyle Pro               *
+*************************************/
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-lifestyle-pro .thrivehive-button {
+		width: 94%;
+	}
+}
+	
+/************************************
+*       Magazine                    *
+*************************************/
+
+.theme-name-magazine #header {
+    height: 115px;
+    min-height: 0;
+    background-size: contain !important;
+}
+		
+@media only screen and (max-width: 703px) {
+	.theme-name-magazine #header {
+		margin-bottom: 100px;
+		position: relative;
+		overflow: visible;
+	}
+		  
+	.theme-name-magazine .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: -100px;
+	}
+}
+		
+@media only screen and (max-width: 480px) {
+	.theme-name-magazine .thrivehive-button {
+		width: 79%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-magazine .thrivehive-button {
+		width: 66%;
+	}
+}
+											
+/************************************
+*       Metro Pro                   *
+*************************************/
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-metro-pro .thrivehive-button {
+		width: 95%;
+	}
+}
+
+/************************************
+*       Mindstream                  *
+*************************************/
+	
+@media only screen and (max-width: 998px) {
+	.theme-name-mindstream #header {
+		margin-bottom: 100px;
+		position: relative;
+		overflow: visible;
+	}
+		  
+	.theme-name-mindstream .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: -100px;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-mindstream .thrivehive-button {
+		width: 79%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-mindstream .thrivehive-button {
+		width: 66%;
+	}
+}
+												
+/************************************
+*       Mocha                       *
+*************************************/
+	
+@media only screen and (max-width: 998px) {
+	.theme-name-mocha #header {
+		margin-bottom: 100px;
+		position: relative;
+		overflow: visible;
+	}
+		  
+	.theme-name-mocha .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: -100px;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-mocha .thrivehive-button {
+		width: 79%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-mocha .thrivehive-button {
+		width: 66%;
+	}
+}
+	
+/************************************
+*       Modern Blogger Pro          *
+*************************************/
+
+.theme-name-modernbloggerpro form.hiveform input[type=text], .theme-name-modernbloggerpro form.hiveform textarea {
+	width: 295px;
+}
+	
+.theme-name-modernbloggerpro form.hiveform {
+	width: 450px;
+}
+
+/* resizing the logo area to be bigger than the header right widget area so larger site titles fit on one line */
+.theme-name-modernbloggerpro .site-header .title-area {
+	width: 58%;
+}
+.theme-name-modernbloggerpro .site-header .header-widget-area {
+	width: 38%;
+}
+		
+@media only screen and (max-width: 400px) {
+	.theme-name-modernbloggerpro form.hiveform input[type=text], .theme-name-modernbloggerpro form.hiveform textarea {
+		width: 240px;
+	}
+}
+			
+@media only screen and (max-width: 998px) {
+	.theme-name-modernbloggerpro .site-header .title-area {
+		width: 100%;
+	}
+	.theme-name-modernbloggerpro .site-header .header-widget-area {
+		width: 100%;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+  	/* make the button wide for mobile */
+	.theme-name-modernbloggerpro .thrivehive-button {
+		width: 95%;
+	}
+}
+																	
+/************************************
+*       Modern Portfolio            *
+*************************************/
+	
+@media only screen and (max-width: 998px) {
+	.theme-name-modern-portfolio #header {
+		margin-bottom: 100px;
+		position: relative;
+		overflow: visible;
+		border: none;
+	}
+		  
+	.theme-name-modern-portfolio .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: -100px;
+	}
+																			  
+	.theme-name-modern-portfolio #menu-main {
+		border-top: 1px solid #222;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-modern-portfolio .thrivehive-button {
+		width: 79%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-modern-portfolio .thrivehive-button {
+		width: 66%;
+	}
+}
+					
+/************************************
+*       News                        *
+*************************************/
+	
+@media only screen and (max-width: 998px) {
+	.theme-name-news #header {
+		margin-bottom: 100px;
+		position: relative;
+		overflow: visible;
+	}
+		  
+	.theme-name-news .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: -100px;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-news .thrivehive-button {
+		width: 79%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-news .thrivehive-button {
+		width: 66%;
+	}
+}
+	
+/************************************
+*       Outreach                    *
+*************************************/
+
+/* repeat overrides default, 
+   color needs to be preserved when image is set, 
+   and needs to default to no background image because the default image looks bad on mobile */
 .theme-name-outreach #header {
-	background-repeat: repeat-y !important;
-	background-position: center !important;
-	background-color: #090909 !important;
+	background-repeat: no-repeat !important;
+	background-color: #1A1A1A !important;
+	background-image: none;
 }
 
 .theme-name-streamline .sidebar .social-widgets img {
@@ -28,6 +526,187 @@ iframe {
 .theme-name-enterprise #home-top-bg {
 	display: none;
 }
+
+/* removes Logo.png as background image on .wrap, which was causing an overlapping background image */
+.theme-name-modernbloggerpro .site-header .wrap {
+	background-image: none;
+}
+	
+@media only screen and (max-width: 998px) {
+	.theme-name-outreach #header {
+		padding-bottom: 120px;
+		position: relative;
+		overflow: visible;
+	}
+		  
+	.theme-name-outreach .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: 20px;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-outreach .thrivehive-button {
+		width: 79%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-outreach .thrivehive-button {
+		width: 66%;
+	}
+}
+			
+/************************************
+*       Prose                       *
+*************************************/
+
+@media only screen and (max-width: 998px) {
+	.theme-name-prose #header {
+		margin-bottom: 100px;
+		position: relative;
+		overflow: visible;
+	}
+		  
+	.theme-name-prose .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: -100px;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-prose .thrivehive-button {
+		width: 79%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-prose .thrivehive-button {
+		width: 66%;
+	}
+}
+																									
+/************************************
+*       Quattro                       *
+*************************************/
+	
+@media only screen and (max-width: 998px) {
+	.theme-name-quattro #header {
+		margin-bottom: 100px;
+		position: relative;
+		overflow: visible;
+		border: none;
+	}
+																										  
+	.theme-name-quattro #menu-main {
+		border-top: 3px double #ccc;
+	}
+		  
+	.theme-name-quattro .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: -100px;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-quattro .thrivehive-button {
+		width: 79%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-quattro .thrivehive-button {
+		width: 66%;
+	}
+}
+	
+/************************************
+*       Sixteen 9 Pro               *
+*************************************/	
+
+@media only screen and (max-width: 1264px) {
+	/* clears up extra space */
+	.theme-name-sixteen-nine-pro .site-header .widget_nav_menu {
+		margin-bottom: 0;
+	}
+		  
+	.theme-name-sixteen-nine-pro .thrivehive-button {
+		position: absolute;
+		top: 10px;
+		right: 20px;
+	}
+}
+
+/* must follow the 1264px in order to overwrite the TH CTA position */
+@media only screen and (max-width: 800px) {
+	.theme-name-sixteen-nine-pro .thrivehive-button {
+		position: static;
+	}
+}
+			
+@media only screen and (min-width: 1265px) {
+	/* centers thrivehive button */
+	.theme-name-sixteen-nine-pro .thrivehive-button {
+		display: inline-block;
+		margin: 0 auto 20px !important;
+		float: none !important;
+	}
+}
+		
+@media only screen and (max-width: 480px) {
+	.theme-name-sixteen-nine-pro .thrivehive-button {
+		width: 95%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-sixteen-nine-pro .thrivehive-button {
+		width: 92%;
+	}
+}
+																														
+/************************************
+*       Streamline                  *
+*************************************/
+	
+@media only screen and (max-width: 998px) {
+	.theme-name-streamline #header {
+		margin-bottom: 100px;
+		position: relative;
+		overflow: visible;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+		box-shadow: none;
+	}
+		  
+	.theme-name-streamline .thrivehive-button {
+		position: absolute;
+		right: 20px;
+		bottom: -100px;
+	}
+}
+			
+@media only screen and (max-width: 480px) {
+	.theme-name-streamline .thrivehive-button {
+		width: 79%;
+	}
+}
+			
+@media only screen and (max-width: 380px) {
+	.theme-name-streamline .thrivehive-button {
+		width: 66%;
+	}
+}
+
+
+/************************************
+*                                   *
+*    General Site Media Queries     *
+*                                   *
+*************************************/
 
 @media only screen and (max-width: 340px) {
 	.phone-number.widget .phone-number-text {

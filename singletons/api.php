@@ -247,6 +247,12 @@ class JSON_API {
       'error' => $message
     ), $status);
   }
+
+  function error_code($message = 'Unknown error', $status = 'error', $code = "200 OK") {
+    $this->response->respond_code(array(
+      'error' => $message
+    ), $status, $code);
+  }
   
   function include_value($key) {
     return $this->response->is_value_included($key);

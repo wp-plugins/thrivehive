@@ -101,6 +101,27 @@ class JSON_API_Posts_Controller {
       'post' => $post
     );
   }
+
+  public function update_post_author(){
+    global $json_api;
+
+    $nonce_id = $json_api->get_nonce_id('posts', 'update_post_author');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    if (!current_user_can('edit_post', $_REQUEST['id'])) {
+      $json_api->error("You need to login with a user that has the 'edit_post' capacity for that post.", '**auth**');
+    }
+    $user = get_user_by('slug', $_REQUEST['author']);
+    $author_id = $user->ID;
+    $updated = wp_update_post(array('ID' => $_REQUEST['id'], 'post_author' => $author_id));
+
+    return array('updated' => $updated);
+  }
   
   /**
   *@api
@@ -172,6 +193,10 @@ class JSON_API_Posts_Controller {
       //Not associated with any post
       //Attachment can be made if we already have a post ID i.e. editing an existing post
       $id = media_handle_upload('attachment', 0);
+      if(is_a($id, 'WP_Error')){
+        $json_api->error_code($id->errors['upload_error'][0], "error", "413 ERROR");
+      }
+
       unset($_FILES['attachment']);
 
       //Toss in both thumbnail and full size image URLs from the first index of the array
@@ -566,6 +591,7 @@ class JSON_API_Posts_Controller {
   }
 
   private function create_categories($categories){
+    global $wp_rewrite;
     foreach ($categories as $cat) {
       $cat_exists = get_term_by('name', $cat, 'category');
       if(!$cat_exists)
@@ -578,6 +604,67 @@ class JSON_API_Posts_Controller {
           ));
       }
     }
+    $wp_rewrite->flush_rules();
+  }
+
+  /**
+  *Sets the SEO homepage title setting for the All In One SEO pack
+  *Requires that plugin to be installed
+  *@api
+  *
+  **/
+  public function set_homepage_seo_title(){
+    global $json_api;
+
+    $nonce_id = $json_api->get_nonce_id('posts', 'set_homepage_seo_title');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    $seo_options = get_option('aioseop_options');
+
+    $seo_options['aiosp_home_title'] = $_REQUEST['title'];
+
+    update_option('aioseop_options', $seo_options);
+
+    return array();
+  }
+
+  public function set_homepage_seo_description(){
+    global $json_api;
+
+    $nonce_id = $json_api->get_nonce_id('posts', 'set_homepage_seo_description');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    $seo_options = get_option('aioseop_options');
+
+    $seo_options['aiosp_home_description'] = $_REQUEST['description'];
+
+    update_option('aioseop_options', $seo_options);
+
+    return array();
+  }
+
+  public function get_homepage_seo_title(){
+    $seo_options = get_option('aioseop_options');
+    $option = $seo_options['aiosp_home_title'];
+
+    return array("option" => $option);
+  }
+
+  public function get_homepage_seo_description(){
+    $seo_options = get_option('aioseop_options');
+    $option = $seo_options['aiosp_home_description'];
+
+    return array("option" => $option);
   }
   
 }

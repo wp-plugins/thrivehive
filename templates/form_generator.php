@@ -6,7 +6,8 @@ function formGenerator($formId, $accountId){
     if($env == false){
         $env = "my.thrivehive.com";
     }
-	return '<style> 
+
+return '<style>
 form.hiveform { 
     color: #000000; 
     text-align: left; 

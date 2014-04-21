@@ -9,6 +9,7 @@
 require_once( ABSPATH . 'wp-admin/includes/nav-menu.php' );
 require_once( ABSPATH . 'wp-includes/nav-menu.php' );
 include_once( ABSPATH . 'wp-content/plugins/thrivehive/lib/thrivehive_buttons.php');
+include_once( ABSPATH . 'wp-content/plugins/thrivehive/lib/thrivehive_forms.php');
 
 /** 
 *Class related to controlling menu and setting options 
@@ -868,6 +869,41 @@ class JSON_API_Menus_Controller {
 		return array('image' => $image, 'thumb' => $thumb, 'repeat' => $repeat, 'pos_x' => $posx);
 	}
 
+	public function clear_background_image(){
+		global $json_api;
+		
+		$nonce_id = $json_api->get_nonce_id('menus', 'clear_background_image');
+
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+		$content = content_url();
+		set_theme_mod('background_image', $content . '/b.gif');
+		set_theme_mod('background_image_thumb', $content . '/b.gif');
+
+		return array();
+	}
+
+	public function update_background_image_settings(){
+		global $json_api;
+		$nonce_id = $json_api->get_nonce_id('menus', 'update_background_image_settings');
+
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		if(isset($_REQUEST['repeat'])){
+			set_theme_mod('background_repeat', $_REQUEST['repeat']);
+		}
+
+		return array();
+	}
+
+
 	/**
 	*Sets the background color for the current theme
 	*@example URL - /menus/set_background_color
@@ -1045,6 +1081,71 @@ class JSON_API_Menus_Controller {
 			$settings['sidebar'] = $sidebar;
 		}
 		return array('accounts' => $accounts, 'settings' => $settings);
+	}
+
+	public function set_custom_javascript(){
+		global $json_api;
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_custom_javascript');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		$js = stripslashes($_REQUEST['custom_js']);
+		update_option('th_javascript', $js);
+
+		return array();
+	}
+
+	public function set_custom_css(){
+		global $json_api;
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_custom_css');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		$css = stripslashes(urldecode($_REQUEST['custom_css']));
+		update_option('th_css', $css);
+
+		return array();
+	}
+
+	public function get_custom_javascript(){
+		$js = get_option('th_javascript');
+		return array('option'=>$js);
+	}
+
+	public function get_custom_css(){
+		$css = get_option('th_css');
+		return array('option'=>$css);
+	}
+
+	public function set_thrivehive_form(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_thrivehive_form');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		$th_id = $_REQUEST['th_id'];
+		$html = stripslashes($_REQUEST['html']);
+
+		$form = get_form_from_id($th_id);
+
+		if(isset($form['th_id'])){
+			update_thrivehive_form($th_id, $html);
+		}	  	
+		else{
+			add_thrivehive_form($th_id, $html);
+	  	}
+
+		return array();
 	}
 
 }

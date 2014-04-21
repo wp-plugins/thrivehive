@@ -101,6 +101,34 @@ class JSON_API_Response {
     }
     exit;
   }
+
+  function respond_code($result, $status = 'ok', $code = "200 OK") {
+    global $json_api;
+    $json = $this->get_json($result, $status);
+    $status_redirect = "redirect_$status";
+    if ($json_api->query->dev || !empty($_REQUEST['dev'])) {
+      // Output the result in a human-redable format
+      if (!headers_sent()) {
+        header('HTTP/1.1 $code');
+        header('Content-Type: text/plain; charset: UTF-8', true);
+      } else {
+        echo '<pre>';
+      }
+      echo $this->prettify($json);
+    } else if (!empty($_REQUEST[$status_redirect])) {
+      wp_redirect($_REQUEST[$status_redirect]);
+    } else if ($json_api->query->redirect) {
+      $url = $this->add_status_query_var($json_api->query->redirect, $status);
+      wp_redirect($url);
+    } else if ($json_api->query->callback) {
+      // Run a JSONP-style callback with the result
+      $this->callback($json_api->query->callback, $json);
+    } else {
+      // Output the result
+      $this->output($json);
+    }
+    exit;
+  }
   
   function output($result) {
     $charset = get_option('blog_charset');
