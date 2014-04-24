@@ -375,7 +375,12 @@ add_action('init', 'register_youtube_scripts');
 
 function register_youtube_scripts(){
 
-	$env = "//" . get_option('th_environment');
+	$env = get_option('th_environment');
+    if($env == false){
+    	$env = "//my.thrivehive.com";
+    }
+
+    $env = '//' . $env;
 
 	wp_register_script('thrivehive-youtube', "$env/content/WebTrack/thrivehive-youtube.js");
 	wp_register_script('thrivehive-youtube-iframes', "$env/content/WebTrack/thrivehive-youtube-iframe.js");
