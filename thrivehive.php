@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.25
+   *Version: 1.26
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -24,7 +24,11 @@ function bg_repeat_body_class($classes) {
 	return $classes;
 }
 
-add_action( 'wp_enqueue_scripts', 'add_custom_stylesheet' );
+$has_th_environment = get_option('th_environment') ? true : false;
+if ($has_th_environment) {
+	add_action( 'wp_enqueue_scripts', 'add_custom_stylesheet' );
+}
+
 function add_custom_stylesheet() {
 	// fourth argument is the version number for caching
     wp_enqueue_style( 'custom-style', plugins_url('css/custom_style.css', __FILE__, false, 'v1') );
