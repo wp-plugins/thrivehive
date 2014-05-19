@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.29
+   *Version: 1.30
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -546,6 +546,9 @@ function create_option_css(){
 	$theme = basename(get_stylesheet_directory());
 	$theme_options = get_theme_options_by_name($theme);
 	$options = unserialize($theme_options['options']);
+	if(!$theme_options){
+		return '';
+	}
 	$css = "";
 	foreach ($options as $opt) {
 		$name = $opt['Option'];

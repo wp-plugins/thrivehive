@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V1.30 Fix for empty theme options
 V1.29 Adding files
 V 1.28 Major release to support custom header style options
 V 1.27 Fix for YouTube video tracking
