@@ -23,6 +23,27 @@ iframe {
 }
 
 /************************************
+*       Sugar slider                *
+*************************************/
+
+body .sugar-slider {
+	width: 90%;
+	margin: 0 auto 30px;
+}
+
+@media only screen and (max-width: 800px) {
+	body .sugar-slider {
+		width: 85%;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	body .sugar-slider {
+		width: 80%;
+	}
+}
+
+/************************************
 *                                   *
 *       Custom Theme Styles         *
 *                                   *
@@ -34,7 +55,13 @@ iframe {
 
 @media only screen and (max-width: 480px) {
   	/* make the button wide for mobile */
-	.thrivehive-button {
+	#header .thrivehive-button {
+		width: 84%;
+		padding: 20px !important;
+		text-align: center;
+	}
+
+	.site-header .thrivehive-button {
 		width: 84%;
 		padding: 20px !important;
 		text-align: center;
@@ -44,7 +71,11 @@ iframe {
 /* this needs to be after the 480 definition */	
 @media only screen and (max-width: 380px) {
 	/* fixes layout of mobile TH CTA */
-	.thrivehive-button {
+	#header .thrivehive-button {
+		width: 80%;
+	}
+
+	.site-header .thrivehive-button {
 		width: 80%;
 	}
 }
@@ -160,7 +191,7 @@ iframe {
 		background-position: center !important;
 	}
 	  
-	.theme-name-agency-pro .thrivehive-button {
+	.theme-name-agency-pro .site-header .thrivehive-button {
 		width: 95%;
 	}
 }
@@ -214,7 +245,7 @@ iframe {
 		width: 100%;
 	}	
 
-	.theme-name-decor .thrivehive-button {
+	.theme-name-decor #header .thrivehive-button {
 		float: none !important;
 	  	display: inline-block;
 	  	margin-left: auto;
@@ -223,11 +254,20 @@ iframe {
 }
   
 @media only screen and (max-width: 480px) {
-	.theme-name-decor .thrivehive-button {
+	.theme-name-decor #header .thrivehive-button {
 		float: right !important;
 	  	margin-left: 0;
 	  	margin-right: 0;
 	}	
+}
+
+/************************************
+*       Enterpris                   *
+*************************************/
+
+/* hides big widget area: fixes https://www.pivotaltracker.com/story/show/68319426 */
+.theme-name-enterprise #home-top-bg {
+	display: none;
 }
 	
 /************************************
@@ -241,7 +281,7 @@ iframe {
 		overflow: visible;
 	}
 		  
-	.theme-name-executive .thrivehive-button {
+	.theme-name-executive #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
@@ -249,13 +289,13 @@ iframe {
 }
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-executive .thrivehive-button {
+	.theme-name-executive #header .thrivehive-button {
 		width: 75%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-executive .thrivehive-button {
+	.theme-name-executive #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -265,13 +305,13 @@ iframe {
 *************************************/
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-going-green-pro .thrivehive-button {
+	.theme-name-going-green-pro .site-header .thrivehive-button {
 		width: 96%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-going-green-pro .thrivehive-button {
+	.theme-name-going-green-pro .site-header .thrivehive-button {
 		width: 95%;
 	}
 }
@@ -287,7 +327,7 @@ iframe {
 *************************************/
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-lifestyle-pro .thrivehive-button {
+	.theme-name-lifestyle-pro .site-header .thrivehive-button {
 		width: 94%;
 	}
 }
@@ -309,7 +349,7 @@ iframe {
 		overflow: visible;
 	}
 		  
-	.theme-name-magazine .thrivehive-button {
+	.theme-name-magazine #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
@@ -317,13 +357,13 @@ iframe {
 }
 		
 @media only screen and (max-width: 480px) {
-	.theme-name-magazine .thrivehive-button {
+	.theme-name-magazine #header .thrivehive-button {
 		width: 79%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-magazine .thrivehive-button {
+	.theme-name-magazine #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -333,7 +373,7 @@ iframe {
 *************************************/
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-metro-pro .thrivehive-button {
+	.theme-name-metro-pro .site-header .thrivehive-button {
 		width: 95%;
 	}
 }
@@ -349,7 +389,7 @@ iframe {
 		overflow: visible;
 	}
 		  
-	.theme-name-mindstream .thrivehive-button {
+	.theme-name-mindstream #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
@@ -357,13 +397,13 @@ iframe {
 }
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-mindstream .thrivehive-button {
+	.theme-name-mindstream #header .thrivehive-button {
 		width: 79%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-mindstream .thrivehive-button {
+	.theme-name-mindstream #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -371,6 +411,12 @@ iframe {
 /************************************
 *       Mocha                       *
 *************************************/
+
+@media only screen and (max-width: 1200px) {
+	body.content-sidebar #content {
+		width: 630px;
+	}
+}
 	
 @media only screen and (max-width: 998px) {
 	.theme-name-mocha #header {
@@ -379,21 +425,27 @@ iframe {
 		overflow: visible;
 	}
 		  
-	.theme-name-mocha .thrivehive-button {
+	.theme-name-mocha #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
 	}
 }
+
+@media only screen and (max-width: 710px) {
+	body.content-sidebar #content {
+		width: 100%;
+	}
+}
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-mocha .thrivehive-button {
+	.theme-name-mocha #header .thrivehive-button {
 		width: 79%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-mocha .thrivehive-button {
+	.theme-name-mocha #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -401,6 +453,11 @@ iframe {
 /************************************
 *       Modern Blogger Pro          *
 *************************************/
+
+/* removes Logo.png as background image on .wrap, which was causing an overlapping background image */
+.theme-name-modernbloggerpro .site-header .wrap {
+	background-image: none;
+}
 
 .theme-name-modernbloggerpro form.hiveform input[type=text], .theme-name-modernbloggerpro form.hiveform textarea {
 	width: 295px;
@@ -435,7 +492,7 @@ iframe {
 			
 @media only screen and (max-width: 480px) {
   	/* make the button wide for mobile */
-	.theme-name-modernbloggerpro .thrivehive-button {
+	.theme-name-modernbloggerpro .site-header .thrivehive-button {
 		width: 95%;
 	}
 }
@@ -452,7 +509,7 @@ iframe {
 		border: none;
 	}
 		  
-	.theme-name-modern-portfolio .thrivehive-button {
+	.theme-name-modern-portfolio #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
@@ -464,13 +521,13 @@ iframe {
 }
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-modern-portfolio .thrivehive-button {
+	.theme-name-modern-portfolio #header .thrivehive-button {
 		width: 79%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-modern-portfolio .thrivehive-button {
+	.theme-name-modern-portfolio #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -486,7 +543,7 @@ iframe {
 		overflow: visible;
 	}
 		  
-	.theme-name-news .thrivehive-button {
+	.theme-name-news #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
@@ -494,13 +551,13 @@ iframe {
 }
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-news .thrivehive-button {
+	.theme-name-news #header .thrivehive-button {
 		width: 79%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-news .thrivehive-button {
+	.theme-name-news #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -517,20 +574,6 @@ iframe {
 	background-color: #1A1A1A !important;
 	background-image: none;
 }
-
-.theme-name-streamline .sidebar .social-widgets img {
-	border-width: 0;
-}
-
-/* hides big widget area: fixes https://www.pivotaltracker.com/story/show/68319426 */
-.theme-name-enterprise #home-top-bg {
-	display: none;
-}
-
-/* removes Logo.png as background image on .wrap, which was causing an overlapping background image */
-.theme-name-modernbloggerpro .site-header .wrap {
-	background-image: none;
-}
 	
 @media only screen and (max-width: 998px) {
 	.theme-name-outreach #header {
@@ -539,7 +582,7 @@ iframe {
 		overflow: visible;
 	}
 		  
-	.theme-name-outreach .thrivehive-button {
+	.theme-name-outreach #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: 20px;
@@ -547,13 +590,13 @@ iframe {
 }
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-outreach .thrivehive-button {
+	.theme-name-outreach #header .thrivehive-button {
 		width: 79%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-outreach .thrivehive-button {
+	.theme-name-outreach #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -569,7 +612,7 @@ iframe {
 		overflow: visible;
 	}
 		  
-	.theme-name-prose .thrivehive-button {
+	.theme-name-prose #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
@@ -577,13 +620,13 @@ iframe {
 }
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-prose .thrivehive-button {
+	.theme-name-prose #header .thrivehive-button {
 		width: 79%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-prose .thrivehive-button {
+	.theme-name-prose #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -604,7 +647,7 @@ iframe {
 		border-top: 3px double #ccc;
 	}
 		  
-	.theme-name-quattro .thrivehive-button {
+	.theme-name-quattro #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
@@ -612,13 +655,13 @@ iframe {
 }
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-quattro .thrivehive-button {
+	.theme-name-quattro #header .thrivehive-button {
 		width: 79%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-quattro .thrivehive-button {
+	.theme-name-quattro #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -633,7 +676,7 @@ iframe {
 		margin-bottom: 0;
 	}
 		  
-	.theme-name-sixteen-nine-pro .thrivehive-button {
+	.theme-name-sixteen-nine-pro .site-header .thrivehive-button {
 		position: absolute;
 		top: 10px;
 		right: 20px;
@@ -642,14 +685,14 @@ iframe {
 
 /* must follow the 1264px in order to overwrite the TH CTA position */
 @media only screen and (max-width: 800px) {
-	.theme-name-sixteen-nine-pro .thrivehive-button {
+	.theme-name-sixteen-nine-pro .site-header .thrivehive-button {
 		position: static;
 	}
 }
 			
 @media only screen and (min-width: 1265px) {
 	/* centers thrivehive button */
-	.theme-name-sixteen-nine-pro .thrivehive-button {
+	.theme-name-sixteen-nine-pro .site-header .thrivehive-button {
 		display: inline-block;
 		margin: 0 auto 20px !important;
 		float: none !important;
@@ -657,13 +700,13 @@ iframe {
 }
 		
 @media only screen and (max-width: 480px) {
-	.theme-name-sixteen-nine-pro .thrivehive-button {
+	.theme-name-sixteen-nine-pro .site-header .thrivehive-button {
 		width: 95%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-sixteen-nine-pro .thrivehive-button {
+	.theme-name-sixteen-nine-pro .site-header .thrivehive-button {
 		width: 92%;
 	}
 }
@@ -671,6 +714,10 @@ iframe {
 /************************************
 *       Streamline                  *
 *************************************/
+
+.theme-name-streamline .sidebar .social-widgets img {
+	border-width: 0;
+}
 	
 @media only screen and (max-width: 998px) {
 	.theme-name-streamline #header {
@@ -682,7 +729,7 @@ iframe {
 		box-shadow: none;
 	}
 		  
-	.theme-name-streamline .thrivehive-button {
+	.theme-name-streamline #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
@@ -690,13 +737,13 @@ iframe {
 }
 			
 @media only screen and (max-width: 480px) {
-	.theme-name-streamline .thrivehive-button {
+	.theme-name-streamline #header .thrivehive-button {
 		width: 79%;
 	}
 }
 			
 @media only screen and (max-width: 380px) {
-	.theme-name-streamline .thrivehive-button {
+	.theme-name-streamline #header .thrivehive-button {
 		width: 66%;
 	}
 }
@@ -726,4 +773,9 @@ iframe {
 		display: block;
 		font-size: 18px;
 	}
+}
+
+.widget-wrap a {
+	margin: 0 0 10px 10px;
+	display: inline-block;
 }

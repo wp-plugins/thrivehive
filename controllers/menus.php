@@ -10,6 +10,7 @@ require_once( ABSPATH . 'wp-admin/includes/nav-menu.php' );
 require_once( ABSPATH . 'wp-includes/nav-menu.php' );
 include_once( ABSPATH . 'wp-content/plugins/thrivehive/lib/thrivehive_buttons.php');
 include_once( ABSPATH . 'wp-content/plugins/thrivehive/lib/thrivehive_forms.php');
+include_once( ABSPATH . 'wp-content/plugins/thrivehive/lib/thrivehive_theme_options.php');
 
 /** 
 *Class related to controlling menu and setting options 
@@ -1002,38 +1003,60 @@ class JSON_API_Menus_Controller {
 		if(!wp_verify_nonce($nonce, $nonce_id)){
 			$json_api->error("Your 	`nonce` value was incorrect");
 		}
-		if(isset($_REQUEST['twitter'])){
-			$twitter = $_REQUEST['twitter'];
-		}
-		if(isset($_REQUEST['facebook'])){
-			$facebook = $_REQUEST['facebook'];
-		}
-		if(isset($_REQUEST['linkedin'])){
-			$linkedin = $_REQUEST['linkedin'];
-		}
-		if(isset($_REQUEST['yelp'])){
-			$yelp = $_REQUEST['yelp'];
-		}
 
-		if(isset($twitter)){
-			$url = parse_url($twitter);
-			$path = str_replace('/', '', $url['path']);
-			$res['twitter'] = update_option('th_twitter', $path);
-		}
-		if(isset($facebook)){
-			$url = parse_url($facebook);
-			$path = str_replace('/', '', $url['path']);
-			$res['facebook'] = update_option('th_facebook', $path);
-		}		
-		if(isset($linkedin)){
-			$url = parse_url($linkedin);
-			$path = str_replace('/', '', basename($url['path']));
-			$res['linkedin'] = update_option('th_linkedin', $path);
-		}
-		if(isset($yelp)){
-			$url = parse_url($yelp);
-			$path = str_replace('/', '', basename($url['path']));
-			$res['yelp'] = update_option('th_yelp', $path);
+		$accountstr = str_replace('\\', '', $_REQUEST['accounts']);
+		$smAccounts = json_decode($accountstr, true);
+
+		foreach ($smAccounts as $key => $account) {
+			switch ($key) {
+				case 'facebook':
+					$url = parse_url($account);
+					$path = str_replace('/', '', $url['path']);
+					$res['facebook'] = update_option('th_facebook', $path);
+					break;
+				case 'twitter':
+					$url = parse_url($account);
+					$path = str_replace('/', '', $url['path']);
+					$res['twitter'] = update_option('th_twitter', $path);
+					break;
+				case 'linkedin':
+					$res['linkedin'] = update_option('th_linkedin', $account);
+					break;
+				case 'yelp':
+					$url = parse_url($account);
+					$path = str_replace('/', '', basename($url['path']));
+					$res['yelp'] = update_option('th_yelp', $path);
+					break;
+				case 'googleplus':
+					$res['googleplus'] = update_option('th_googleplus', $account);
+					break;
+				case 'instagram':
+					$url = parse_url($account);
+					$path = str_replace('/', '', $url['path']);
+					$res['instagram'] = update_option('th_instagram', $path);
+					break;
+				case 'youtube':
+					$url = parse_url($account);
+					$path = str_replace('/', '', basename($url['path']));
+					$res['youtube'] = update_option('th_youtube', $path);
+					break;
+				case 'houzz':
+					$res['houzz'] = update_option('th_houzz', $account);
+					break;
+				case 'angieslist':
+					$res['angieslist'] = update_option('th_angieslist', $account);
+					break;
+				case 'pinterest':
+					$url = parse_url($account);
+					$path = str_replace('/', '', $url['path']);
+					$res['pinterest'] = update_option('th_pinterest', $path);
+					break;
+				case 'foursquare':
+					$res['foursquare'] = update_option('th_foursquare', $account);
+					break;
+				default:
+					break;
+			}
 		}
 
 		update_option('th_social_blogroll', $_REQUEST['blogroll']);
@@ -1047,12 +1070,32 @@ class JSON_API_Menus_Controller {
 
 	public function get_social_widget_settings(){
 		$settings = array('blogroll' => false, 'blog' => false, 'sidebar' => false);
-		$accounts = array('facebook' => '', 'twitter' => '', 'yelp' => '', 'linkedin' => '');
+		$accounts = array(
+			'facebook' => '', 
+			'twitter' => '', 
+			'yelp' => '', 
+			'linkedin' => '',
+			'googleplus' => '', 
+			'instagram' => '', 
+			'youtube' => '', 
+			'houzz' => '',
+			'angieslist' => '',
+			'pinterest' => '',
+			'foursquare' => ''
+			);
 		//Accounts
 		$twitter = get_option('th_twitter');
 		$facebook = get_option('th_facebook');
 		$linkedin = get_option('th_linkedin');
 		$yelp = get_option('th_yelp');
+		$googleplus = get_option('th_googleplus');
+		$instagram = get_option('th_instagram');
+		$youtube = get_option('th_youtube');
+		$houzz = get_option('th_houzz');
+		$angieslist = get_option('th_angieslist');
+		$pinterest = get_option('th_pinterest');
+		$foursquare = get_option('th_foursquare');
+
 		//Settings
 		$blogroll = get_option('th_social_blogroll');
 		$blog = get_option('th_social_blog');
@@ -1069,6 +1112,27 @@ class JSON_API_Menus_Controller {
 		}
 		if($yelp){
 			$accounts['yelp'] = $yelp;
+		}
+		if($googleplus){
+			$accounts['googleplus'] = $googleplus;
+		}
+		if($instagram){
+			$accounts['instagram'] = $instagram;
+		}
+		if($youtube){
+			$accounts['youtube'] = $youtube;
+		}
+		if($houzz){
+			$accounts['houzz'] = $houzz;
+		}
+		if($angieslist){
+			$accounts['angieslist'] = $angieslist;
+		}
+		if($pinterest){
+			$accounts['pinterest'] = $pinterest;
+		}
+		if($foursquare){
+			$accounts['foursquare'] = $foursquare;
 		}
 
 		if($blogroll){
@@ -1146,6 +1210,109 @@ class JSON_API_Menus_Controller {
 	  	}
 
 		return array();
+	}
+
+	public function set_theme_option(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_theme_option');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+		$optionstr = str_replace('\\', '', $_REQUEST['option']);
+		$new_option = json_decode($optionstr, true);
+
+		$theme = basename(get_stylesheet_directory());
+		$theme_options = get_theme_options_by_name($theme);
+		if(isset($theme_options["theme"]))
+		{
+			$options = unserialize($theme_options['options']);
+			$option_found = false;
+			for ($i=0; $i < count($options); $i++) { 
+				if($options[$i]['Option'] == $new_option['Option']){
+					foreach ($new_option as $key => $value) {
+						$options[$i][$key] = $value;
+					}
+					$option_found = true;
+					break;
+				}
+			}
+			if(!$option_found){
+				array_push($options, $new_option);
+			}
+
+			update_theme_options($theme, serialize($options));
+		}
+
+		else{
+			$options = array($new_option);
+			$res = add_theme_options($theme, serialize($options));
+		}
+
+		return array('options' => $options, 'theme' => $theme, 'res' => $res);
+	}
+
+	public function set_all_theme_options(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_theme_option');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		$optionsstr = str_replace('\\', '', $_REQUEST['options']);
+		$new_options = json_decode($optionsstr, true);
+		$theme = basename(get_stylesheet_directory());
+		$theme_options = get_theme_options_by_name($theme);
+		if(isset($theme_options["theme"]))
+		{
+			update_theme_options($theme, serialize($new_options), $_REQUEST['version']);
+		}
+		else{
+			$res = add_theme_options($theme, serialize($options), $_REQUEST['version']);
+		}
+		return array('options' => $options);
+	}
+
+	public function get_theme_options(){
+		$theme = basename(get_stylesheet_directory());
+		$theme_options = get_theme_options_by_name($theme);
+		$options = unserialize($theme_options['options']);
+
+		return array('options' => $options, 'theme' => $theme, 'version' => $theme_options['version']);
+	}
+
+	public function set_default_theme_options(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_default_theme_options');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		$theme = basename(get_stylesheet_directory());
+		$theme_options = get_theme_options_by_name($theme);
+
+		if(isset($theme_options["theme"])){
+			//DO NOTHING
+		}
+		else{
+			//NO Option found
+			$optionsstr = str_replace('\\', '', $_REQUEST['options']);
+			$options = json_decode($optionsstr, true);
+			$defaults = array();
+			foreach ($options as $opt) {
+				array_push($defaults, $opt);
+			}
+			$res = add_theme_options($theme, serialize($defaults));
+		}
+		return array("options" => $options);
 	}
 
 }

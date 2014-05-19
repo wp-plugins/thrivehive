@@ -106,5 +106,32 @@ class JSON_API_Authors_Controller{
 
 		return array();
 	}
+
+	public function update_google_plus_profile(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('authors', 'update_google_plus_profile');
+
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+		}
+
+		$user = get_user_by('slug', $_REQUEST['user']);
+
+
+		$res = update_user_meta($user->ID, 'googleplus', $_REQUEST['profile']);
+
+		return array($res);
+	}
+
+	public function get_google_plus_profile(){
+		$user = get_user_by('slug', $_REQUEST['user']);
+
+		$res = get_user_meta($user->ID, 'googleplus', true);
+
+		return array('profile' => $res);
+	}
 }
 ?>

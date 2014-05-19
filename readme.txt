@@ -34,6 +34,8 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.28 Major release to support custom header style options
+V 1.27 Fix for YouTube video tracking
 V 1.26 Fix for overlapping forms on landing pages
 V 1.25 increasing version number to allow  update on some sites
 V 1.24 Major release supporting forms, custom css/js, lightbox, categories, authors, background image

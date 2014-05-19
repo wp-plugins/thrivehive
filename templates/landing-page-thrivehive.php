@@ -231,12 +231,12 @@ function renderForm() {
                 color: #E10707; 
             } 
 
-            @media only screen and (max-width: 1023px) {
-                .left-column-container, .right-column-container {
-                    float: none;
-                    width: 100%;
-                }
-            }
+			@media only screen and (max-width: 1023px) {
+				.left-column-container, .right-column-container {
+					float: none;
+					width: 100%;
+				}
+			}
 
             @media only screen and (max-width : 600px) { 
                 form.hiveform input[type=text], form.hiveform textarea,  form.hiveform select {                 
@@ -249,15 +249,15 @@ function renderForm() {
                     clear: both; 
                     float: none; 
                     margin-top: 10px;
-                }
-            }
+                } 
+            } 
 
-            @media only screen and (max-width: 480px) {
-                form.hiveform {
-                    width: 253px;
-                }
-            }
-
+			@media only screen and (max-width: 480px) {
+				form.hiveform {
+					width: 253px;
+				}
+			}
+			
             </style>
 
             <a name="contact-form"></a>

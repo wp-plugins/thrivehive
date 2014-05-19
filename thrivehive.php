@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.26
+   *Version: 1.28
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -71,6 +71,7 @@ $dir = json_api_dir();
 @include_once "$dir/models/attachment.php";
 @include_once dirname(__FILE__) . "/lib/thrivehive_buttons.php";
 @include_once dirname(__FILE__) . "/lib/thrivehive_forms.php";
+@include_once dirname(__FILE__) . "/lib/thrivehive_theme_options.php";
 @include_once dirname(__FILE__) . "/templates/form_generator.php";
 
 /**
@@ -107,6 +108,15 @@ function register_thrivehive_settings() {
 	register_setting( 'thrivehive-settings-group', 'th_twitter');
 	register_setting( 'thrivehive-settings-group', 'th_linkedin');
 	register_setting( 'thrivehive-settings-group', 'th_yelp');
+	register_setting( 'thrivehive-settings-group', 'th_googleplus');
+	register_setting( 'thrivehive-settings-group', 'th_instagram');
+	register_setting( 'thrivehive-settings-group', 'th_youtube');
+	register_setting( 'thrivehive-settings-group', 'th_houzz');
+	register_setting( 'thrivehive-settings-group', 'th_angieslist');
+	register_setting( 'thrivehive-settings-group', 'th_pinterest');
+	register_setting( 'thrivehive-settings-group', 'th_foursquare');
+
+
 	register_setting( 'thrivehive-settings-group', 'th_social_blogroll');
 	register_setting( 'thrivehive-settings-group', 'th_social_blog');
 	register_setting( 'thrivehive-settings-group', 'th_social_sidebar');
@@ -234,7 +244,7 @@ function thrivehive_settings_page() {
 			</td>
 		</tr>
 		<tr valign="top">
-			<th scope="row">ThriveHive LinkedIn Username/Userid</th>
+			<th scope="row">ThriveHive LinkedIn Page URL</th>
 			<td>
 				<input type="text" name="th_linkedin" value="<?php echo get_option('th_linkedin'); ?>" />
 			</td>
@@ -243,6 +253,48 @@ function thrivehive_settings_page() {
 			<th scope="row">ThriveHive Yelp Username/Userid</th>
 			<td>
 				<input type="text" name="th_yelp" value="<?php echo get_option('th_yelp'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">ThriveHive Google Plus Page URL</th>
+			<td>
+				<input type="text" name="th_googleplus" value="<?php echo get_option('th_googleplus'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">ThriveHive Instagram Username/Userid</th>
+			<td>
+				<input type="text" name="th_instagram" value="<?php echo get_option('th_instagram'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">ThriveHive YouTube Username/Userid</th>
+			<td>
+				<input type="text" name="th_youtube" value="<?php echo get_option('th_youtube'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">ThriveHive Houzz Page URL</th>
+			<td>
+				<input type="text" name="th_houzz" value="<?php echo get_option('th_houzz'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">ThriveHive Angie's List Public URL</th>
+			<td>
+				<input type="text" name="th_angieslist" value="<?php echo get_option('th_angieslist'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">ThriveHive Pinterest Username/Userid</th>
+			<td>
+				<input type="text" name="th_pinterest" value="<?php echo get_option('th_pinterest'); ?>" />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">ThriveHive Foursquare Page URL</th>
+			<td>
+				<input type="text" name="th_foursquare" value="<?php echo get_option('th_foursquare'); ?>" />
 			</td>
 		</tr>
 		<tr valign="top">
@@ -360,7 +412,13 @@ function th_map(){
 }
 
 function th_display_gallery($atts){
-	$fake_shortcode = '[gallery';
+	$fake_shortcode = '';
+
+	if (isset($atts['isslider']) && $atts['isslider'] === 'true') {
+		$fake_shortcode = '[sugar_slider';
+	} else {
+		$fake_shortcode = '[gallery';
+	}
 
 	foreach($atts as $attName => $attValue){
 		$fake_shortcode .= " $attName = \"$attValue\"";
@@ -377,7 +435,7 @@ function register_youtube_scripts(){
 
 	$env = get_option('th_environment');
     if($env == false){
-    	$env = "//my.thrivehive.com";
+    	$env = "my.thrivehive.com";
     }
 
     $env = '//' . $env;
@@ -484,9 +542,30 @@ function thrivehive_custom_css(){
 	}
 }
 
+function create_option_css(){
+	$theme = basename(get_stylesheet_directory());
+	$theme_options = get_theme_options_by_name($theme);
+	$options = unserialize($theme_options['options']);
+	$css = "";
+	foreach ($options as $opt) {
+		$name = $opt['Option'];
+		$selector = $opt['Selector'];
+		$value = $opt['Value'];
+		$value_type = $opt['Type'];
+		$css .= "
+				/* $name */
+				$selector {
+					$value_type:$value;
+				}
+				";
+	}
+	echo "<style type='text/css'>$css</style>";
+}
+
 register_activation_hook(__FILE__, 'th_activate');
 register_activation_hook(__FILE__, 'th_permalinks');
 register_activation_hook(__FILE__, 'thrivehive_create_button_db');
+register_activation_hook(__FILE__, 'thrivehive_create_theme_options_table');
 register_activation_hook(__FILE__, 'thrivehive_create_forms_db');
 
 
@@ -590,6 +669,7 @@ function th_redirect() {
 add_action('wp_footer', 'thrivehive_instrumentation');
 add_action('wp_footer', 'thrivehive_custom_javascript');
 add_action('wp_footer', 'add_theme_name_as_body_class');
+add_action('wp_head', 'create_option_css');
 add_action('wp_head','thrivehive_custom_css');
 
 // admin messages hook!
@@ -689,6 +769,23 @@ function thrivehive_create_forms_db() {
 		dbDelta($sql);
 	}
 }
+
+function thrivehive_create_theme_options_table(){
+	global $wpdb;
+	$table_name = $wpdb->prefix . "TH_" . "theme_options";
+	$sql = "CREATE TABLE " . $table_name . "( 
+			id INT NOT NULL AUTO_INCREMENT,
+			theme VARCHAR(100) NOT NULL,
+			options TEXT NOT NULL,
+			version INT(11) DEFAULT 0,
+			PRIMARY KEY (id)
+			);";
+	if(!thrivehive_buttons_table_exists($table_name)){
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
+	}
+}
+
 
 /**
 *Checks to see if the thrivehive buttons table already exists
@@ -1383,8 +1480,17 @@ class ThriveHiveSocialButtons extends WP_Widget {
 			$twitter = get_option('th_twitter');
 			$linkedin = get_option('th_linkedin');
 			$yelp = get_option('th_yelp');
+			$googleplus = get_option('th_googleplus');
+			$instagram = get_option('th_instagram');
+			$youtube = get_option('th_youtube');
+			$houzz = get_option('th_houzz');
+			$angieslist = get_option('th_angieslist');
+			$pinterest = get_option('th_pinterest');
+			$foursquare = get_option('th_foursquare');
 
-			if ($facebook || $twitter || $linkedin || $yelp) {
+
+			if ($facebook || $twitter || $linkedin || $yelp || $googleplus || $instagram || 
+				$youtube || $houzz || $angieslist || $pinterest || $foursquare) {
 				echo $before_widget;
 				echo "<div class='social-widgets widget'>";
 				echo "<div class='widget-wrap'>";
@@ -1398,11 +1504,39 @@ class ThriveHiveSocialButtons extends WP_Widget {
 					}
 					if($linkedin){
 						$linkedin_icon = plugins_url('/images/icon-linkedin-32.png', __FILE__);
-						echo "<a target='_blank' href='https://linkedin.com/company/$linkedin' style='margin-left: 10px'><img src='$linkedin_icon' /></a>";
+						echo "<a target='_blank' href='$linkedin' style='margin-left: 10px'><img src='$linkedin_icon' /></a>";
 					}
 					if($yelp){
 						$yelp_icon = plugins_url('/images/icon-yelp-32.png', __FILE__);
 						echo "<a target='_blank' href='http://yelp.com/biz/$yelp' style='margin-left: 10px'><img src='$yelp_icon' /></a>";
+					}
+					if($googleplus){
+						$googleplus_icon = plugins_url('/images/icon-gplus-32.png', __FILE__);
+						echo "<a target='_blank' href='$googleplus' style='margin-left: 10px'><img src='$googleplus_icon' /></a>";
+					}
+					if($instagram){
+						$instagram_icon = plugins_url('/images/icon-instagram-32.png', __FILE__);
+						echo "<a target='_blank' href='http://instagram.com/$instagram' style='margin-left: 10px'><img src='$instagram_icon' /></a>";
+					}
+					if($youtube){
+						$youtube_icon = plugins_url('/images/icon-youtube-32.png', __FILE__);
+						echo "<a target='_blank' href='http://youtube.com/user/$youtube' style='margin-left: 10px'><img src='$youtube_icon' /></a>";
+					}
+					if($houzz){
+						$houzz_icon = plugins_url('/images/icon-houzz-32.png', __FILE__);
+						echo "<a target='_blank' href='$houzz' style='margin-left: 10px'><img src='$houzz_icon' /></a>";
+					}
+					if($angieslist){
+						$angieslist_icon = plugins_url('/images/icon-angieslist-32.png', __FILE__);
+						echo "<a target='_blank' href='$angieslist' style='margin-left: 10px'><img src='$angieslist_icon' /></a>";
+					}
+					if($pinterest){
+						$pinterest_icon = plugins_url('/images/icon-pinterest-32.png', __FILE__);
+						echo "<a target='_blank' href='http://pinterest.com/$pinterest' style='margin-left: 10px'><img src='$pinterest_icon' /></a>";
+					}
+					if($foursquare){
+						$foursquare_icon = plugins_url('/images/icon-foursquare-32.png', __FILE__);
+						echo "<a target='_blank' href='$foursquare' style='margin-left: 10px'><img src='$foursquare_icon' /></a>";
 					}
 				echo "</div>";
 				echo "</div>";
