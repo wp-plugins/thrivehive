@@ -1283,6 +1283,10 @@ class JSON_API_Menus_Controller {
 		$theme_options = get_theme_options_by_name($theme);
 		$options = unserialize($theme_options['options']);
 
+		if($options == false){
+			$options = array();
+		}
+
 		return array('options' => $options, 'theme' => $theme, 'version' => $theme_options['version']);
 	}
 
@@ -1310,7 +1314,7 @@ class JSON_API_Menus_Controller {
 			foreach ($options as $opt) {
 				array_push($defaults, $opt);
 			}
-			$res = add_theme_options($theme, serialize($defaults));
+			$res = add_theme_options($theme, serialize($defaults), $_REQUEST['version']);
 		}
 		return array("options" => $options);
 	}
