@@ -4,13 +4,28 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.30
+   *Version: 1.31
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
 
 /* hack in a cover image instead of a static, single bg image */
 /* if it's set to static, overwrite and set to cover */
+
+add_action('init', 'version_check');
+
+function version_check(){
+	//UPDATE THIS WHEN WE MAKE VERSION CHANGES
+	$db_version = '1.31';
+
+	$ver = get_option('thrivehive_vers');
+	if(!$ver || $ver != $db_version){
+		update_option('thrivehive_vers', $db_version);
+		thrivehive_create_button_db();
+		thrivehive_create_theme_options_table();
+		thrivehive_create_forms_db();
+	}
+}
 
 add_filter('body_class', 'bg_repeat_body_class');
 
@@ -430,6 +445,7 @@ function th_display_gallery($atts){
 }
 
 add_action('init', 'register_youtube_scripts');
+
 
 function register_youtube_scripts(){
 
