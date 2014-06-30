@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.31
+   *Version: 1.32
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -31,11 +31,11 @@ add_filter('body_class', 'bg_repeat_body_class');
 
 function bg_repeat_body_class($classes) {
   	$bg_repeat = get_theme_mod('background_repeat');
-  
+
   	if ($bg_repeat === 'no-repeat' || $bg_repeat === 'False') {
 		array_push($classes, 'use-cover-image-for-bg');
 	}
-  
+
 	return $classes;
 }
 
@@ -93,7 +93,7 @@ $dir = json_api_dir();
 *Creates the settings menu for the ThriveHive plugin
 **/
 function thrivehive_create_menu() {
-	
+
 	//create new top-level menu
 	add_menu_page('ThriveHive Plugin Settings', 'ThriveHive', 'administrator', __FILE__, 'thrivehive_settings_page',plugins_url('/images/icon.png', __FILE__, '999'));
 
@@ -116,7 +116,7 @@ function register_thrivehive_settings() {
 	register_setting( 'thrivehive-settings-group', 'th_landingform_id' );
 	register_setting( 'thrivehive-settings-group', 'th_contactform_id' );
 	register_setting( 'thrivehive-settings-group', 'th_company_address');
-	
+
 	register_setting( 'thrivehive-settings-group', 'th_landingform_showfields' );
 	register_setting( 'thrivehive-settings-group', 'th_site_logo');
 	register_setting( 'thrivehive-settings-group', 'th_facebook');
@@ -245,13 +245,13 @@ function thrivehive_settings_page() {
 			<td>
 				<input type="text" name="th_landingform_id" value="<?php echo get_option('th_landingform_id'); ?>" />
 			</td>
-		</tr>		
+		</tr>
 		<tr valign="top">
 			<th scope="row">ThriveHive Facebook Username/Userid</th>
 			<td>
 				<input type="text" name="th_facebook" value="<?php echo get_option('th_facebook'); ?>" />
 			</td>
-		</tr>		
+		</tr>
 		<tr valign="top">
 			<th scope="row">ThriveHive twitter Username/Userid</th>
 			<td>
@@ -317,19 +317,19 @@ function thrivehive_settings_page() {
 			<td>
 				<input type="checkbox" value='True' name="th_social_blogroll" <?php if (get_option('th_social_blogroll') && get_option('th_social_blogroll') == "True"){?>checked<?php } ?> />
 			</td>
-		</tr>		
+		</tr>
 		<tr valign="top">
 			<th scope="row">Show Social Buttons on Blog Entry</th>
 			<td>
 				<input type="checkbox" value='True' name="th_social_blog" <?php if (get_option('th_social_blog') && get_option('th_social_blog') == "True"){?>checked<?php } ?> />
 			</td>
-		</tr>	
+		</tr>
 		<tr valign="top">
 			<th scope="row">Show Social Buttons on Sidebar</th>
 			<td>
 				<input type="checkbox" value='True' name="th_social_sidebar" <?php if (get_option('th_social_sidebar') && get_option('th_social_sidebar') == "True"){?>checked<?php } ?> />
 			</td>
-		</tr>		
+		</tr>
 		<tr valign="top">
 			<th scope="row">Page Logo Url</th>
 			<td>
@@ -378,7 +378,7 @@ function th_display_form( $atts ){
 
 		if( $contact_form_id ){
 			return formGenerator($contact_form_id, $account_id);
-		} 
+		}
 		else {
 			 return get_option('th_form_html');
 		}
@@ -474,7 +474,7 @@ function th_display_youtube($atts){
 		$allowfullscreen = isset( $atts['allowfullscreen'] ) && $atts['allowfullscreen'] == 'false' ? '' : 'allowfullscreen';
 		$autoplay = isset( $atts['autoplay']) && $atts['autoplay'] == "true" ? 1 : null;
 		$name = isset( $atts['name'] ) ? $atts['name'] : 'Video';
-		
+
 		$query = http_build_query(array(
 			'enablejsapi' => 1, // allow javascript api (for tracking)
 			'autoplay' => $autoplay, // user settable autoplay
@@ -486,7 +486,7 @@ function th_display_youtube($atts){
 		return( "<iframe id='thrivehive-$id' width='$width' height='$height' src='//www.youtube.com/embed/$id?$query' frameborder='0' $allowfullscreen></iframe>\n<script>cat.instrumentYouTubeIframe( document.getElementById('thrivehive-$id'), '$name' );</script>");
 	}
 
-	
+
 }
 
 
@@ -601,7 +601,7 @@ function th_activate() {
 	//			'Plugin Activation Error',  array( 'response'=>200, 'back_link'=>TRUE ) );
 	//}
     #add_filter('rewrite_rules_array', 'json_api_rewrites');
-    
+
     #flush_rewrite_rules();
     #$wp_rewrite->generate_rewrite_rules();
     //add_option('thrivehive_do_activation_validation', true);
@@ -613,7 +613,7 @@ function th_permalinks(){
 	global $wp_rewrite;
 	$home_path = get_home_path();
 	if(! file_exists($home_path . '.htaccess')){
-		file_put_contents($home_path . '.htaccess', 
+		file_put_contents($home_path . '.htaccess',
 			"
 			#BEGIN WordPress
 			<IfModule mod_rewrite.c>
@@ -663,7 +663,7 @@ function th_redirect() {
 			if(is_plugin_active($plugin)){
 				$html = '<div class="error">';
         		$html .= '<p>';
-         		$html .= __( 'There was a problem activating the ThriveHive plugin. <br> 
+         		$html .= __( 'There was a problem activating the ThriveHive plugin. <br>
 				      This is usually caused by a redirect set up in the WordPress .htaccess file or a similar plugin.' );
          		$html .= __( '<br> Please try to remedy this to ensure that the plugin works smoothly' );
         		$html .= '</p>';
@@ -684,7 +684,7 @@ function th_redirect() {
 }
 
 
-// footer hook 
+// footer hook
 add_action('wp_footer', 'thrivehive_instrumentation');
 add_action('wp_footer', 'thrivehive_custom_javascript');
 add_action('wp_footer', 'add_theme_name_as_body_class');
@@ -792,7 +792,7 @@ function thrivehive_create_forms_db() {
 function thrivehive_create_theme_options_table(){
 	global $wpdb;
 	$table_name = $wpdb->prefix . "TH_" . "theme_options";
-	$sql = "CREATE TABLE " . $table_name . "( 
+	$sql = "CREATE TABLE " . $table_name . "(
 			id INT NOT NULL AUTO_INCREMENT,
 			theme VARCHAR(100) NOT NULL,
 			options TEXT NOT NULL,
@@ -816,12 +816,12 @@ function thrivehive_buttons_table_exists($table){
 }
 
 /***********************************************************************************
-_________ _______  _______  _          _______  _______ _________   _______  _______  ______   _______ 
+_________ _______  _______  _          _______  _______ _________   _______  _______  ______   _______
 \__    _/(  ____ \(  ___  )( (    /|  (  ___  )(  ____ )\__   __/  (  ____ \(  ___  )(  __  \ (  ____ \
    )  (  | (    \/| (   ) ||  \  ( |  | (   ) || (    )|   ) (     | (    \/| (   ) || (  \  )| (    \/
-   |  |  | (_____ | |   | ||   \ | |  | (___) || (____)|   | |     | |      | |   | || |   ) || (__    
-   |  |  (_____  )| |   | || (\ \) |  |  ___  ||  _____)   | |     | |      | |   | || |   | ||  __)   
-   |  |        ) || |   | || | \   |  | (   ) || (         | |     | |      | |   | || |   ) || (      
+   |  |  | (_____ | |   | ||   \ | |  | (___) || (____)|   | |     | |      | |   | || |   ) || (__
+   |  |  (_____  )| |   | || (\ \) |  |  ___  ||  _____)   | |     | |      | |   | || |   | ||  __)
+   |  |        ) || |   | || | \   |  | (   ) || (         | |     | |      | |   | || |   ) || (
 |\_)  )  /\____) || (___) || )  \  |  | )   ( || )      ___) (___  | (____/\| (___) || (__/  )| (____/\
 (____/   \_______)(_______)|/    )_)  |/     \||/       \_______/  (_______/(_______)(______/ (_______/
 
@@ -906,14 +906,14 @@ class ThriveHiveLogo extends WP_Widget {
 
 	public function widget( $args, $instance ) {
 		// outputs the content of the widget
-		echo "<img src="; 
+		echo "<img src=";
 		echo get_option('th_site_logo');
 		echo ">";
 	}
 
  	public function form( $instance ) {
 		// outputs the options form on admin
-		echo "<img src="; 
+		echo "<img src=";
 		echo get_option('th_site_logo');
 		echo ">";
 	}
@@ -937,7 +937,7 @@ if(!function_exists('custom_logo_create')){
 */
 
 class ThriveHiveButton extends WP_Widget {
-	
+
 	/**
 	 * Register widget with WordPress.
 	 */
@@ -951,7 +951,7 @@ class ThriveHiveButton extends WP_Widget {
 	 * Register widget with WordPress.
 	 */
 	public function widget( $args, $instance ) {
-		
+
 		echo $before_widget;
 	    $buttonId = empty($instance['buttonId']) ? ' ' : $instance['buttonId'];
 	    if (!empty($buttonId))
@@ -959,10 +959,10 @@ class ThriveHiveButton extends WP_Widget {
 			$css =  stripslashes($buttonOptions['generated_css']);
 			$text = stripslashes($buttonOptions['text']);
 			$url = stripslashes($buttonOptions['url']);
-		
+
 			echo "<a class='thrivehive-button' style='$css' href='$url'>$text</a>";
-	 
-	    echo $after_widget;		
+
+	    echo $after_widget;
 	}
 	/**
 	 * Back-end widget form.
@@ -1343,17 +1343,17 @@ class Simple_Preview {
 	    } else{
 				unset($preview_posts[$post_id]);
 		}
-		update_option('simple_preview', $preview_posts); 
+		update_option('simple_preview', $preview_posts);
 	}
 
 	// Show the post preview
 	function show_preview() {
 		if ( !is_admin() && isset($_GET['p']) && isset($_GET['preview']) ) {
 			$this->id = (int) $_GET['p'];
-			$preview_posts = get_option('simple_preview');	
-		
+			$preview_posts = get_option('simple_preview');
+
 			//if ( !isset($preview_posts[$this->id]) )
-			//	wp_die('You do not have permission to publicly preview this post.');  
+			//	wp_die('You do not have permission to publicly preview this post.');
 			add_action('pre_get_posts', array($this,'pages_filter'));
 			add_filter('posts_results', array(&$this, 'fake_publish'));
 		}
@@ -1425,7 +1425,7 @@ add_action( 'init', 'th_draft', 0 );
 
 
 class ThriveHivePhone extends WP_Widget {
-	
+
 	/**
 	 * Register widget with WordPress.
 	 */
@@ -1439,7 +1439,7 @@ class ThriveHivePhone extends WP_Widget {
 	 * Register widget with WordPress.
 	 */
 	public function widget( $args, $instance ) {
-		
+
 		$num = th_display_phone();
 
 		echo $before_widget;
@@ -1449,7 +1449,7 @@ class ThriveHivePhone extends WP_Widget {
 		echo "<div class='phone-number-text'>$num</div>";
 		echo "</div>";
 		echo "</div>";
-	    echo $after_widget;		
+	    echo $after_widget;
 	}
 	/**
 	 * Back-end widget form.
@@ -1459,7 +1459,7 @@ class ThriveHivePhone extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
  	public function form( $instance ) {
-		
+
 	  }
 	/**
 	 * Sanitize widget form values as they are saved.
@@ -1479,7 +1479,7 @@ class ThriveHivePhone extends WP_Widget {
 }
 
 class ThriveHiveSocialButtons extends WP_Widget {
-	
+
 	/**
 	 * Register widget with WordPress.
 	 */
@@ -1508,7 +1508,7 @@ class ThriveHiveSocialButtons extends WP_Widget {
 			$foursquare = get_option('th_foursquare');
 
 
-			if ($facebook || $twitter || $linkedin || $yelp || $googleplus || $instagram || 
+			if ($facebook || $twitter || $linkedin || $yelp || $googleplus || $instagram ||
 				$youtube || $houzz || $angieslist || $pinterest || $foursquare) {
 				echo $before_widget;
 				echo "<div class='social-widgets widget'>";
@@ -1571,7 +1571,7 @@ class ThriveHiveSocialButtons extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
  	public function form( $instance ) {
-		
+
 	  }
 	/**
 	 * Sanitize widget form values as they are saved.
@@ -1597,7 +1597,7 @@ function renderSocialStuff($content){
 		$permalink = get_permalink();
 		$title = get_the_title();
 		$encodedPermalink = urlencode($permalink);
-		
+
 		wp_enqueue_script( "twitter", "//platform.twitter.com/widgets.js");
 		wp_enqueue_script( "facebook", "//static.ak.fbcdn.net/connect.php/js/FB.Share");
 		$blog_roll = get_option("th_social_blogroll");

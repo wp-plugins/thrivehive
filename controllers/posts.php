@@ -32,7 +32,7 @@ class JSON_API_Posts_Controller {
     if (!current_user_can('edit_posts')) {
       $json_api->error("You need to login with a user that has 'edit_posts' capacity.",'**auth**');
     }
-  
+
     $categories = strtolower(str_replace('\\', '', $_REQUEST['categories']));
     $categories = json_decode($categories);
     $this->create_categories($categories);
@@ -58,7 +58,7 @@ class JSON_API_Posts_Controller {
       'post' => $post
     );
   }
-  
+
   /**
   *@api
   **/
@@ -122,7 +122,7 @@ class JSON_API_Posts_Controller {
 
     return array('updated' => $updated);
   }
-  
+
   /**
   *@api
   **/
@@ -139,8 +139,8 @@ class JSON_API_Posts_Controller {
     if (!current_user_can('delete_posts')) {
       $json_api->error("You need to login with a user that has the 'delete_posts' capacity.", "**auth**");
     }
-    if ($post->post_author != get_current_user_id() && !current_user_can('delete_other_posts')) {
-      $json_api->error("You need to login with a user that has the 'delete_other_posts' capacity.", "**auth**");
+    if (!current_user_can('delete_others_posts')) {
+      $json_api->error("You need to login with a user that has the 'delete_others_posts' capacity.", "**auth**");
     }
     /*if (!$json_api->query->nonce) {
       $json_api->error("You must include a 'nonce' value to update posts. Use the `get_nonce` Core API method.");
@@ -422,7 +422,7 @@ class JSON_API_Posts_Controller {
   }
 
   /**
-  *Gets the link to the preview version of a post 
+  *Gets the link to the preview version of a post
   *@api
   *@example URL - /api/posts/get_post_preview
   *@return array containing the `link` to the post preview
@@ -537,7 +537,7 @@ class JSON_API_Posts_Controller {
   public function get_page_template_files(){
     global $json_api;
   include_once ABSPATH . 'wp-admin/includes/theme.php';
-   
+
   $templates = get_page_templates();
 
   $newarray = array();
@@ -596,7 +596,7 @@ class JSON_API_Posts_Controller {
       $cat_exists = get_term_by('name', $cat, 'category');
       if(!$cat_exists)
       {
-        wp_insert_term($cat, 'category', 
+        wp_insert_term($cat, 'category',
           array(
           'description'=>$cat,
           'slug'=>sanitize_title($cat),
@@ -666,7 +666,7 @@ class JSON_API_Posts_Controller {
 
     return array("option" => $option);
   }
-  
+
 }
 
 ?>
