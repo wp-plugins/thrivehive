@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.32
+   *Version: 1.33
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -1539,7 +1539,12 @@ class ThriveHiveSocialButtons extends WP_Widget {
 					}
 					if($youtube){
 						$youtube_icon = plugins_url('/images/icon-youtube-32.png', __FILE__);
-						echo "<a target='_blank' href='http://youtube.com/user/$youtube' style='margin-left: 10px'><img src='$youtube_icon' /></a>";
+						if (strpos($youtube, 'http') === 0) {
+							echo "<a target='_blank' href='$youtube' style='margin-left: 10px'><img src='$youtube_icon' /></a>";
+						}
+						else{
+							echo "<a target='_blank' href='http://youtube.com/user/$youtube' style='margin-left: 10px'><img src='$youtube_icon' /></a>";
+						}
 					}
 					if($houzz){
 						$houzz_icon = plugins_url('/images/icon-houzz-32.png', __FILE__);

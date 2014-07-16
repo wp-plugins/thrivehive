@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V1.33 Changing the storage of youtube account value
 V1.32 Fixing capabilities check for deleting posts
 V1.30 Fix for empty theme options
 V1.29 Adding files

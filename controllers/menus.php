@@ -12,8 +12,8 @@ include_once( ABSPATH . 'wp-content/plugins/thrivehive/lib/thrivehive_buttons.ph
 include_once( ABSPATH . 'wp-content/plugins/thrivehive/lib/thrivehive_forms.php');
 include_once( ABSPATH . 'wp-content/plugins/thrivehive/lib/thrivehive_theme_options.php');
 
-/** 
-*Class related to controlling menu and setting options 
+/**
+*Class related to controlling menu and setting options
 *@package Controllers\Menus
 */
 class JSON_API_Menus_Controller {
@@ -149,7 +149,7 @@ class JSON_API_Menus_Controller {
 
 		$itemstr = str_replace('\\', '', $_REQUEST['items']);
 		$items = json_decode($itemstr);
-		
+
 		$current_items = wp_get_nav_menu_items($_REQUEST['menu_id'], array());
 		foreach ($items as $item) {
 			foreach ($current_items as $current_item) {
@@ -211,7 +211,7 @@ class JSON_API_Menus_Controller {
 	**/
 	private function map_page($page){
 		$menu_item = array(
-			'menu-item-object-id' => $page['ID'], 
+			'menu-item-object-id' => $page['ID'],
 			'menu-item-object' => "page",
 			'menu-item-position' => 0,
 			'menu-item-type' => "post_type",
@@ -283,7 +283,7 @@ class JSON_API_Menus_Controller {
   		$image_data = wp_get_attachment_image_src($image_id, "medium");
 
 		update_option('th_site_logo', $image_data[0]);
-	  
+
 	    $this->set_theme_logo($image_data[1], $image_data[2], $image_data[0]);
 	  	$this->set_theme_logo2($image_data[0], $image_data[1], $image_data[2], $image_id);
 
@@ -315,7 +315,7 @@ class JSON_API_Menus_Controller {
 	  fputs($tmp_file, $line);
 	}
 	fclose($file_handler); fclose($tmp_file);
-	
+
 	if(!$replaced){
 	  	$line = "\n add_theme_support( 'genesis-custom-header', array('flex-height' => true, 'width' => %d, 'height' => %d, 'header_image' => \"%s\") );";
 		$line = sprintf($line, $width, $height, $upload);
@@ -370,7 +370,7 @@ class JSON_API_Menus_Controller {
 	  fputs($tmp_file, $line);
 	}
 	fclose($file_handler); fclose($tmp_file);
-	
+
 	if(!$replaced){
 	  	$line = "
 	  			\n /* HEADER RESIZING */ \n
@@ -579,7 +579,7 @@ class JSON_API_Menus_Controller {
 		}
 
 		$data = array(
-			'text'=>$_REQUEST['text'], 
+			'text'=>$_REQUEST['text'],
 			'norm_gradient1'=>$_REQUEST['norm_gradient1'],
 			'norm_gradient2'=>$_REQUEST['norm_gradient2'],
 			'hover_gradient1'=>$_REQUEST['hover_gradient1'],
@@ -652,7 +652,7 @@ class JSON_API_Menus_Controller {
 			$json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
 		}
 		$data = array(
-			'text'=>$_REQUEST['text'], 
+			'text'=>$_REQUEST['text'],
 			'norm_gradient1'=>$_REQUEST['norm_gradient1'],
 			'norm_gradient2'=>$_REQUEST['norm_gradient2'],
 			'hover_gradient1'=>$_REQUEST['hover_gradient1'],
@@ -719,7 +719,7 @@ class JSON_API_Menus_Controller {
 		if($logo_data){
 		$logo_id = $logo_data->attachment_id;
 		}
-		
+
 		$sidebars = get_option('sidebars_widgets');
 
 		//persist background settings
@@ -739,19 +739,19 @@ class JSON_API_Menus_Controller {
 		set_theme_mod('background_image_thumb', $thumb);
 
 		update_option('sidebars_widgets', $sidebars);
-		
+
 		if($logo_data){
 		//Update the logo settings
 		$image_data = wp_get_attachment_image_src($logo_id, "medium");
 
 		update_option('th_site_logo', $image_data[0]);
-	  	
-	  
+
+
 	    	$this->set_theme_logo($image_data[1], $image_data[2], $image_data[0]);
 	  	$this->set_theme_logo2($image_data[0], $image_data[1], $image_data[2], $logo_id);
 		}
 		$this->set_footer();
-		
+
 		return array();
 	}
 
@@ -789,7 +789,7 @@ class JSON_API_Menus_Controller {
 	  fputs($tmp_file, $line);
 	}
 	fclose($file_handler); fclose($tmp_file);
-	
+
 	if(!$replaced){
 	  	$line = "
 	  			\n/* Customize footer credits */\n
@@ -872,7 +872,7 @@ class JSON_API_Menus_Controller {
 
 	public function clear_background_image(){
 		global $json_api;
-		
+
 		$nonce_id = $json_api->get_nonce_id('menus', 'clear_background_image');
 
 		$nonce = wp_create_nonce($nonce_id);
@@ -916,7 +916,7 @@ class JSON_API_Menus_Controller {
 		if(!isset($_REQUEST['target_color'])){
 			$json_api->error("You must specify the `target_color`");
 		}
-		
+
 		/*if(!isset($_REQUEST['nonce'])){
 			$json_api->error("You must include a `nonce` value");
 		}*/
@@ -1036,9 +1036,7 @@ class JSON_API_Menus_Controller {
 					$res['instagram'] = update_option('th_instagram', $path);
 					break;
 				case 'youtube':
-					$url = parse_url($account);
-					$path = str_replace('/', '', basename($url['path']));
-					$res['youtube'] = update_option('th_youtube', $path);
+					$res['youtube'] = update_option('th_youtube', $account);
 					break;
 				case 'houzz':
 					$res['houzz'] = update_option('th_houzz', $account);
@@ -1060,9 +1058,9 @@ class JSON_API_Menus_Controller {
 		}
 
 		update_option('th_social_blogroll', $_REQUEST['blogroll']);
-	
+
 		update_option('th_social_blog', $_REQUEST['blog']);
-	
+
 		update_option('th_social_sidebar', $_REQUEST['sidebar']);
 
 		return array($res);
@@ -1071,13 +1069,13 @@ class JSON_API_Menus_Controller {
 	public function get_social_widget_settings(){
 		$settings = array('blogroll' => false, 'blog' => false, 'sidebar' => false);
 		$accounts = array(
-			'facebook' => '', 
-			'twitter' => '', 
-			'yelp' => '', 
+			'facebook' => '',
+			'twitter' => '',
+			'yelp' => '',
 			'linkedin' => '',
-			'googleplus' => '', 
-			'instagram' => '', 
-			'youtube' => '', 
+			'googleplus' => '',
+			'instagram' => '',
+			'youtube' => '',
 			'houzz' => '',
 			'angieslist' => '',
 			'pinterest' => '',
@@ -1204,7 +1202,7 @@ class JSON_API_Menus_Controller {
 
 		if(isset($form['th_id'])){
 			update_thrivehive_form($th_id, $html);
-		}	  	
+		}
 		else{
 			add_thrivehive_form($th_id, $html);
 	  	}
@@ -1230,7 +1228,7 @@ class JSON_API_Menus_Controller {
 		{
 			$options = unserialize($theme_options['options']);
 			$option_found = false;
-			for ($i=0; $i < count($options); $i++) { 
+			for ($i=0; $i < count($options); $i++) {
 				if($options[$i]['Option'] == $new_option['Option']){
 					foreach ($new_option as $key => $value) {
 						$options[$i][$key] = $value;
