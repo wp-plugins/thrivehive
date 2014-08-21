@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.34
+   *Version: 1.35
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -1556,12 +1556,7 @@ class ThriveHiveSocialButtons extends WP_Widget {
 					}
 					if($pinterest){
 						$pinterest_icon = plugins_url('/images/icon-pinterest-32.png', __FILE__);
-						if (strpos($pinterest, 'http') === 0) {
-							echo "<a target='_blank' href='$pinterest' style='margin-left: 10px'><img src='$pinterest_icon' /></a>";
-						}
-						else{
-							echo "<a target='_blank' href='http://pinterest.com/$pinterest' style='margin-left: 10px'><img src='$pinterest_icon' /></a>";
-						}
+						echo "<a target='_blank' href='http://pinterest.com/$pinterest' style='margin-left: 10px'><img src='$pinterest_icon' /></a>";
 					}
 					if($foursquare){
 						$foursquare_icon = plugins_url('/images/icon-foursquare-32.png', __FILE__);

@@ -68,7 +68,7 @@ body .sugar-slider {
 	}
 }
 
-/* this needs to be after the 480 definition */	
+/* this needs to be after the 480 definition */
 @media only screen and (max-width: 380px) {
 	/* fixes layout of mobile TH CTA */
 	#header .thrivehive-button {
@@ -101,7 +101,7 @@ body .sugar-slider {
 .theme-name-adorable #header {
 	background-size: contain !important;
 }
-	
+
 /* resizing the logo area to be bigger than the header right widget area so larger site titles fit on one line */
 .theme-name-adorable #header #title-area {
 	width: 60%;
@@ -109,7 +109,7 @@ body .sugar-slider {
 .theme-name-adorable #header .header-widget-area {
 	width: 40%;
 }
-	
+
 @media only screen and (max-width: 800px) {
 	.theme-name-adorable .menu-primary {
 		border-bottom: #ddd double;
@@ -117,21 +117,21 @@ body .sugar-slider {
 
 	.theme-name-adorable #nav {
 		border: none;
-	}		
+	}
 }
-	
+
 @media only screen and (max-width: 980px) {
 	.theme-name-adorable #header {
 		width: 100%;
 	}
 }
-		
+
 @media only screen and (max-width: 970px) {
 	.theme-name-adorable #header .wrap {
 		width: 100%;
 	}
 }
-		
+
 
 /************************************
 *       Agency Pro                  *
@@ -185,12 +185,12 @@ body .sugar-slider {
 	.theme-name-agency-pro .site-header .header-widget-area {
 		width: 100%;
 	}
-  	
+
   	/* sets this back to default */
 	.theme-name-agency-pro.header-image .site-title a {
 		background-position: center !important;
 	}
-	  
+
 	.theme-name-agency-pro .site-header .thrivehive-button {
 		width: 95%;
 	}
@@ -214,16 +214,16 @@ body .sugar-slider {
 	background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
 }
-		
+
 .theme-name-decor.header-image #title a {
 	background-size: contain !important;
 	margin-bottom: 40px;
 }
-			
+
 .theme-name-decor form.hiveform {
 	width: 400px;
 }
-				
+
 .theme-name-decor form.hiveform input[type=text] {
 	margin-top: 0px;
 }
@@ -243,22 +243,22 @@ body .sugar-slider {
 	}
 	.theme-name-decor #header .header-widget-area {
 		width: 100%;
-	}	
+	}
 
 	.theme-name-decor #header .thrivehive-button {
 		float: none !important;
 	  	display: inline-block;
 	  	margin-left: auto;
 	  	margin-right: auto;
-	}	
+	}
 }
-  
+
 @media only screen and (max-width: 480px) {
 	.theme-name-decor #header .thrivehive-button {
 		float: right !important;
 	  	margin-left: 0;
 	  	margin-right: 0;
-	}	
+	}
 }
 
 /************************************
@@ -269,69 +269,69 @@ body .sugar-slider {
 .theme-name-enterprise #home-top-bg {
 	display: none;
 }
-	
+
 /************************************
 *       Executive                   *
 *************************************/
-	
+
 @media only screen and (max-width: 998px) {
 	.theme-name-executive #header {
 		margin-bottom: 100px;
 		position: relative;
 		overflow: visible;
 	}
-		  
+
 	.theme-name-executive #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-executive #header .thrivehive-button {
 		width: 75%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-executive #header .thrivehive-button {
 		width: 66%;
 	}
 }
-					
+
 /************************************
 *       Going Green Pro             *
 *************************************/
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-going-green-pro .site-header .thrivehive-button {
 		width: 96%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-going-green-pro .site-header .thrivehive-button {
 		width: 95%;
 	}
 }
-							
+
 @media only screen and (max-width: 340px) {
 	.theme-name-going-green-pro form.hiveform input[type=text], .theme-name-modernbloggerpro form.hiveform textarea {
 		width: 190px;
 	}
 }
-								
+
 /************************************
 *       Lifestyle Pro               *
 *************************************/
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-lifestyle-pro .site-header .thrivehive-button {
 		width: 94%;
 	}
 }
-	
+
 /************************************
 *       Magazine                    *
 *************************************/
@@ -341,73 +341,80 @@ body .sugar-slider {
     min-height: 0;
     background-size: contain !important;
 }
-		
+
 @media only screen and (max-width: 703px) {
 	.theme-name-magazine #header {
 		margin-bottom: 100px;
 		position: relative;
 		overflow: visible;
 	}
-		  
+
 	.theme-name-magazine #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
 	}
 }
-		
+
 @media only screen and (max-width: 480px) {
 	.theme-name-magazine #header .thrivehive-button {
 		width: 79%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-magazine #header .thrivehive-button {
 		width: 66%;
 	}
 }
-											
+
 /************************************
 *       Metro Pro                   *
 *************************************/
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-metro-pro .site-header .thrivehive-button {
 		width: 95%;
 	}
 }
+.theme-name-metro-pro .backstretch img {
+	opacity: 1 !important;
+}
+
+.theme-name-metro-pro.header-image .site-title a {
+	max-width: none;
+}
 
 /************************************
 *       Mindstream                  *
 *************************************/
-	
+
 @media only screen and (max-width: 998px) {
 	.theme-name-mindstream #header {
 		margin-bottom: 100px;
 		position: relative;
 		overflow: visible;
 	}
-		  
+
 	.theme-name-mindstream #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-mindstream #header .thrivehive-button {
 		width: 79%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-mindstream #header .thrivehive-button {
 		width: 66%;
 	}
 }
-												
+
 /************************************
 *       Mocha                       *
 *************************************/
@@ -417,14 +424,14 @@ body .sugar-slider {
 		width: 630px;
 	}
 }
-	
+
 @media only screen and (max-width: 998px) {
 	.theme-name-mocha #header {
 		margin-bottom: 100px;
 		position: relative;
 		overflow: visible;
 	}
-		  
+
 	.theme-name-mocha #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
@@ -437,19 +444,19 @@ body .sugar-slider {
 		width: 100%;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-mocha #header .thrivehive-button {
 		width: 79%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-mocha #header .thrivehive-button {
 		width: 66%;
 	}
 }
-	
+
 /************************************
 *       Modern Blogger Pro          *
 *************************************/
@@ -462,7 +469,7 @@ body .sugar-slider {
 .theme-name-modernbloggerpro form.hiveform input[type=text], .theme-name-modernbloggerpro form.hiveform textarea {
 	width: 295px;
 }
-	
+
 .theme-name-modernbloggerpro form.hiveform {
 	width: 450px;
 }
@@ -474,13 +481,13 @@ body .sugar-slider {
 .theme-name-modernbloggerpro .site-header .header-widget-area {
 	width: 38%;
 }
-		
+
 @media only screen and (max-width: 400px) {
 	.theme-name-modernbloggerpro form.hiveform input[type=text], .theme-name-modernbloggerpro form.hiveform textarea {
 		width: 240px;
 	}
 }
-			
+
 @media only screen and (max-width: 998px) {
 	.theme-name-modernbloggerpro .site-header .title-area {
 		width: 100%;
@@ -489,18 +496,18 @@ body .sugar-slider {
 		width: 100%;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
   	/* make the button wide for mobile */
 	.theme-name-modernbloggerpro .site-header .thrivehive-button {
 		width: 95%;
 	}
 }
-																	
+
 /************************************
 *       Modern Portfolio            *
 *************************************/
-	
+
 @media only screen and (max-width: 998px) {
 	.theme-name-modern-portfolio #header {
 		margin-bottom: 100px;
@@ -508,99 +515,99 @@ body .sugar-slider {
 		overflow: visible;
 		border: none;
 	}
-		  
+
 	.theme-name-modern-portfolio #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
 	}
-																			  
+
 	.theme-name-modern-portfolio #menu-main {
 		border-top: 1px solid #222;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-modern-portfolio #header .thrivehive-button {
 		width: 79%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-modern-portfolio #header .thrivehive-button {
 		width: 66%;
 	}
 }
-					
+
 /************************************
 *       News                        *
 *************************************/
-	
+
 @media only screen and (max-width: 998px) {
 	.theme-name-news #header {
 		margin-bottom: 100px;
 		position: relative;
 		overflow: visible;
 	}
-		  
+
 	.theme-name-news #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-news #header .thrivehive-button {
 		width: 79%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-news #header .thrivehive-button {
 		width: 66%;
 	}
 }
-	
+
 /************************************
 *       Outreach                    *
 *************************************/
 
-/* repeat overrides default, 
-   color needs to be preserved when image is set, 
+/* repeat overrides default,
+   color needs to be preserved when image is set,
    and needs to default to no background image because the default image looks bad on mobile */
 .theme-name-outreach #header {
 	background-repeat: no-repeat !important;
 	background-color: #1A1A1A !important;
 	background-image: none;
 }
-	
+
 @media only screen and (max-width: 998px) {
 	.theme-name-outreach #header {
 		padding-bottom: 120px;
 		position: relative;
 		overflow: visible;
 	}
-		  
+
 	.theme-name-outreach #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: 20px;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-outreach #header .thrivehive-button {
 		width: 79%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-outreach #header .thrivehive-button {
 		width: 66%;
 	}
 }
-			
+
 /************************************
 *       Prose                       *
 *************************************/
@@ -611,30 +618,30 @@ body .sugar-slider {
 		position: relative;
 		overflow: visible;
 	}
-		  
+
 	.theme-name-prose #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-prose #header .thrivehive-button {
 		width: 79%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-prose #header .thrivehive-button {
 		width: 66%;
 	}
 }
-																									
+
 /************************************
 *       Quattro                       *
 *************************************/
-	
+
 @media only screen and (max-width: 998px) {
 	.theme-name-quattro #header {
 		margin-bottom: 100px;
@@ -642,40 +649,40 @@ body .sugar-slider {
 		overflow: visible;
 		border: none;
 	}
-																										  
+
 	.theme-name-quattro #menu-main {
 		border-top: 3px double #ccc;
 	}
-		  
+
 	.theme-name-quattro #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-quattro #header .thrivehive-button {
 		width: 79%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-quattro #header .thrivehive-button {
 		width: 66%;
 	}
 }
-	
+
 /************************************
 *       Sixteen 9 Pro               *
-*************************************/	
+*************************************/
 
 @media only screen and (max-width: 1264px) {
 	/* clears up extra space */
 	.theme-name-sixteen-nine-pro .site-header .widget_nav_menu {
 		margin-bottom: 0;
 	}
-		  
+
 	.theme-name-sixteen-nine-pro .site-header .thrivehive-button {
 		position: absolute;
 		top: 10px;
@@ -689,7 +696,7 @@ body .sugar-slider {
 		position: static;
 	}
 }
-			
+
 @media only screen and (min-width: 1265px) {
 	/* centers thrivehive button */
 	.theme-name-sixteen-nine-pro .site-header .thrivehive-button {
@@ -698,19 +705,19 @@ body .sugar-slider {
 		float: none !important;
 	}
 }
-		
+
 @media only screen and (max-width: 480px) {
 	.theme-name-sixteen-nine-pro .site-header .thrivehive-button {
 		width: 95%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-sixteen-nine-pro .site-header .thrivehive-button {
 		width: 92%;
 	}
 }
-																														
+
 /************************************
 *       Streamline                  *
 *************************************/
@@ -718,7 +725,7 @@ body .sugar-slider {
 .theme-name-streamline .sidebar .social-widgets img {
 	border-width: 0;
 }
-	
+
 @media only screen and (max-width: 998px) {
 	.theme-name-streamline #header {
 		margin-bottom: 100px;
@@ -728,20 +735,20 @@ body .sugar-slider {
 		-moz-box-shadow: none;
 		box-shadow: none;
 	}
-		  
+
 	.theme-name-streamline #header .thrivehive-button {
 		position: absolute;
 		right: 20px;
 		bottom: -100px;
 	}
 }
-			
+
 @media only screen and (max-width: 480px) {
 	.theme-name-streamline #header .thrivehive-button {
 		width: 79%;
 	}
 }
-			
+
 @media only screen and (max-width: 380px) {
 	.theme-name-streamline #header .thrivehive-button {
 		width: 66%;

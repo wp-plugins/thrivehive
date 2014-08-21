@@ -1045,6 +1045,8 @@ class JSON_API_Menus_Controller {
 					$res['angieslist'] = update_option('th_angieslist', $account);
 					break;
 				case 'pinterest':
+					$url = parse_url($account);
+					$path = str_replace('/', '', $url['path']);
 					$res['pinterest'] = update_option('th_pinterest', $path);
 					break;
 				case 'foursquare':
