@@ -1,6 +1,6 @@
 === ThriveHive ===
 Contributors: thrivehive
-Donate link: 
+Donate link:
 Tags: web analytics, tracking, thrivehive thrive hive
 Requires at least: 3
 Tested up to: 3.8.1
@@ -8,7 +8,7 @@ Stable tag: .1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin will automatically instrument a site with ThriveHive's tracking code. 
+This plugin will automatically instrument a site with ThriveHive's tracking code.
 
 == Description ==
 
@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.38 Adding footer changes to include address
 V 1.35 Major release to fuix issues with Metro Pro theme
 V 1.28 Major release to support custom header style options
 V 1.27 Fix for YouTube video tracking
@@ -43,7 +44,7 @@ V 1.24 Major release supporting forms, custom css/js, lightbox, categories, auth
 V 1.23 Added comments field to default contact us form
 V 1.22 Fix for YouTube embed showing up at top of page/post
 V 1.21 Fix for Youtube tracking environment url
-V 1.20 Major release supporting new shortcodes for youtube and image gallery, LinkedIn and Yelp widget buttons, 
+V 1.20 Major release supporting new shortcodes for youtube and image gallery, LinkedIn and Yelp widget buttons,
 V 1.10 Fixed a bug for opening blog posts in thrivehive
 V 1.09 Styling fix on contact us form generator
 V 1.08  Function naming conflict issue with a specific theme
