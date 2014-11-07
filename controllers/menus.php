@@ -475,7 +475,7 @@ class JSON_API_Menus_Controller {
 		if(isset($_REQUEST['homepage_seo'])){
 			$seo_options = get_option('aioseop_options');
 
-		    $seo_options['aiosp_home_title'] = $_REQUEST['homepage_seo'];
+		    $seo_options['aiosp_home_title'] = stripslashes($_REQUEST['homepage_seo']);
 
 		    update_option('aioseop_options', $seo_options);
 		}
