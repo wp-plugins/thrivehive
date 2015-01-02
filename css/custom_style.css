@@ -642,6 +642,11 @@ body .sugar-slider {
 *       Quattro                       *
 *************************************/
 
+/* fixes bug: hovering over main menu wouldn't let you select submenu item because of space in between them */
+#menu-main .menu-item .sub-menu {
+	margin-top: 0;
+}
+
 @media only screen and (max-width: 998px) {
 	.theme-name-quattro #header {
 		margin-bottom: 100px;
