@@ -49,12 +49,12 @@ class JSON_API_Core_Controller {
     $posts = $json_api->introspector->get_posts();
     return $this->posts_result($posts);
   }
-  
+
   /**
-  *Grab all posts matching the desired parameters 
+  *Grab all posts matching the desired parameters
   *@example URL - /core/get_posts/
   *@api
-  *@return array containing all posts 
+  *@return array containing all posts
   **/
    public function get_posts() {
     global $wpdb, $json_api;
@@ -91,8 +91,8 @@ class JSON_API_Core_Controller {
           SELECT DISTINCT p.ID, p.post_title, p.post_type, p.post_status
           FROM $wpdb->posts p
           LEFT JOIN $wpdb->postmeta m ON p.ID = m.post_id AND m.meta_key LIKE 'th_extra_type'
-          WHERE p.post_type = '$post_type' 
-          AND p.post_status != 'auto-draft' 
+          WHERE p.post_type = '$post_type'
+          AND p.post_status != 'auto-draft'
           AND p.post_status != 'trash'
           AND m.meta_key is null
           ORDER BY p.post_date DESC
@@ -109,8 +109,8 @@ class JSON_API_Core_Controller {
           SELECT p.ID, p.post_title, p.post_type, p.post_status
           FROM $wpdb->posts p
           JOIN $wpdb->postmeta m ON p.ID = m.post_id
-          WHERE p.post_type = '$post_type' 
-          AND p.post_status != 'auto-draft' 
+          WHERE p.post_type = '$post_type'
+          AND p.post_status != 'auto-draft'
           AND p.post_status != 'trash'
           AND m.meta_key =  'th_extra_type'
           AND m.meta_value = '$extra_type'
@@ -124,12 +124,16 @@ class JSON_API_Core_Controller {
         $res = $wpdb->get_results($query, ARRAY_A);
     }
     $newres = array();
+    $comments_query = new WP_Comment_Query;
     foreach ($res as $retpost) {
+      $args = array('post_id' => $retpost['ID'], 'count' => true, 'status' => 'hold');
+      $comments = $comments_query->query( $args );
       $retpost['url'] = get_permalink($retpost['ID']);
       $retpost['status'] = $retpost['post_status'];
       $retpost['title'] = $retpost['post_title'];
       $retpost['type'] = $retpost['post_type'];
       $retpost['id'] = $retpost['ID'];
+      $retpost['pendingComments'] = $comments;
       unset($retpost['post_status']);
       unset($retpost['post_type']);
       unset($retpost['post_title']);
@@ -148,7 +152,7 @@ class JSON_API_Core_Controller {
   {
     $count = count($posts);
     $previewdrafts = array();
-    for ($i=0; $i < $count; $i++) { 
+    for ($i=0; $i < $count; $i++) {
       $id = $posts[$i]->id;
       if(in_array($id, $previewdrafts))
       {
@@ -169,7 +173,7 @@ class JSON_API_Core_Controller {
       }
     }
 
-    for ($i=0; $i < $count ; $i++) { 
+    for ($i=0; $i < $count ; $i++) {
       $id = $posts[$i]->id;
       if(in_array($id, $previewdrafts))
       {
@@ -214,7 +218,7 @@ class JSON_API_Core_Controller {
     }
     return array('images' => $images);
   }
-  
+
   /**
   *login to the specified user account
   *@example URL - /core/login
@@ -233,12 +237,12 @@ class JSON_API_Core_Controller {
     }
     return $user;
   }
-  
+
   /**
   *Grab the post with the specified ID
   *@example URL - /core/get_post/
   *@api
-  *@return array containing the specified post 
+  *@return array containing the specified post
   **/
   public function get_post() {
     global $json_api, $post;
@@ -265,7 +269,7 @@ class JSON_API_Core_Controller {
   *Grab the page with the specified ID
   *@example URL - /core/get_page/
   *@api
-  *@return array containing the specified page 
+  *@return array containing the specified page
   **/
   public function get_page() {
     global $json_api;
@@ -287,7 +291,7 @@ class JSON_API_Core_Controller {
     } else {
       $json_api->error("Include 'id' or 'slug' var in your request.");
     }
-    
+
     // Workaround for https://core.trac.wordpress.org/ticket/12647
     if (empty($posts)) {
       $url = $_SERVER['REQUEST_URI'];
@@ -302,7 +306,7 @@ class JSON_API_Core_Controller {
       }
       $posts = $json_api->introspector->get_posts(array('pagename' => $path));
     }
-    
+
     if (count($posts) == 1) {
       if (!empty($children)) {
         $json_api->introspector->attach_child_posts($posts[0]);
@@ -314,7 +318,7 @@ class JSON_API_Core_Controller {
       $json_api->error("Not found.");
     }
   }
-  
+
   /**
   *@api
   **/
@@ -338,7 +342,7 @@ class JSON_API_Core_Controller {
     }
     return $this->posts_result($posts);
   }
-  
+
   /**
   *@api
   **/
@@ -353,7 +357,7 @@ class JSON_API_Core_Controller {
     ));
     return $this->posts_object_result($posts, $category);
   }
-  
+
   /**
   *@api
   **/
@@ -368,7 +372,7 @@ class JSON_API_Core_Controller {
     ));
     return $this->posts_object_result($posts, $tag);
   }
-  
+
   /**
   *@api
   **/
@@ -383,7 +387,7 @@ class JSON_API_Core_Controller {
     ));
     return $this->posts_object_result($posts, $author);
   }
-  
+
   /**
   *@api
   **/
@@ -398,7 +402,7 @@ class JSON_API_Core_Controller {
     }
     return $this->posts_result($posts);
   }
-  
+
   /**
   *@api
   **/
@@ -411,7 +415,7 @@ class JSON_API_Core_Controller {
       'tree' => $tree
     );
   }
-  
+
   /**
   *@api
   **/
@@ -429,7 +433,7 @@ class JSON_API_Core_Controller {
       'categories' => $categories
     );
   }
-  
+
   /**
   *@api
   **/
@@ -441,7 +445,7 @@ class JSON_API_Core_Controller {
       'tags' => $tags
     );
   }
-  
+
   /**
   *@api
   **/
@@ -453,7 +457,7 @@ class JSON_API_Core_Controller {
       'authors' => array_values($authors)
     );
   }
-  
+
   /**
   *@api
   **/
@@ -461,7 +465,7 @@ class JSON_API_Core_Controller {
     global $json_api;
     $pages = array();
     $post_type = $json_api->query->post_type ? $json_api->query->post_type : 'page';
-    
+
     // Thanks to blinder for the fix!
     $numberposts = empty($json_api->query->count) ? -1 : $json_api->query->count;
     $wp_posts = get_posts(array(
@@ -481,7 +485,7 @@ class JSON_API_Core_Controller {
       'pages' => $pages
     );
   }
-  
+
   /**
   *@api
   **/
@@ -507,7 +511,7 @@ class JSON_API_Core_Controller {
       $json_api->error("Include 'controller' and 'method' vars in your request.");
     }
   }
-  
+
   protected function get_object_posts($object, $id_var, $slug_var) {
     global $json_api;
     $object_id = "{$type}_id";
@@ -532,7 +536,7 @@ class JSON_API_Core_Controller {
     }
     return $posts;
   }
-  
+
   protected function posts_result($posts) {
     global $wp_query;
     return array(
@@ -542,7 +546,7 @@ class JSON_API_Core_Controller {
       'posts' => $posts
     );
   }
-  
+
   protected function posts_object_result($posts, $object) {
     global $wp_query;
     // Convert something like "JSON_API_Category" into "category"
@@ -559,7 +563,7 @@ class JSON_API_Core_Controller {
   *Gets the values for formatting SEO options from the all-in-one SEO plugin
   *@example URL - /api/core/get_seo_format_data
   *@api
-  *@return array containing `post_title_format`, `blog_title`, `blog_description`, 
+  *@return array containing `post_title_format`, `blog_title`, `blog_description`,
   *`category_title`, `post_author_login`, `post_author_nicename`, `post_author_firstname`, `post_author_lastname`
   **/
   public function get_seo_format_data()
@@ -603,15 +607,15 @@ class JSON_API_Core_Controller {
   {
     global $json_api, $wpdb;
 
-    $query = 
+    $query =
     "
       SELECT
         (SELECT count(*) FROM wp_posts WHERE post_type = 'post' AND post_status = 'publish') as post_count,
         (SELECT count(*)
           FROM wp_posts p
           LEFT JOIN wp_postmeta m ON p.ID = m.post_id AND m.meta_key LIKE 'th_extra_type'
-          WHERE p.post_type = 'page' 
-          AND p.post_status = 'publish' 
+          WHERE p.post_type = 'page'
+          AND p.post_status = 'publish'
           AND m.meta_key is null) as page_count,
         (SELECT count(*) FROM wp_TH_buttons) as button_count;
     ";
@@ -662,8 +666,8 @@ class JSON_API_Core_Controller {
       'include'                  => '',
       'number'                   => '',
       'taxonomy'                 => 'category',
-      'pad_counts'               => false 
-    ); 
+      'pad_counts'               => false
+    );
     $categories = get_categories($args);
 
     return array('categories' => $categories);
@@ -674,7 +678,76 @@ class JSON_API_Core_Controller {
 
     return array($cat);
   }
-  
+
+  public function get_comments(){
+    global $json_api;
+    $args = array();
+
+    if(isset($_REQUEST['count'])){
+      $args['number'] = $_REQUEST['count'];
+    }
+    if(isset($_REQUEST['offset'])){
+      $args['offset'] = $_REQUEST['offset'];
+    }
+    if(isset($_REQUEST['post_id'])){
+      $args['post_id'] = $_REQUEST['post_id'];
+    }
+    if(isset($_REQUEST['sort'])){
+      $args['order'] = $_REQUEST['sort'];
+    }
+    if(isset($_REQUEST['status'])){
+      $args['status'] = $_REQUEST['status'];
+    }
+    if(isset($_REQUEST['parent_id'])){
+      $args['parent'] = $_REQUEST['parent_id'];
+    }
+
+    $comments_query = new WP_Comment_Query;
+    $comments = $comments_query->query($args);
+
+    $retval = array();
+
+    foreach ($comments as $comment) {
+      $post_id = $comment->comment_post_ID;
+      $post = get_post($post_id, ARRAY_A);
+      if($comment->comment_approved == 'spam' || $comment->comment_approved == 'trash'){
+        $status = $comment->comment_approved;
+      }
+      else if($comment->comment_approved == 1){
+        $status = 'approve';
+      }
+      else{
+        $status = 'hold';
+      }
+      $ret_instance = array(
+          'comment_id' => $comment->comment_ID,
+          'post_title' => $post["post_title"],
+          'date' => $comment->comment_date,
+          'content' => $comment->comment_content,
+          'author_name' => $comment->comment_author,
+          'author_email' => $comment->comment_author_email,
+          'author_url' => $comment->comment_author_url,
+          'post_id' => $post_id,
+          'status' => $status,
+          'parent_id' => $comment->comment_parent
+          );
+      if($ret_instance['parent_id'] == '0'){
+        $ret_instance['parent_id'] = null;
+      }
+      $retval[] = $ret_instance;
+    }
+
+    return array('comments' => $retval);
+
+  }
+
+  public function get_pending_comment_count(){
+    $args = array('count' => true, 'status' => 'hold');
+    $comments_query = new WP_Comment_Query;
+    $comments = $comments_query->query($args);
+    return array('pendingComments' => $comments);
+  }
+
 }
 
 ?>

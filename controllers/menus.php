@@ -789,16 +789,15 @@ class JSON_API_Menus_Controller {
 	  			/* Customize footer credits */\n
 				add_filter( 'genesis_footer_creds_text', 'custom_footer_creds_text' );
 				function custom_footer_creds_text() {
+				\$address = str_replace( '</br>', '', get_option('th_company_address'));
+				\$name = get_option('blogname');
 				echo '<div class=\"creds\"><p>';
 				echo 'Copyright &copy; ';
 				echo date('Y');
-				echo ' &middot; <a href=\"/\">%s</a> &middot; %s &middot; Powered by <a href=\"http://www.thrivehive.com\" target=\"_new\" title=\"ThriveHive\">ThriveHive</a>';
+				echo ' &middot; <a href=\"/\">'.\$name.'</a> &middot; '.\$address.' &middot; Powered by <a href=\"http://www.thrivehive.com\" target=\"_new\" title=\"ThriveHive\">ThriveHive</a>';
 				echo '</p></div>';
 				}
 				";
-		$address = get_option('th_company_address');
-		$option = get_option('blogname');
-		$line = sprintf($line, $option, $address);
 	  	$replaced = true;
 	  }
 	  fputs($tmp_file, $line);
@@ -810,16 +809,15 @@ class JSON_API_Menus_Controller {
 	  			/* Customize footer credits */\n
 				add_filter( 'genesis_footer_creds_text', 'custom_footer_creds_text' );
 				function custom_footer_creds_text() {
+				\$address = str_replace( '</br>', '', get_option('th_company_address'));
+				\$name = get_option('blogname');
 				echo '<div class=\"creds\"><p>';
 				echo 'Copyright &copy; ';
 				echo date('Y');
-				echo ' &middot; <a href=\"/\">%s</a> &middot; %s &middot; Powered by <a href=\"http://www.thrivehive.com\" target=\"_new\" title=\"ThriveHive\">ThriveHive</a>';
+				echo ' &middot; <a href=\"/\">'.\$name.'</a> &middot; '.\$address.' &middot; Powered by <a href=\"http://www.thrivehive.com\" target=\"_new\" title=\"ThriveHive\">ThriveHive</a>';
 				echo '</p></div>';
 				}
 				";
-		$address = get_option('th_company_address');
-		$option = get_option('blogname');
-		$line = sprintf($line, $option, $address);
 		file_put_contents($file_name, $line, FILE_APPEND);
 	}
 	else{

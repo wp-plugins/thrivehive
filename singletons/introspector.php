@@ -115,6 +115,10 @@ class JSON_API_Introspector {
       $json_api->error("Include 'id' or 'slug' var in your request.");
     }
     if (!empty($posts)) {
+      $page_type = get_post_meta($id, "th_extra_type", true);
+      if($page_type){
+        $posts[0]->page_type = $page_type;
+      }
       return $posts[0];
     } else {
       return null;

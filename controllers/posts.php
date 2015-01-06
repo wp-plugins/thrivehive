@@ -93,6 +93,10 @@ class JSON_API_Posts_Controller {
     nocache_headers();
     $post = new JSON_API_Post($post);
     $post->update($_REQUEST);
+    if(isset($_REQUEST['extra_type']))
+    {
+      update_post_meta($id, 'th_extra_type', $_REQUEST['extra_type']);
+    }
     if(isset($_REQUEST['th_data']))
     {
       update_post_meta($_REQUEST['post_id'], 'th_data', $_REQUEST['th_data']);
@@ -667,6 +671,74 @@ class JSON_API_Posts_Controller {
     return array("option" => $option);
   }
 
+  public function update_post_comments(){
+    global $json_api;
+    $ids = strtolower(str_replace('\\', '', $_REQUEST['ids']));
+    $ids = json_decode($ids);
+    $status = $_REQUEST['status'];
+
+    $nonce_id = $json_api->get_nonce_id('posts', 'update_post_comments');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    foreach ($ids as $id) {
+      wp_set_comment_status($id, $status);
+    }
+    return array();
+  }
+
+  public function delete_post_comments(){
+    global $json_api;
+
+    $ids = strtolower(str_replace('\\', '', $_REQUEST['ids']));
+    $ids = json_decode($ids);
+
+    $nonce_id = $json_api->get_nonce_id('posts', 'delete_post_comments');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    foreach ($ids as $id) {
+      wp_delete_comment($id);
+    }
+    return array();
+  }
+  public function reply_to_comment(){
+    global $json_api;
+    $id = $_REQUEST['id'];
+    $content = $_REQUEST['content'];
+    $post_id = $_REQUEST['post_id'];
+    $user_id = $_REQUEST['user_id'];
+    $nonce_id = $json_api->get_nonce_id('posts', 'reply_to_comment');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    $user = get_user_by('id', $user_id);
+    $args = array(
+        'comment_post_ID' => $post_id,
+        'comment_author' => $user->display_name,
+        'comment_author_email' => $user->user_email,
+        'comment_author_url' => get_site_url(),
+        'comment_content' => $content,
+        'comment_type' => '',
+        'comment_parent' => $id,
+        'user_id' => $user_id,
+        'comment_author_IP' => '127.0.0.1'
+      );
+    $comment_id = wp_new_comment($args);
+    return array($comment_id);
+  }
 }
 
 ?>
