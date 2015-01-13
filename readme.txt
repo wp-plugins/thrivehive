@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+V 1.52 Updating get_all_users to return email addresses
 V 1.51 Updating user creation to include email address and adding method to update it
 V 1.5 Minor release changing functionalities for filtering pages by types and comment management
 V 1.40 Fix for excessive slashes in seo homepage

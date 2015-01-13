@@ -59,7 +59,7 @@ class JSON_API_Authors_Controller{
 			$json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
 		}
 
-		$args = array('fields' => array('user_login', 'user_nicename', 'ID', 'display_name'));
+		$args = array('fields' => array('user_login', 'user_nicename', 'ID', 'display_name', 'user_email'));
 
 		$users = get_users($args);
 
