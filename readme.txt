@@ -34,37 +34,37 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
-V 1.52 Updating get_all_users to return email addresses
-V 1.51 Updating user creation to include email address and adding method to update it
-V 1.5 Minor release changing functionalities for filtering pages by types and comment management
-V 1.40 Fix for excessive slashes in seo homepage
-V 1.39 Fix for RSS XML Feed
-V 1.38 Adding footer changes to include address
-V 1.35 Major release to fuix issues with Metro Pro theme
-V 1.28 Major release to support custom header style options
-V 1.27 Fix for YouTube video tracking
-V 1.26 Fix for overlapping forms on landing pages
-V 1.25 increasing version number to allow  update on some sites
-V 1.24 Major release supporting forms, custom css/js, lightbox, categories, authors, background image
-V 1.23 Added comments field to default contact us form
-V 1.22 Fix for YouTube embed showing up at top of page/post
-V 1.21 Fix for Youtube tracking environment url
-V 1.20 Major release supporting new shortcodes for youtube and image gallery, LinkedIn and Yelp widget buttons,
-V 1.10 Fixed a bug for opening blog posts in thrivehive
-V 1.09 Styling fix on contact us form generator
-V 1.08  Function naming conflict issue with a specific theme
-V 1.07 Fix to make sure menu item shows up, and shows up last
-V 1.06  Bug fix for theme page templates not showing up
-V 1.05  Bug fix for PHP Version <5.4
-V 1.04  Updating social buttons to be optional
-V 1.03  changed social buttons to be echo'd to the page rather than written directly
-V 1.02	Adding validation for current PHP version
-V 1.00  MAJOR Release integrating with the new Thrivehive wordpress interface
-V 0.59: Fixing but with getting blog post content
-V 0.58: Changing the method for getting public previews
-V 0.54: Added rewrite flushing on activation
-V 0.51: Bug fix for creating blog posts with no title having all content wiped out
-V 0.5:  Major update adding integration with ThriveHive to create and view blog posts as well as various usability enhancements
+* V 1.52 Updating get_all_users to return email addresses
+* V 1.51 Updating user creation to include email address and adding method to update it
+* V 1.5 Minor release changing functionalities for filtering pages by types and comment management
+* V 1.40 Fix for excessive slashes in seo homepage
+* V 1.39 Fix for RSS XML Feed
+* V 1.38 Adding footer changes to include address
+* V 1.35 Major release to fuix issues with Metro Pro theme
+* V 1.28 Major release to support custom header style options
+* V 1.27 Fix for YouTube video tracking
+* V 1.26 Fix for overlapping forms on landing pages
+* V 1.25 increasing version number to allow  update on some sites
+* V 1.24 Major release supporting forms, custom css/js, lightbox, categories, authors, background * image
+* V 1.23 Added comments field to default contact us form
+* V 1.22 Fix for YouTube embed showing up at top of page/post
+* V 1.21 Fix for Youtube tracking environment url
+* V 1.20 Major release supporting new shortcodes for youtube and image gallery, LinkedIn and Yelp * widget buttons,
+* V 1.10 Fixed a bug for opening blog posts in thrivehive
+* V 1.09 Styling fix on contact us form generator
+* V 1.08  Function naming conflict issue with a specific theme
+* V 1.07 Fix to make sure menu item shows up, and shows up last
+* V 1.06  Bug fix for theme page templates not showing up
+* V 1.05  Bug fix for PHP Version <5.4
+* V 1.04  Updating social buttons to be optional
+* V 1.03  changed social buttons to be echo'd to the page rather than written directly
+* V 1.02	Adding validation for current PHP version
+* V 1.00  MAJOR Release integrating with the new Thrivehive wordpress interface
+* V 0.59: Fixing but with getting blog post content
+* V 0.58: Changing the method for getting public previews
+* V 0.54: Added rewrite flushing on activation
+* V 0.51: Bug fix for creating blog posts with no title having all content wiped out
+* V 0.5:  Major update adding integration with ThriveHive to create and view blog posts as well as various usability enhancements
 
 
 == Upgrade notice ==
