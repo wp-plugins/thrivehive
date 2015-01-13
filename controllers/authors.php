@@ -14,12 +14,16 @@ class JSON_API_Authors_Controller{
 		if(!isset($_REQUEST['user'])){
 			$json_api->error("You must specify the `user` name");
 		}
+		if(!isset($_REQUEST['email'])){
+			$json_api->error("You must specify the `email` for the user");
+		}
 
 		$username = $_REQUEST['user'];
+		$email = $_REQUEST['email'];
 
 		$password = $this->randString(10);
 
-		$newUser = wp_create_user($username, $password);
+		$newUser = wp_create_user($username, $password, $email);
 
 		if(is_a($newUser, 'WP_Error')){
 			$json_api->error($newUser->errors['existing_user_login'][0]);
@@ -107,6 +111,36 @@ class JSON_API_Authors_Controller{
 		return array();
 	}
 
+	public function update_user_email(){
+		global $json_api;
+		$nonce_id = $json_api->get_nonce_id('authors', 'update_user_email');
+
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+		}
+
+		if(!isset($_REQUEST['user_id'])){
+			$json_api->error("You must specify the `user_id` to update a user");
+		}
+
+		if(!isset($_REQUEST['email'])){
+			$json_api->error("You must specify the `email` to update the user with");
+		}
+
+		$user_id = $_REQUEST['user_id'];
+		$email = $_REQUEST['email'];
+
+		$user = get_user_by('id', $_REQUEST['user_id']);
+
+		$up_data = array('ID' => $user->ID, 'user_email' => $email);
+
+		wp_update_user($up_data);
+
+		return array();
+	}
+
 	public function update_google_plus_profile(){
 		global $json_api;
 
@@ -134,4 +168,5 @@ class JSON_API_Authors_Controller{
 		return array('profile' => $res);
 	}
 }
+
 ?>
