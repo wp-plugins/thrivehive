@@ -722,7 +722,7 @@ class JSON_API_Core_Controller {
       $ret_instance = array(
           'comment_id' => $comment->comment_ID,
           'post_title' => $post["post_title"],
-          'date' => $comment->comment_date,
+          'date' => $comment->comment_date_gmt,
           'content' => $comment->comment_content,
           'author_name' => $comment->comment_author,
           'author_email' => $comment->comment_author_email,
