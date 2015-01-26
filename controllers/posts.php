@@ -737,6 +737,9 @@ class JSON_API_Posts_Controller {
         'comment_author_IP' => '127.0.0.1'
       );
     $comment_id = wp_new_comment($args);
+
+    //auto approve the comment
+    wp_set_comment_status($comment_id, "approve");
     return array($comment_id);
   }
 }

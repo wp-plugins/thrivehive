@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.54 Auto-approving comments our authors make in reply to other comments
 * V 1.53 Updating comment management to give the gmt date
 * V 1.52 Updating get_all_users to return email addresses
 * V 1.51 Updating user creation to include email address and adding method to update it
