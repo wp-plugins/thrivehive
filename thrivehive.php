@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.54
+   *Version: 1.55
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -422,7 +422,7 @@ function th_display_address( $atts){
 }
 
 function th_map(){
-  $address = urlencode(get_option('th_company_address'));
+  $address = urlencode(str_replace("</br>", " ", get_option('th_company_address')));
   return "<img src='http://maps.google.com/maps/api/staticmap?size=375x205&amp;maptype=roadmap&amp;markers=size:mid%7Ccolor:red%7C$address&amp;sensor=false'>";
 }
 
