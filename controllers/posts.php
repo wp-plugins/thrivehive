@@ -541,6 +541,10 @@ class JSON_API_Posts_Controller {
   public function get_page_template_files(){
     global $json_api;
   include_once ABSPATH . 'wp-admin/includes/theme.php';
+  require_once(ABSPATH . 'wp-content/plugins/thrivehive/class-page-template-example.php' );
+
+  $page = Page_Template_Plugin::get_instance();
+  $page->register_project_templates();
 
   $templates = get_page_templates();
 
