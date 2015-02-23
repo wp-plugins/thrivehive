@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.56
+   *Version: 1.57
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -423,7 +423,7 @@ function th_display_address( $atts){
 
 function th_map(){
   $address = urlencode(str_replace("</br>", " ", get_option('th_company_address')));
-  return "<img src='http://maps.google.com/maps/api/staticmap?size=375x205&amp;maptype=roadmap&amp;markers=size:mid%7Ccolor:red%7C$address&amp;sensor=false'>";
+  return "<a target='_blank' href='http://maps.google.com/maps?daddr=$address'><img src='http://maps.google.com/maps/api/staticmap?size=375x205&amp;maptype=roadmap&amp;markers=size:mid%7Ccolor:red%7C$address&amp;sensor=false'></a>";
 }
 
 function th_display_gallery($atts){
@@ -443,6 +443,27 @@ function th_display_gallery($atts){
 
 	return do_shortcode($fake_shortcode);
 }
+
+function th_display_pdf($atts){
+	$fake_shortcode = '<div>[gview';
+	$file_found = false;
+
+	foreach($atts as $attName => $attValue){
+		if($attName == "file" && !empty($attValue)){
+			$file_found = true;
+		}
+		$fake_shortcode .= " $attName = \"$attValue\"";
+	}
+
+	if(!$file_found){
+		return;
+	}
+
+	$fake_shortcode .= ']</div>';
+
+	return do_shortcode($fake_shortcode);
+}
+
 
 add_action('init', 'register_youtube_scripts');
 
@@ -511,6 +532,9 @@ add_shortcode( 'th_gallery', 'th_display_gallery');
 
 //[th_youtube]
 add_shortcode( 'th_youtube', 'th_display_youtube' );
+
+//[th_pdf]
+add_shortcode('th_pdf', 'th_display_pdf');
 
 //instrument site
 function thrivehive_instrumentation() {

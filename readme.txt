@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.57 Adding PDF management
 * V 1.56 Fixing an issue with landing page template and newer versions of genesis
 * V 1.55 Fixing bug with the map shortcode and <br> tags
 * V 1.54 Auto-approving comments our authors make in reply to other comments
