@@ -143,8 +143,12 @@ class JSON_API_Post {
     if (isset($values['categories'])) {
       $categories = explode(',', $values['categories']);
       foreach ($categories as $category_slug) {
+        $category_name = $category_slug;
         $category_slug = trim($category_slug);
         $category = $json_api->introspector->get_category_by_slug($category_slug);
+        if(!$category){
+          $category = $json_api->introspector->get_category_by_name($category_name);
+        }
         if (empty($wp_values['post_category'])) {
           $wp_values['post_category'] = array($category->id);
         } else {
