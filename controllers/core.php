@@ -68,7 +68,7 @@ class JSON_API_Core_Controller {
     {
       $offset = $_REQUEST['offset'];
     }
-
+    //For filtering by a specific page type unique to thrivehive
     if(!isset($_REQUEST['extra_type']))
     {
       $extra_type = null;
@@ -76,6 +76,15 @@ class JSON_API_Core_Controller {
     else
     {
       $extra_type = $_REQUEST['extra_type'];
+    }
+    //For excluding a certain page type from results
+    if(!isset($_REQUEST['exclude_type']))
+    {
+      $exclude_type = "th_default_thankyou";
+    }
+    else
+    {
+      $exclude_type = $_REQUEST['exclude_type'];
     }
     if(!isset($_REQUEST['post_type']))
     {
@@ -85,6 +94,9 @@ class JSON_API_Core_Controller {
     {
       $post_type = $_REQUEST['post_type'];
     }
+
+    $search = $_REQUEST['search'];
+    //Not searching for a specific subtype
     if(is_null($extra_type))
     {
       $query = "
@@ -95,14 +107,18 @@ class JSON_API_Core_Controller {
           AND p.post_status != 'auto-draft'
           AND p.post_status != 'trash'
           AND m.meta_key is null
-          ORDER BY p.post_date DESC
           ";
+      if(!empty($search)){
+        $query = $query."\nAND p.post_title LIKE '%$search%'";
+      }
+      $query = $query."\nORDER BY p.post_date DESC";
       if($count != 0){
         $query=$query."\nLIMIT $count OFFSET $offset";
       }
           $query=$query.";";
       $res = $wpdb->get_results($query, ARRAY_A);
     }
+    //Searching for a specific subtype
     else
     {
         $query = "
@@ -113,9 +129,15 @@ class JSON_API_Core_Controller {
           AND p.post_status != 'auto-draft'
           AND p.post_status != 'trash'
           AND m.meta_key =  'th_extra_type'
-          AND m.meta_value = '$extra_type'
-          ORDER BY p.post_date DESC
-          ";
+          AND m.meta_value = '$extra_type'";
+          if($exclude_type != null){
+            $query = $query."\nAND m.meta_value != $exclude_type";
+          }
+          if(!empty($search)){
+            $query = $query."\nAND p.post_title LIKE '%$search%'";
+          }
+
+          $query = $query."\nORDER BY p.post_date DESC";
         if($count != 0)
         {
           $query=$query."\nLIMIT $count OFFSET $offset";
@@ -197,10 +219,17 @@ class JSON_API_Core_Controller {
       $json_api->error("You must log into an account with 'upload_files' capacity", '**auth**');
     }
 
+    if($_REQUEST["show_pdfs"]){
+      $mime_type = "application/pdf";
+    }
+    else{
+      $mime_type = "image";
+    }
+
     $args = array(
     'post_type' => 'attachment',
     'post_status' => 'published',
-    'post_mime_type' => 'image',
+    'post_mime_type' => $mime_type,
     'posts_per_page' => -1,
     'numberposts' => null,
     );
@@ -211,10 +240,17 @@ class JSON_API_Core_Controller {
     foreach( $query_images->posts as $image) {
       $id = $image->ID;
       $imageurl = wp_get_attachment_url($id);
-      $src = wp_get_attachment_image_src($id, 'thumbnail');
-      $alttext = get_post_meta($id, '_wp_attachment_image_alt', true);
+      if(!$_REQUEST["show_pdfs"]){
+        $thumbnail = wp_get_attachment_image_src($id, 'thumbnail');
+        $thumbnail = $thumbnail[0];
+        $alttext = get_post_meta($id, '_wp_attachment_image_alt', true);
+      }
+      else{
+        $thumbnail = get_post_meta($id, "th_pdf_thumbnail", true);
+        $alttext = null;
+      }
 
-      $images[] = array('id' => $id, 'url' => $imageurl, 'alt_text' => $alttext, 'thumbnail' => $src[0]);
+      $images[] = array('id' => $id, 'url' => $imageurl, 'alt_text' => $alttext, 'thumbnail' => $thumbnail);
     }
     return array('images' => $images);
   }

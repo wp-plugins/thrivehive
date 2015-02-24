@@ -16,8 +16,7 @@ include_once( ABSPATH . 'wp-content/plugins/thrivehive/lib/thrivehive_theme_opti
 *Class related to controlling menu and setting options
 *@package Controllers\Menus
 */
-class JSON_API_Menus_Controller {
-	/**
+class JSON_API_Menus_Controller {	/**
 	*Adds an item to the specified menu, otherwise add it to the default menu
 	*@example URL - /menus/add_menu_item
 	*@api
@@ -1327,6 +1326,89 @@ class JSON_API_Menus_Controller {
 			$res = add_theme_options($theme, serialize($defaults), $_REQUEST['version']);
 		}
 		return array("options" => $options);
+	}
+
+	public function get_parallax_pages(){
+		$settings = get_option("th_parallax_settings");
+		$settings_json = json_encode($settings["blocks"]);
+		return array("blocks" => $settings_json, "maxBlocks" => $settings["max_blocks"]);
+	}
+
+	public function set_parallax_pages(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_parallax_pages');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		if(!isset($_REQUEST["blocks"])){
+			$json_api->error("You must specify the `blocks` variable to set");
+		}
+
+		$settings = get_option("th_parallax_settings");
+
+		$blocks = json_decode(stripslashes($_REQUEST["blocks"]), true);
+		$index = 0;
+		foreach ($blocks as $block) {
+			$current_setting = $settings["blocks"][$index];
+
+			if($block["custom"] || $block["empty"]){
+				if($current_setting["ID"]){
+					delete_post_meta($current_setting["ID"], "th_parallax_page");
+				}
+			}
+
+			elseif ($block["ID"]) {
+				if($current_setting["ID"] && $current_setting["ID"] != $block["ID"]){
+					delete_post_meta($current_setting["ID"], "th_parallax_page");
+					update_post_meta($block["ID"], "th_parallax_page", true);
+				}
+				else{
+					update_post_meta($block["ID"], "th_parallax_page", true);
+				}
+			}
+			$index += 1;
+		}
+
+		$settings["blocks"] = $blocks;
+		update_option("th_parallax_settings", $settings);
+
+		return array($blocks);
+	}
+
+	public function get_page_auto_add_setting(){
+		$option = get_option('th_page_nav_autoadd');
+
+		if($option){
+			return array('option' => (bool)$option);
+		}
+		else{
+			return array('option' => false);
+		}
+	}
+
+	public function set_page_auto_add_setting(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_page_auto_add_setting');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		if(!isset($_REQUEST["value"])){
+			$json_api->error("You must provide a `value` to set for the option");
+		}
+
+		$value = strtolower($_REQUEST["value"]) === "true";
+
+		update_option('th_page_nav_autoadd', $value);
+
+		return array();
 	}
 
 }

@@ -144,6 +144,11 @@ class JSON_API_Introspector {
     return null;
   }
 
+  public function get_category_by_name($category_name) {
+    $wp_category = get_term_by('name', $category_name, 'category');
+    return $this->get_category_object($wp_category);
+  }
+
   public function get_category_by_id($category_id) {
     $wp_category = get_term_by('id', $category_id, 'category');
     return $this->get_category_object($wp_category);
@@ -151,6 +156,9 @@ class JSON_API_Introspector {
 
   public function get_category_by_slug($category_slug) {
     $wp_category = get_term_by('slug', $category_slug, 'category');
+    if(!$wp_category){
+      return null;
+    }
     return $this->get_category_object($wp_category);
   }
 

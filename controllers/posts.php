@@ -201,6 +201,30 @@ class JSON_API_Posts_Controller {
         $json_api->error_code($id->errors['upload_error'][0], "error", "413 ERROR");
       }
 
+      //We're uploading a PDF, we need to do some magic to get a thumbnail for it
+      if($_FILES['attachment']['type'] == "application/pdf"){
+        //Const for PDF dir
+        $PDF_UPLOAD_DIR = "TH_PDFS";
+        $upload_dir = wp_upload_dir()['basedir']."/$PDF_UPLOAD_DIR";
+        //If our directory doesn't exist, create it.
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir);
+        }
+        //Create our file name based off the base name of the upload
+        $file_name = basename($_FILES["attachment"]["name"], ".pdf").".jpg";
+        //URL for the pdf we uploaded
+        $pdf_url = './'.parse_url( wp_get_attachment_url( $id) )["path"];
+        //The image we will be creating for the thumbnail
+        $output_image = $upload_dir."/$file_name";
+        $output = null;
+        //Create a thumbnail from the first page of our PDF
+        exec("convert -thumbnail x180 -define pdf:use-trimbox=true \"{$pdf_url}[0]\" \"{$output_image}\" 2>&1", $output);
+        unset($_FILES['attachment']);
+        $output_image_url = wp_upload_dir()['baseurl']."/$PDF_UPLOAD_DIR/$file_name";
+        update_post_meta($id, "th_pdf_thumbnail", $output_image_url);
+        return array('id' => $id, 'thumbnail' => $output_image_url, 'url' => wp_get_attachment_url($id));
+      }
+
       unset($_FILES['attachment']);
 
       //Toss in both thumbnail and full size image URLs from the first index of the array
@@ -541,6 +565,10 @@ class JSON_API_Posts_Controller {
   public function get_page_template_files(){
     global $json_api;
   include_once ABSPATH . 'wp-admin/includes/theme.php';
+  require_once(ABSPATH . 'wp-content/plugins/thrivehive/class-page-template-example.php' );
+
+  $page = Page_Template_Plugin::get_instance();
+  $page->register_project_templates();
 
   $templates = get_page_templates();
 
@@ -741,6 +769,24 @@ class JSON_API_Posts_Controller {
     //auto approve the comment
     wp_set_comment_status($comment_id, "approve");
     return array($comment_id);
+  }
+
+  public function upload_file(){
+    global $json_api;
+    if(!current_user_can('upload_files')){
+      $json_api->error("You must log into an account with 'upload_files' capacity", '**auth**');
+    }
+
+    nocache_headers();
+
+    if(!empty($_FILES['attachment'])){
+      $bits = $_FILES['attachment'];
+      $name = $_FILES["attachment"]["name"];
+
+      $upload = wp_upload_bits($name, null, file_get_contents($bits));
+
+      return $upload;
+    }
   }
 }
 
