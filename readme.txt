@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.59 Fixing a bug with older versions of PHP and accessing the post controller
 * V 1.58 Fixing bug with non canonical category slugs and saving posts
 * V 1.57 Adding PDF management
 * V 1.56 Fixing an issue with landing page template and newer versions of genesis
