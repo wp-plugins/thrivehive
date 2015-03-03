@@ -201,11 +201,12 @@ class JSON_API_Posts_Controller {
         $json_api->error_code($id->errors['upload_error'][0], "error", "413 ERROR");
       }
 
-      //We're uploading a PDF, we need to do some magic to get a thumbnail for it
+       //We're uploading a PDF, we need to do some magic to get a thumbnail for it
       if($_FILES['attachment']['type'] == "application/pdf"){
         //Const for PDF dir
         $PDF_UPLOAD_DIR = "TH_PDFS";
-        $upload_dir = wp_upload_dir()['basedir']."/$PDF_UPLOAD_DIR";
+        $wp_dir = wp_upload_dir();
+        $upload_dir = $wp_dir['basedir']."/$PDF_UPLOAD_DIR";
         //If our directory doesn't exist, create it.
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir);
@@ -213,14 +214,15 @@ class JSON_API_Posts_Controller {
         //Create our file name based off the base name of the upload
         $file_name = basename($_FILES["attachment"]["name"], ".pdf").".jpg";
         //URL for the pdf we uploaded
-        $pdf_url = './'.parse_url( wp_get_attachment_url( $id) )["path"];
+        $parsed_url = './'.parse_url( wp_get_attachment_url( $id) );
+        $pdf_url = $parsed_url["path"];
         //The image we will be creating for the thumbnail
         $output_image = $upload_dir."/$file_name";
         $output = null;
         //Create a thumbnail from the first page of our PDF
         exec("convert -thumbnail x180 -define pdf:use-trimbox=true \"{$pdf_url}[0]\" \"{$output_image}\" 2>&1", $output);
         unset($_FILES['attachment']);
-        $output_image_url = wp_upload_dir()['baseurl']."/$PDF_UPLOAD_DIR/$file_name";
+        $output_image_url = $wp_dir['baseurl']."/$PDF_UPLOAD_DIR/$file_name";
         update_post_meta($id, "th_pdf_thumbnail", $output_image_url);
         return array('id' => $id, 'thumbnail' => $output_image_url, 'url' => wp_get_attachment_url($id));
       }
@@ -788,6 +790,50 @@ class JSON_API_Posts_Controller {
       return $upload;
     }
   }
-}
 
+  public function get_page_genesis_layout(){
+    global $json_api;
+    $nonce_id = $json_api->get_nonce_id('posts', 'get_page_genesis_layout');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    if(!isset($_REQUEST["post_id"])){
+      $json_api->error("You must specify the `post_id` of the page to access");
+    }
+
+    $layout = get_post_meta($_REQUEST["post_id"], "_genesis_layout", true);
+
+    if(!$layout){
+      return array();
+    }
+
+    return array("option" => $layout);
+  }
+
+  public function set_page_genesis_layout(){
+    global $json_api;
+    $nonce_id = $json_api->get_nonce_id('posts', 'set_page_genesis_layout');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    if(!isset($_REQUEST["post_id"])){
+      $json_api->error("You must specify the `post_id` of the page to access");
+    }
+    if(!isset($_REQUEST["layout"])){
+      $json_api->error("You must specify the `layout` of the page to set");
+    }
+
+    update_post_meta($_REQUEST["post_id"], "_genesis_layout", $_REQUEST["layout"]);
+
+    return array();
+  }
+}
 ?>
