@@ -161,6 +161,7 @@ class JSON_API_Menus_Controller {	/**
 					$item_data['title'] = $item->title;
 					$item_data['post_title'] = $item->title;
 					wp_update_post($item_data);
+					update_post_meta($item-ID, "_menu_item_target", $item->target);
 				}
 			}
 		}

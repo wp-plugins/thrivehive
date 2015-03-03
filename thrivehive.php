@@ -130,6 +130,7 @@ function register_thrivehive_settings() {
 	register_setting( 'thrivehive-settings-group', 'th_angieslist');
 	register_setting( 'thrivehive-settings-group', 'th_pinterest');
 	register_setting( 'thrivehive-settings-group', 'th_foursquare');
+    register_setting( 'thrivehive-settings-group', 'th_tripadvisor');
 
 
 	register_setting( 'thrivehive-settings-group', 'th_social_blogroll');
@@ -312,6 +313,12 @@ function thrivehive_settings_page() {
 				<input type="text" name="th_foursquare" value="<?php echo get_option('th_foursquare'); ?>" />
 			</td>
 		</tr>
+        <tr valign="top">
+            <th scope="row">ThriveHive TripAdvisor Page URL</th>
+            <td>
+                <input type="text" name="th_tripadvisor" value="<?php echo get_option('th_tripadvisor'); ?>" />
+            </td>
+        </tr>
 		<tr valign="top">
 			<th scope="row">Show Social Buttons on Blogroll</th>
 			<td>
@@ -1530,6 +1537,7 @@ class ThriveHiveSocialButtons extends WP_Widget {
 			$angieslist = get_option('th_angieslist');
 			$pinterest = get_option('th_pinterest');
 			$foursquare = get_option('th_foursquare');
+            $tripadvisor = get_option('th_tripadvisor');
 
 
 			if ($facebook || $twitter || $linkedin || $yelp || $googleplus || $instagram ||
