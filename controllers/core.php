@@ -131,7 +131,7 @@ class JSON_API_Core_Controller {
           AND m.meta_key =  'th_extra_type'
           AND m.meta_value = '$extra_type'";
           if($exclude_type != null){
-            $query = $query."\nAND m.meta_value != $exclude_type";
+            $query = $query."\nAND m.meta_value != '$exclude_type'";
           }
           if(!empty($search)){
             $query = $query."\nAND p.post_title LIKE '%$search%'";

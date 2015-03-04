@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.61 Fixing a bug with displaying landing pages in TH
 * V 1.60 Fixing a bug introduced with pdf uploads in 1.59
 * V 1.59 Fixing a bug with older versions of PHP and accessing the post controller
 * V 1.58 Fixing bug with non canonical category slugs and saving posts
