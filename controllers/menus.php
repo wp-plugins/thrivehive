@@ -1064,6 +1064,9 @@ class JSON_API_Menus_Controller {	/**
 				case 'foursquare':
 					$res['foursquare'] = update_option('th_foursquare', $account);
 					break;
+				case 'tripadvisor':
+					$res['tripadvisor'] = update_option('th_tripadvisor', $account);
+					break;
 				default:
 					break;
 			}

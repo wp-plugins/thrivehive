@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.61
+   *Version: 1.62
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -1541,7 +1541,7 @@ class ThriveHiveSocialButtons extends WP_Widget {
 
 
 			if ($facebook || $twitter || $linkedin || $yelp || $googleplus || $instagram ||
-				$youtube || $houzz || $angieslist || $pinterest || $foursquare) {
+				$youtube || $houzz || $angieslist || $pinterest || $foursquare || $tripadvisor) {
 				echo $before_widget;
 				echo "<div class='social-widgets widget'>";
 				echo "<div class='widget-wrap'>";
@@ -1599,6 +1599,10 @@ class ThriveHiveSocialButtons extends WP_Widget {
 						$foursquare_icon = plugins_url('/images/icon-foursquare-32.png', __FILE__);
 						echo "<a target='_blank' href='$foursquare' style='margin-left: 10px'><img src='$foursquare_icon' /></a>";
 					}
+                    if($tripadvisor){
+                        $tripadvisor_icon = plugins_url('/images/icon-tripadvisor-32.png', __FILE__);
+                        echo "<a target='_blank' href='$tripadvisor' style='margin-left: 10px'><img src='$tripadvisor_icon' /></a>";
+                    }
 				echo "</div>";
 				echo "</div>";
 			    echo $after_widget;
