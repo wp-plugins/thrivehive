@@ -1457,55 +1457,62 @@ add_action( 'init', 'th_draft', 0 );
 
 class ThriveHivePhone extends WP_Widget {
 
-	/**
-	 * Register widget with WordPress.
-	 */
-	public function __construct() {
-		parent::__construct(
-			'th_phone_widget', // Base ID
-			'ThriveHive Phone Number', // Name
-			array( 'description' => __( 'Displays phone number in the widget area', 'text_domain' ), ));// Args
-	}
-	/**
-	 * Register widget with WordPress.
-	 */
-	public function widget( $args, $instance ) {
+    /**
+     * Register widget with WordPress.
+     */
+    public function __construct() {
+        parent::__construct(
+            'th_phone_widget', // Base ID
+            'ThriveHive Phone Number', // Name
+            array( 'description' => __( 'Displays phone number in the widget area', 'text_domain' ), ));// Args
+    }
+    /**
+     * Register widget with WordPress.
+     */
+    public function widget( $args, $instance ) {
 
-		$num = th_display_phone();
+        $num = th_display_phone(null);
 
-		echo $before_widget;
-		echo "<div class='phone-number widget'>";
-		echo "<div class='widget-wrap'>";
-		echo "<h4 class='heading'>Get in touch:</h4>";
-		echo "<div class='phone-number-text'>$num</div>";
-		echo "</div>";
-		echo "</div>";
-	    echo $after_widget;
-	}
-	/**
-	 * Back-end widget form.
-	 *
-	 * @see WP_Widget::form()
-	 *
-	 * @param array $instance Previously saved values from database.
-	 */
- 	public function form( $instance ) {
-
-	  }
-	/**
-	 * Sanitize widget form values as they are saved.
-	 *
-	 * @see WP_Widget::update()
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update( $new_instance, $old_instance ) {
-		      $instance = $old_instance;
+        echo $before_widget;
+        $heading = empty($instance['heading']) ? 'Get in touch:' : $instance['heading'];
+        echo "<div class='phone-number widget'>";
+        echo "<div class='widget-wrap'>";
+        echo "<h4 class='heading'>$heading</h4>";
+        echo "<div class='phone-number-text'>$num</div>";
+        echo "</div>";
+        echo "</div>";
+        echo $after_widget;
+    }
+    /**
+     * Back-end widget form.
+     *
+     * @see WP_Widget::form()
+     *
+     * @param array $instance Previously saved values from database.
+     */
+    public function form( $instance ) {
+        $defaults = array( 'heading' => 'Get in touch:' );
+        $instance = wp_parse_args( $instance, $defaults );
+        $heading = $instance['heading'];
+?>
+  <p><label for="<?php echo $this->get_field_id('heading'); ?>">Heading: <input class="widefat" id="<?php echo $this->get_field_id('buttonId'); ?>" name="<?php echo $this->get_field_name('heading'); ?>" type="text" value="<?php echo attribute_escape($heading); ?>" /></label></p>
+<?php
+      }
+    /**
+     * Sanitize widget form values as they are saved.
+     *
+     * @see WP_Widget::update()
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
+     */
+    public function update( $new_instance, $old_instance ) {
+     $instance = $old_instance;
+     $instance['heading'] = ( ! empty( $new_instance['heading'] ) ) ? strip_tags( $new_instance['heading'] ) : '';
      return $instance;
-	}
+    }
 
 }
 
