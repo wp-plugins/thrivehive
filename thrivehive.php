@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.62
+   *Version: 1.63
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -1637,39 +1637,55 @@ class ThriveHiveSocialButtons extends WP_Widget {
 }
 add_filter ('the_content', 'renderSocialStuff');
 function renderSocialStuff($content){
-	// Based on //kikolani.com/social-sharing-buttons-in-single-post-templates.html
-	if(!is_page()){
-		$twitter = get_option("th_twitter");
-		$permalink = get_permalink();
-		$title = get_the_title();
-		$encodedPermalink = urlencode($permalink);
-
-		wp_enqueue_script( "twitter", "//platform.twitter.com/widgets.js");
-		wp_enqueue_script( "facebook", "//static.ak.fbcdn.net/connect.php/js/FB.Share");
-		$blog_roll = get_option("th_social_blogroll");
-		$single = get_option("th_social_blog");
-		$show_blogroll = $blog_roll == "True" && !is_single();
-		$show_single = $single == "True" && is_single();
-		if($show_blogroll || $show_single)
-		{
-			echo  "";
-			echo "<div class='social-buttons' style='margin:5px 0'>";
-			echo "	<div id='twitterbutton' style='float:left'>";
-			echo "		<div>";
-			echo "			<a href='//twitter.com/share' class='twitter-share-button' data-url='$permalink' data-counturl='$permalink' data-text='$title' data-via='$twitter' data-related='$twitter'>Tweet</a>";
-			echo "		</div>";
-			echo "	</div>";
-			echo "	<div id='likebutton' style='float:left'>";
-			echo "		<iframe src='//www.facebook.com/plugins/like.php?href=$encodedPermalink&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;font=verdana&amp;colorscheme=light&amp;height=21' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:100px; height:21px;' allowTransparency='true'>";
-			echo "		</iframe>";
-			echo "	</div>";
-			echo "	<div id='sharebutton' style='padding-top:1px;float:left;'>";
-			echo "	</div>";
-			echo "	<div style='clear: both;'></div>";
-			echo "</div>";
-		}
-	}
-	return $content;
+    // Based on //kikolani.com/social-sharing-buttons-in-single-post-templates.html
+    if(!is_page()){
+        $twitter = get_option("th_twitter");
+        $permalink = get_permalink();
+        $title = get_the_title();
+        $encodedPermalink = urlencode($permalink);
+        $image = wp_get_attachment_url( get_post_thumbnail_id(get_the_ID()));
+        if($image == ""){
+            $image = get_header_image();
+        }
+        if($image == ""){
+            $image = includes_url("images/wlw/wp-watermark.png");
+        }
+        $image = urlencode($image);
+        wp_enqueue_script( "twitter", "//platform.twitter.com/widgets.js");
+        wp_enqueue_script( "facebook", "//static.ak.fbcdn.net/connect.php/js/FB.Share");
+        wp_enqueue_script( "linkedin", '//platform.linkedin.com/in.js');
+        wp_enqueue_script( "pinterest", '//assets.pinterest.com/js/pinit.js');
+        $blog_roll = get_option("th_social_blogroll");
+        $single = get_option("th_social_blog");
+        $show_blogroll = $blog_roll == "True" && !is_single();
+        $show_single = $single == "True" && is_single();
+        $desc = $title." | ".get_bloginfo();
+        if($show_blogroll || $show_single)
+        {
+            echo  "";
+            echo "<div class='social-buttons' style='margin:5px 0'>";
+            echo "  <div id='twitterbutton' style='float:left'>";
+            echo "      <div>";
+            echo "          <a href='//twitter.com/share' class='twitter-share-button' data-url='$permalink' data-counturl='$permalink' data-text='$title' data-via='$twitter' data-related='$twitter'>Tweet</a>";
+            echo "      </div>";
+            echo "  </div>";
+            echo "  <div id='likebutton' style='float:left'>";
+            echo "      <iframe src='//www.facebook.com/plugins/like.php?href=$encodedPermalink&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;font=verdana&amp;colorscheme=light&amp;height=21' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:100px; height:21px;' allowTransparency='true'>";
+            echo "      </iframe>";
+            echo "  </div>";
+            echo "  <div id='linkedinshare' style='float:left'>";
+            echo "      <script type='IN/Share' data-url='$permalink' data-counter='right'></script>";
+            echo "  </div>";
+            echo "  <div id='pinit' style='float:left; margin-left:10px'>";
+            echo "      <a href='//pinterest.com/pin/create/button/?url=$permalink&media=$image&class=pin-it-button&description=$desc' class='pin-it-button' count-layout='horizontal'><img border='0' src='//assets.pinterest.com/images/PinExt.png' title='Pin It' /></a>";
+            echo "  </div>";
+            echo "  <div id='sharebutton' style='padding-top:1px;float:left;'>";
+            echo "  </div>";
+            echo "  <div style='clear: both;'></div>";
+            echo "</div>";
+        }
+    }
+    return $content;
 }
 
 ?>
