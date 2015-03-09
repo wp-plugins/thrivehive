@@ -22,12 +22,31 @@ class JSON_API_Response {
   function get_json($data, $status = 'ok') {
     global $json_api;
     $version = thrivehive_get_version();
+    $last_ver_check = get_option('th_last_version_check');
+    $check_latest_version = False;
+    if(!$last_ver_check)
+    {
+      $check_latest_version = True;
+    }
+    else{
+      if(abs((new DateTime("Now"))->getTimestamp() - $last_ver_check->getTimestamp()) / 60 >= 30){
+        $check_latest_version = True;
+      }
+    }
+    if($check_latest_version){
+      $latest_version = $this->th_latest_ver();
+      update_option('th_last_version_check', new DateTime('NOW'));
+      update_option('th_latest_ver', $latest_version);
+    }
+    else{
+      $latest_version = get_option('th_latest_ver');
+    }
     // Include a status value with the response
     if (is_array($data)) {
-      $data = array_merge(array('status' => $status, 'plugin_version' => $version), $data);
+      $data = array_merge(array('status' => $status, 'plugin_version' => $version, 'latest_version' => $latest_version), $data);
     } else if (is_object($data)) {
       $data = get_object_vars($data);
-      $data = array_merge(array('status' => $status, 'plugin_version' => $version), $data);
+      $data = array_merge(array('status' => $status, 'plugin_version' => $version, 'latest_version' => $latest_version), $data);
     }
 
     $data = apply_filters('json_api_encode', $data);
@@ -61,6 +80,37 @@ class JSON_API_Response {
 
     return $json;
   }
+  private function th_latest_ver(){
+      if ( ! function_exists( 'plugins_api' ) ) {
+        require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+      }
+      // set the arguments to get latest info from repository via API ##
+      $args = array(
+          'slug' => 'thrivehive',
+          'fields' => array('version' => true,)
+      );
+
+      /** Prepare our query */
+      $call_api = plugins_api( 'plugin_information', $args );
+
+      if ( is_wp_error( $call_api ) ) {
+
+          $api_error = $call_api->get_error_message();
+          return $api_error;
+      } else {
+
+          //echo $call_api; // everything ##
+
+          if ( ! empty( $call_api->version ) ) {
+
+              $version_latest = $call_api->version;
+              return $version_latest;
+          }
+
+      }
+
+       return false;
+    }
 
   function is_value_included($key) {
     // Props to ikesyo for submitting a fix!

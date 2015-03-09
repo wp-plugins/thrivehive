@@ -17,12 +17,10 @@ class JSON_API_Core_Controller {
     if (!empty($json_api->query->controller)) {
       return $json_api->controller_info($json_api->query->controller);
     } else {
-      $version = thrivehive_get_version();
       $active_controllers = explode(',', get_option('json_api_controllers', 'core'));
       $controllers = array_intersect($json_api->get_controllers(), $active_controllers);
       return array(
-        'json_api_version' => $version,
-        'controllers' => array_values($controllers)
+        'controllers' => array_values($controllers),
       );
     }
   }
