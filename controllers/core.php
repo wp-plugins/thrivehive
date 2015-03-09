@@ -17,21 +17,7 @@ class JSON_API_Core_Controller {
     if (!empty($json_api->query->controller)) {
       return $json_api->controller_info($json_api->query->controller);
     } else {
-      $dir = json_api_dir();
-      if (file_exists("$dir/json-api.php")) {
-        $php = file_get_contents("$dir/json-api.php");
-      } else {
-        // Check one directory up, in case json-api.php was moved
-        $dir = dirname($dir);
-        if (file_exists("$dir/json-api.php")) {
-          $php = file_get_contents("$dir/json-api.php");
-        }
-      }
-      if (preg_match('/^\s*Version:\s*(.+)$/m', $php, $matches)) {
-        $version = $matches[1];
-      } else {
-        $version = '(Unknown)';
-      }
+      $version = thrivehive_get_version();
       $active_controllers = explode(',', get_option('json_api_controllers', 'core'));
       $controllers = array_intersect($json_api->get_controllers(), $active_controllers);
       return array(

@@ -909,12 +909,21 @@ function json_api_rewrites($wp_rules) {
 }
 
 function json_api_dir() {
-  if (defined('JSON_API_DIR') && file_exists(JSON_API_DIR)) {
-    return JSON_API_DIR;
-  } else {
     return dirname(__FILE__);
-  }
 }
+/**
+ * Returns current plugin version.
+ *
+ * @return string Plugin version
+ */
+function  thrivehive_get_version() {
+    if ( ! function_exists( 'get_plugins' ) )
+        require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+    $plugin_folder = get_plugins( '/' . plugin_basename( dirname( __FILE__ ) ) );
+    $plugin_file = basename( ( __FILE__ ) );
+    return $plugin_folder[$plugin_file]['Version'];
+}
+
 
 // Add initialization and activation hooks
 add_action('init', 'json_api_init');
