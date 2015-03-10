@@ -34,6 +34,8 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.65 Added default margin to images in .content
+* V 1.64 Added float right to <li> elements in #menu-main
 * V 1.63
     * Adding in endpoints for getting and setting genesis layout for pages.
     * Adding in sharing for pinterest and linked in on blog pages and phone widget header editing
