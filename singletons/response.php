@@ -29,7 +29,8 @@ class JSON_API_Response {
       $check_latest_version = True;
     }
     else{
-      if(abs((new DateTime("Now"))->getTimestamp() - $last_ver_check->getTimestamp()) / 60 >= 30){
+      $date_time = new DateTime("Now");
+      if(abs($date_time->getTimestamp() - $last_ver_check->getTimestamp()) / 60 >= 30){
         $check_latest_version = True;
       }
     }
