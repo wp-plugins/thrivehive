@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.58
+   *Version: 1.63
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -130,6 +130,7 @@ function register_thrivehive_settings() {
 	register_setting( 'thrivehive-settings-group', 'th_angieslist');
 	register_setting( 'thrivehive-settings-group', 'th_pinterest');
 	register_setting( 'thrivehive-settings-group', 'th_foursquare');
+    register_setting( 'thrivehive-settings-group', 'th_tripadvisor');
 
 
 	register_setting( 'thrivehive-settings-group', 'th_social_blogroll');
@@ -312,6 +313,12 @@ function thrivehive_settings_page() {
 				<input type="text" name="th_foursquare" value="<?php echo get_option('th_foursquare'); ?>" />
 			</td>
 		</tr>
+        <tr valign="top">
+            <th scope="row">ThriveHive TripAdvisor Page URL</th>
+            <td>
+                <input type="text" name="th_tripadvisor" value="<?php echo get_option('th_tripadvisor'); ?>" />
+            </td>
+        </tr>
 		<tr valign="top">
 			<th scope="row">Show Social Buttons on Blogroll</th>
 			<td>
@@ -902,12 +909,21 @@ function json_api_rewrites($wp_rules) {
 }
 
 function json_api_dir() {
-  if (defined('JSON_API_DIR') && file_exists(JSON_API_DIR)) {
-    return JSON_API_DIR;
-  } else {
     return dirname(__FILE__);
-  }
 }
+/**
+ * Returns current plugin version.
+ *
+ * @return string Plugin version
+ */
+function  thrivehive_get_version() {
+    if ( ! function_exists( 'get_plugins' ) )
+        require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+    $plugin_folder = get_plugins( '/' . plugin_basename( dirname( __FILE__ ) ) );
+    $plugin_file = basename( ( __FILE__ ) );
+    return $plugin_folder[$plugin_file]['Version'];
+}
+
 
 // Add initialization and activation hooks
 add_action('init', 'json_api_init');
@@ -1450,55 +1466,62 @@ add_action( 'init', 'th_draft', 0 );
 
 class ThriveHivePhone extends WP_Widget {
 
-	/**
-	 * Register widget with WordPress.
-	 */
-	public function __construct() {
-		parent::__construct(
-			'th_phone_widget', // Base ID
-			'ThriveHive Phone Number', // Name
-			array( 'description' => __( 'Displays phone number in the widget area', 'text_domain' ), ));// Args
-	}
-	/**
-	 * Register widget with WordPress.
-	 */
-	public function widget( $args, $instance ) {
+    /**
+     * Register widget with WordPress.
+     */
+    public function __construct() {
+        parent::__construct(
+            'th_phone_widget', // Base ID
+            'ThriveHive Phone Number', // Name
+            array( 'description' => __( 'Displays phone number in the widget area', 'text_domain' ), ));// Args
+    }
+    /**
+     * Register widget with WordPress.
+     */
+    public function widget( $args, $instance ) {
 
-		$num = th_display_phone();
+        $num = th_display_phone(null);
 
-		echo $before_widget;
-		echo "<div class='phone-number widget'>";
-		echo "<div class='widget-wrap'>";
-		echo "<h4 class='heading'>Get in touch:</h4>";
-		echo "<div class='phone-number-text'>$num</div>";
-		echo "</div>";
-		echo "</div>";
-	    echo $after_widget;
-	}
-	/**
-	 * Back-end widget form.
-	 *
-	 * @see WP_Widget::form()
-	 *
-	 * @param array $instance Previously saved values from database.
-	 */
- 	public function form( $instance ) {
-
-	  }
-	/**
-	 * Sanitize widget form values as they are saved.
-	 *
-	 * @see WP_Widget::update()
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update( $new_instance, $old_instance ) {
-		      $instance = $old_instance;
+        echo $before_widget;
+        $heading = empty($instance['heading']) ? 'Get in touch:' : $instance['heading'];
+        echo "<div class='phone-number widget'>";
+        echo "<div class='widget-wrap'>";
+        echo "<h4 class='heading'>$heading</h4>";
+        echo "<div class='phone-number-text'>$num</div>";
+        echo "</div>";
+        echo "</div>";
+        echo $after_widget;
+    }
+    /**
+     * Back-end widget form.
+     *
+     * @see WP_Widget::form()
+     *
+     * @param array $instance Previously saved values from database.
+     */
+    public function form( $instance ) {
+        $defaults = array( 'heading' => 'Get in touch:' );
+        $instance = wp_parse_args( $instance, $defaults );
+        $heading = $instance['heading'];
+?>
+  <p><label for="<?php echo $this->get_field_id('heading'); ?>">Heading: <input class="widefat" id="<?php echo $this->get_field_id('buttonId'); ?>" name="<?php echo $this->get_field_name('heading'); ?>" type="text" value="<?php echo attribute_escape($heading); ?>" /></label></p>
+<?php
+      }
+    /**
+     * Sanitize widget form values as they are saved.
+     *
+     * @see WP_Widget::update()
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
+     */
+    public function update( $new_instance, $old_instance ) {
+     $instance = $old_instance;
+     $instance['heading'] = ( ! empty( $new_instance['heading'] ) ) ? strip_tags( $new_instance['heading'] ) : '';
      return $instance;
-	}
+    }
 
 }
 
@@ -1530,10 +1553,11 @@ class ThriveHiveSocialButtons extends WP_Widget {
 			$angieslist = get_option('th_angieslist');
 			$pinterest = get_option('th_pinterest');
 			$foursquare = get_option('th_foursquare');
+            $tripadvisor = get_option('th_tripadvisor');
 
 
 			if ($facebook || $twitter || $linkedin || $yelp || $googleplus || $instagram ||
-				$youtube || $houzz || $angieslist || $pinterest || $foursquare) {
+				$youtube || $houzz || $angieslist || $pinterest || $foursquare || $tripadvisor) {
 				echo $before_widget;
 				echo "<div class='social-widgets widget'>";
 				echo "<div class='widget-wrap'>";
@@ -1591,6 +1615,10 @@ class ThriveHiveSocialButtons extends WP_Widget {
 						$foursquare_icon = plugins_url('/images/icon-foursquare-32.png', __FILE__);
 						echo "<a target='_blank' href='$foursquare' style='margin-left: 10px'><img src='$foursquare_icon' /></a>";
 					}
+                    if($tripadvisor){
+                        $tripadvisor_icon = plugins_url('/images/icon-tripadvisor-32.png', __FILE__);
+                        echo "<a target='_blank' href='$tripadvisor' style='margin-left: 10px'><img src='$tripadvisor_icon' /></a>";
+                    }
 				echo "</div>";
 				echo "</div>";
 			    echo $after_widget;
@@ -1625,39 +1653,55 @@ class ThriveHiveSocialButtons extends WP_Widget {
 }
 add_filter ('the_content', 'renderSocialStuff');
 function renderSocialStuff($content){
-	// Based on //kikolani.com/social-sharing-buttons-in-single-post-templates.html
-	if(!is_page()){
-		$twitter = get_option("th_twitter");
-		$permalink = get_permalink();
-		$title = get_the_title();
-		$encodedPermalink = urlencode($permalink);
-
-		wp_enqueue_script( "twitter", "//platform.twitter.com/widgets.js");
-		wp_enqueue_script( "facebook", "//static.ak.fbcdn.net/connect.php/js/FB.Share");
-		$blog_roll = get_option("th_social_blogroll");
-		$single = get_option("th_social_blog");
-		$show_blogroll = $blog_roll == "True" && !is_single();
-		$show_single = $single == "True" && is_single();
-		if($show_blogroll || $show_single)
-		{
-			echo  "";
-			echo "<div class='social-buttons' style='margin:5px 0'>";
-			echo "	<div id='twitterbutton' style='float:left'>";
-			echo "		<div>";
-			echo "			<a href='//twitter.com/share' class='twitter-share-button' data-url='$permalink' data-counturl='$permalink' data-text='$title' data-via='$twitter' data-related='$twitter'>Tweet</a>";
-			echo "		</div>";
-			echo "	</div>";
-			echo "	<div id='likebutton' style='float:left'>";
-			echo "		<iframe src='//www.facebook.com/plugins/like.php?href=$encodedPermalink&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;font=verdana&amp;colorscheme=light&amp;height=21' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:100px; height:21px;' allowTransparency='true'>";
-			echo "		</iframe>";
-			echo "	</div>";
-			echo "	<div id='sharebutton' style='padding-top:1px;float:left;'>";
-			echo "	</div>";
-			echo "	<div style='clear: both;'></div>";
-			echo "</div>";
-		}
-	}
-	return $content;
+    // Based on //kikolani.com/social-sharing-buttons-in-single-post-templates.html
+    if(!is_page()){
+        $twitter = get_option("th_twitter");
+        $permalink = get_permalink();
+        $title = get_the_title();
+        $encodedPermalink = urlencode($permalink);
+        $image = wp_get_attachment_url( get_post_thumbnail_id(get_the_ID()));
+        if($image == ""){
+            $image = get_header_image();
+        }
+        if($image == ""){
+            $image = includes_url("images/wlw/wp-watermark.png");
+        }
+        $image = urlencode($image);
+        wp_enqueue_script( "twitter", "//platform.twitter.com/widgets.js");
+        wp_enqueue_script( "facebook", "//static.ak.fbcdn.net/connect.php/js/FB.Share");
+        wp_enqueue_script( "linkedin", '//platform.linkedin.com/in.js');
+        wp_enqueue_script( "pinterest", '//assets.pinterest.com/js/pinit.js');
+        $blog_roll = get_option("th_social_blogroll");
+        $single = get_option("th_social_blog");
+        $show_blogroll = $blog_roll == "True" && !is_single();
+        $show_single = $single == "True" && is_single();
+        $desc = $title." | ".get_bloginfo();
+        if($show_blogroll || $show_single)
+        {
+            echo  "";
+            echo "<div class='social-buttons' style='margin:5px 0'>";
+            echo "  <div id='twitterbutton' style='float:left'>";
+            echo "      <div>";
+            echo "          <a href='//twitter.com/share' class='twitter-share-button' data-url='$permalink' data-counturl='$permalink' data-text='$title' data-via='$twitter' data-related='$twitter'>Tweet</a>";
+            echo "      </div>";
+            echo "  </div>";
+            echo "  <div id='likebutton' style='float:left'>";
+            echo "      <iframe src='//www.facebook.com/plugins/like.php?href=$encodedPermalink&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;font=verdana&amp;colorscheme=light&amp;height=21' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:100px; height:21px;' allowTransparency='true'>";
+            echo "      </iframe>";
+            echo "  </div>";
+            echo "  <div id='linkedinshare' style='float:left'>";
+            echo "      <script type='IN/Share' data-url='$permalink' data-counter='right'></script>";
+            echo "  </div>";
+            echo "  <div id='pinit' style='float:left; margin-left:10px'>";
+            echo "      <a href='//pinterest.com/pin/create/button/?url=$permalink&media=$image&class=pin-it-button&description=$desc' class='pin-it-button' count-layout='horizontal'><img border='0' src='//assets.pinterest.com/images/PinExt.png' title='Pin It' /></a>";
+            echo "  </div>";
+            echo "  <div id='sharebutton' style='padding-top:1px;float:left;'>";
+            echo "  </div>";
+            echo "  <div style='clear: both;'></div>";
+            echo "</div>";
+        }
+    }
+    return $content;
 }
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 class JSON_API_Response {
-  
+
   function setup() {
     global $json_api;
     $this->include_values = array();
@@ -14,23 +14,44 @@ class JSON_API_Response {
       $this->exclude_values = explode(',', $json_api->query->exclude);
       $this->include_values = array_diff($this->include_values, $this->exclude_values);
     }
-    
+
     // Compatibility with Disqus plugin
     remove_action('loop_end', 'dsq_loop_end');
   }
-  
+
   function get_json($data, $status = 'ok') {
     global $json_api;
+    $version = thrivehive_get_version();
+    $last_ver_check = get_option('th_last_version_check');
+    $check_latest_version = False;
+    if(!$last_ver_check)
+    {
+      $check_latest_version = True;
+    }
+    else{
+      $date_time = new DateTime("Now");
+      if(abs($date_time->getTimestamp() - $last_ver_check->getTimestamp()) / 60 >= 30){
+        $check_latest_version = True;
+      }
+    }
+    if($check_latest_version){
+      $latest_version = $this->th_latest_ver();
+      update_option('th_last_version_check', new DateTime('NOW'));
+      update_option('th_latest_ver', $latest_version);
+    }
+    else{
+      $latest_version = get_option('th_latest_ver');
+    }
     // Include a status value with the response
     if (is_array($data)) {
-      $data = array_merge(array('status' => $status), $data);
+      $data = array_merge(array('status' => $status, 'plugin_version' => $version, 'latest_version' => $latest_version), $data);
     } else if (is_object($data)) {
       $data = get_object_vars($data);
-      $data = array_merge(array('status' => $status), $data);
+      $data = array_merge(array('status' => $status, 'plugin_version' => $version, 'latest_version' => $latest_version), $data);
     }
-    
+
     $data = apply_filters('json_api_encode', $data);
-    
+
     if (function_exists('json_encode')) {
       // Use the built-in json_encode function if it's available
       if (version_compare(PHP_VERSION, '5.3') < 0) {
@@ -51,16 +72,47 @@ class JSON_API_Response {
       $json_service = new Services_JSON();
       $json = $json_service->encode($data);
     }
-    
+
     // Thanks to Stack Overflow user Gumbo stackoverflow.com/questions/2934563
     if ($json_api->query->json_unescaped_unicode) {
       $callback = array($this, 'replace_unicode_escape_sequence');
       $json = preg_replace_callback('/\\\\u([0-9a-f]{4})/i', $callback, $json);
     }
-    
+
     return $json;
   }
-  
+  private function th_latest_ver(){
+      if ( ! function_exists( 'plugins_api' ) ) {
+        require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+      }
+      // set the arguments to get latest info from repository via API ##
+      $args = array(
+          'slug' => 'thrivehive',
+          'fields' => array('version' => true,)
+      );
+
+      /** Prepare our query */
+      $call_api = plugins_api( 'plugin_information', $args );
+
+      if ( is_wp_error( $call_api ) ) {
+
+          $api_error = $call_api->get_error_message();
+          return $api_error;
+      } else {
+
+          //echo $call_api; // everything ##
+
+          if ( ! empty( $call_api->version ) ) {
+
+              $version_latest = $call_api->version;
+              return $version_latest;
+          }
+
+      }
+
+       return false;
+    }
+
   function is_value_included($key) {
     // Props to ikesyo for submitting a fix!
     if (empty($this->include_values) && empty($this->exclude_values)) {
@@ -73,7 +125,7 @@ class JSON_API_Response {
       }
     }
   }
-  
+
   function respond($result, $status = 'ok') {
     global $json_api;
     $json = $this->get_json($result, $status);
@@ -129,7 +181,7 @@ class JSON_API_Response {
     }
     exit;
   }
-  
+
   function output($result) {
     $charset = get_option('blog_charset');
     if (!headers_sent()) {
@@ -138,7 +190,7 @@ class JSON_API_Response {
     }
     echo $result;
   }
-  
+
   function callback($callback, $result) {
     $charset = get_option('blog_charset');
     if (!headers_sent()) {
@@ -147,7 +199,7 @@ class JSON_API_Response {
     }
     echo "$callback($result)";
   }
-  
+
   function add_status_query_var($url, $status) {
     if (strpos($url, '#')) {
       // Remove the anchor hash for now
@@ -166,7 +218,7 @@ class JSON_API_Response {
     }
     return $url;
   }
-  
+
   function prettify($ugly) {
     $pretty = "";
     $indent = "";
@@ -223,11 +275,11 @@ class JSON_API_Response {
     }
     return $pretty;
   }
-  
+
   function replace_unicode_escape_sequence($match) {
     return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
   }
-  
+
 }
 
 ?>
