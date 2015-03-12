@@ -281,8 +281,9 @@ class JSON_API_Posts_Controller {
     {
       $json_api->error("You must log into an account with 'upload_files' capacity", '**auth**');
     }
-
-     $res = update_post_meta($_REQUEST['post_id'], '_wp_attachment_image_alt', $_REQUEST['alt_text']);
+    $post_details = array('ID' => $_REQUEST['post_id'], 'post_excerpt' => $_REQUEST['caption']);
+    wp_update_post($post_details);
+    $res = update_post_meta($_REQUEST['post_id'], '_wp_attachment_image_alt', $_REQUEST['alt_text']);
 
      return array('modified' => $res);
   }

@@ -223,6 +223,7 @@ class JSON_API_Core_Controller {
 
     foreach( $query_images->posts as $image) {
       $id = $image->ID;
+      $caption = $image->post_excerpt;
       $imageurl = wp_get_attachment_url($id);
       if(!$_REQUEST["show_pdfs"]){
         $thumbnail = wp_get_attachment_image_src($id, 'thumbnail');
@@ -234,7 +235,7 @@ class JSON_API_Core_Controller {
         $alttext = null;
       }
 
-      $images[] = array('id' => $id, 'url' => $imageurl, 'alt_text' => $alttext, 'thumbnail' => $thumbnail);
+      $images[] = array('id' => $id, 'url' => $imageurl, 'alt_text' => $alttext, 'thumbnail' => $thumbnail, 'caption' => $caption);
     }
     return array('images' => $images);
   }
