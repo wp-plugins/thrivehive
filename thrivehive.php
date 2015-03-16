@@ -17,12 +17,10 @@ add_action('init', 'version_check');
 function version_check(){
 	//UPDATE THIS WHEN WE MAKE VERSION CHANGES
 	$db_version = '1.63';
+	$update = null;
 
 	$ver = get_option('thrivehive_vers');
-	if(!$ver){
-		$update = null;
-	}
-	else if($ver != $db_version){
+	if($ver != $db_version){
 		$update = $db_version;
 	}
 	if(!$ver || $update){
@@ -814,11 +812,6 @@ function thrivehive_create_button_db($version=null) {
 		dbDelta($sql);
 	}
 
-	// if($version == '1.63'){
-	// 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-	// 	$alter_sql = "ALTER TABLE ". $table_name . "ADD COLUMN target VARCHAR(10) NULL;";
-	// 	dbDelta($alter_sql);
-	// }
 }
 function thrivehive_create_forms_db() {
 	global $wpdb;
