@@ -161,7 +161,7 @@ class JSON_API_Menus_Controller {	/**
 					$item_data['title'] = $item->title;
 					$item_data['post_title'] = $item->title;
 					wp_update_post($item_data);
-					update_post_meta($item-ID, "_menu_item_target", $item->target);
+					update_post_meta($item->ID, "_menu_item_target", $item->target);
 				}
 			}
 		}
@@ -580,6 +580,9 @@ class JSON_API_Menus_Controller {	/**
 		if(!isset($_REQUEST['url'])){
 			$json_api->error("You must include the redirect `url` value");
 		}
+		if(!isset($_REQUEST['target'])){
+			$json_api->error("You must include the window `target` value");
+		}
 		/*if(!isset($_REQUEST['nonce'])){
 			$json_api->error("You must include the `nonce` value");
 		}*/
@@ -603,7 +606,8 @@ class JSON_API_Menus_Controller {	/**
 			'norm_text_color'=>$_REQUEST['norm_text_color'],
 			'hover_text_color'=>$_REQUEST['hover_text_color'],
 			'generated_css'=>$_REQUEST['generated_css'],
-			'url'=>$_REQUEST['url']
+			'url'=>$_REQUEST['url'],
+			'target'=>$_REQUEST['target']
 			);
 
 		$button = set_thrivehive_button($_REQUEST['id'], $data);
@@ -654,6 +658,9 @@ class JSON_API_Menus_Controller {	/**
 		if(!isset($_REQUEST['url'])){
 			$json_api->error("You must include the redirect `url` value");
 		}
+		if(!isset($_REQUEST['target'])){
+			$json_api->error("You must include the window `target` value");
+		}
 		/*if(!isset($_REQUEST['nonce'])){
 			$json_api->error("You must include the `nonce` value");
 		}*/
@@ -676,7 +683,8 @@ class JSON_API_Menus_Controller {	/**
 			'norm_text_color'=>$_REQUEST['norm_text_color'],
 			'hover_text_color'=>$_REQUEST['hover_text_color'],
 			'generated_css'=>$_REQUEST['generated_css'],
-			'url'=>$_REQUEST['url']
+			'url'=>$_REQUEST['url'],
+			'target'=>$_REQUEST['target']
 			);
 		$button = create_thrivehive_button($data);
 		return array('button' => $button);

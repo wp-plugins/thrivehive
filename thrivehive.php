@@ -16,12 +16,18 @@ add_action('init', 'version_check');
 
 function version_check(){
 	//UPDATE THIS WHEN WE MAKE VERSION CHANGES
-	$db_version = '1.31';
+	$db_version = '1.63';
 
 	$ver = get_option('thrivehive_vers');
-	if(!$ver || $ver != $db_version){
-		update_option('thrivehive_vers', $db_version);
-		thrivehive_create_button_db();
+	if(!$ver){
+		$update = null;
+	}
+	else if($ver != $db_version){
+		$update = $db_version;
+	}
+	if(!$ver || $update){
+		//update_option('thrivehive_vers', $db_version);
+		thrivehive_create_button_db($update);
 		thrivehive_create_theme_options_table();
 		thrivehive_create_forms_db();
 	}
@@ -420,8 +426,9 @@ function th_display_button ( $atts) {
 	$css =  stripslashes($buttonOptions['generated_css']);
 	$text = stripslashes($buttonOptions['text']);
 	$url = stripslashes($buttonOptions['url']);
+	$target = stripslashes($buttonOptions['target']);
 
-	return  "<a class='thrivehive-button' style='$css display: inline-block;' href='$url'>$text</a>";
+	return  "<a class='thrivehive-button' target='$target' style='$css display: inline-block;' href='$url'>$text</a>";
 }
 
 function th_display_address( $atts){
@@ -782,7 +789,7 @@ function thrivehive_admin_msgs() {
 /**
 *Sets up the database for the thrivehive buttons
 **/
-function thrivehive_create_button_db() {
+function thrivehive_create_button_db($version=null) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . "TH_" . "buttons";
 	$sql = "CREATE TABLE " . $table_name . " (
@@ -798,12 +805,20 @@ function thrivehive_create_button_db() {
 			hover_text_color VARCHAR(10) NULL,
 			generated_css TEXT NULL,
 			url TEXT NULL,
+			target VARCHAR(10) NULL,
 			PRIMARY KEY  (id)
 			);";
-	if(!thrivehive_buttons_table_exists($table_name)) {
+	if(!thrivehive_buttons_table_exists($table_name) || $version) {
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		update_option('thrivehive_vers', $version);
 		dbDelta($sql);
 	}
+
+	// if($version == '1.63'){
+	// 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+	// 	$alter_sql = "ALTER TABLE ". $table_name . "ADD COLUMN target VARCHAR(10) NULL;";
+	// 	dbDelta($alter_sql);
+	// }
 }
 function thrivehive_create_forms_db() {
 	global $wpdb;
@@ -999,8 +1014,9 @@ class ThriveHiveButton extends WP_Widget {
 			$css =  stripslashes($buttonOptions['generated_css']);
 			$text = stripslashes($buttonOptions['text']);
 			$url = stripslashes($buttonOptions['url']);
+			$target = stripslashes($buttonOptions['target']);
 
-			echo "<a class='thrivehive-button' style='$css' href='$url'>$text</a>";
+			echo "<a class='thrivehive-button' target='$target' style='$css' href='$url'>$text</a>";
 
 	    echo $after_widget;
 	}
