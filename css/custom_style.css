@@ -97,9 +97,9 @@ body .sugar-slider {
 	padding-top: 15px;
 }
 
-/* make sure logo isn't cropped, but rather resized */
 .theme-name-adorable #header {
-	background-size: contain !important;
+	background-origin: content-box;
+	padding: 10px;
 }
 
 /* resizing the logo area to be bigger than the header right widget area so larger site titles fit on one line */
@@ -117,6 +117,10 @@ body .sugar-slider {
 
 	.theme-name-adorable #nav {
 		border: none;
+	}
+
+	.theme-name-adorable #wrap #header {
+		background-position: center center;
 	}
 }
 
@@ -274,11 +278,18 @@ body .sugar-slider {
 *       Executive                   *
 *************************************/
 
-@media only screen and (max-width: 998px) {
+.theme-name-executive #header {
+	padding: 10px;
+	background-origin: content-box;
+}
+
+@media only screen and (max-width: 1023px) {
 	.theme-name-executive #header {
 		margin-bottom: 100px;
 		position: relative;
 		overflow: visible;
+		background-position: center center;
+
 	}
 
 	.theme-name-executive #header .thrivehive-button {
@@ -303,6 +314,10 @@ body .sugar-slider {
 /************************************
 *       Going Green Pro             *
 *************************************/
+
+.theme-name-going-green-pro .site-header .title-area {
+	min-height: 10rem;
+}
 
 @media only screen and (max-width: 480px) {
 	.theme-name-going-green-pro .site-header .thrivehive-button {
@@ -371,6 +386,16 @@ body .sugar-slider {
 /************************************
 *       Metro Pro                   *
 *************************************/
+
+
+@media only screen and (max-width: 1023px) {
+
+	.theme-name-metro-pro .site-header .site-title a {
+		background-position: center center;
+	}
+
+}
+
 
 @media only screen and (max-width: 480px) {
 	.theme-name-metro-pro .site-header .thrivehive-button {
@@ -612,11 +637,18 @@ body .sugar-slider {
 *       Prose                       *
 *************************************/
 
+.theme-name-prose #header {
+	background-origin: content-box;
+	padding: 10px 0;
+}
+
 @media only screen and (max-width: 998px) {
 	.theme-name-prose #header {
 		margin-bottom: 100px;
 		position: relative;
 		overflow: visible;
+		background-position: center center;
+		
 	}
 
 	.theme-name-prose #header .thrivehive-button {
@@ -647,12 +679,17 @@ body .sugar-slider {
 	margin-top: 0;
 }
 
-@media only screen and (max-width: 998px) {
+.theme-name-quattro #header {
+	background-origin: content-box;
+}
+
+@media only screen and (max-width: 1200px) {
 	.theme-name-quattro #header {
 		margin-bottom: 100px;
 		position: relative;
 		overflow: visible;
 		border: none;
+		background-position: center center;
 	}
 
 	.theme-name-quattro #menu-main {
@@ -731,6 +768,7 @@ body .sugar-slider {
 	border-width: 0;
 }
 
+
 @media only screen and (max-width: 998px) {
 	.theme-name-streamline #header {
 		margin-bottom: 100px;
@@ -739,6 +777,7 @@ body .sugar-slider {
 		-webkit-box-shadow: none;
 		-moz-box-shadow: none;
 		box-shadow: none;
+		background-position: center center;
 	}
 
 	.theme-name-streamline #header .thrivehive-button {
@@ -767,6 +806,10 @@ body .sugar-slider {
 *************************************/
 .theme-name-parallax-pro .site-inner {
     margin-top: 200px;
+}
+
+.theme-name-parallax-pro .site-title a {
+/*	margin: 12px 0;*/
 }
 
 
@@ -800,3 +843,21 @@ body .sugar-slider {
 	margin: 0 0 10px 10px;
 	display: inline-block;
 }
+
+/*
+	Logo sizing
+ */
+#header, .header-image .site-title a, .site-header .title-area {
+	background-position: left center;
+	background-size: contain;
+}
+/* todo: finish this
+@media only screen and (max-width: 998px) {
+	.site-header aside.header-widget-area.widget-area  {
+		text-align: center;
+	}
+	aside.header-widget-area > * {
+		display: inline-block;
+		float: none !important;
+	}
+}*/

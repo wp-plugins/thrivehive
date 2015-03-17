@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.63 Adding dynamic logo tweaks
 * V 1.62 Fixing but with landing page template showing nav menu
 * V 1.61 Fixing a bug with displaying landing pages in TH
 * V 1.60 Fixing a bug introduced with pdf uploads in 1.59
