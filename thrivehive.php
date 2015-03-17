@@ -1712,5 +1712,67 @@ function renderSocialStuff($content){
     }
     return $content;
 }
+if($has_th_environment){
+	add_action( 'genesis_meta', 'thrivehive_custom_header_override' );
+}
 
-?>
+function thrivehive_custom_header_override(){
+	// replace genesis header func with our own
+	remove_action( 'wp_head', 'genesis_custom_header_style' );
+	add_action( 'wp_head', 'genesis_custom_header_style_override' );
+
+}
+
+
+// copied from genesis/lib/structure/header.php:754ish
+/**
+ * Custom header callback.
+ *
+ * It outputs special CSS to the document head, modifying the look of the header based on user input.
+ *
+ * @since 1.6.0
+ *
+ * @uses genesis_html() Check for HTML5 support.
+ *
+ * @return null Return null on if custom header not supported, user specified own callback, or no options set.
+ */
+function genesis_custom_header_style_override() {
+
+	//* Do nothing if custom header not supported
+	if ( ! current_theme_supports( 'custom-header' ) )
+		return;
+
+	//* Do nothing if user specifies their own callback
+	if ( get_theme_support( 'custom-header', 'wp-head-callback' ) )
+		return;
+
+	$output = '';
+
+	$header_image = get_header_image();
+	$text_color   = get_header_textcolor();
+
+	//* If no options set, don't waste the output. Do nothing.
+	if ( empty( $header_image ) && ! display_header_text() && $text_color === get_theme_support( 'custom-header', 'default-text-color' ) )
+		return;
+
+	$header_selector = get_theme_support( 'custom-header', 'header-selector' );
+	$title_selector  = genesis_html5() ? '.custom-header .site-title'       : '.custom-header #title';
+	$desc_selector   = genesis_html5() ? '.custom-header .site-description' : '.custom-header #description';
+
+	//* Header selector fallback
+	if ( ! $header_selector )
+		$header_selector = genesis_html5() ? '.custom-header .site-header' : '.custom-header #header';
+
+	//* Header image CSS, if exists
+	if ( $header_image )
+		$output .= sprintf( '%s, %s:hover { background-image: url(%s); background-repeat: no-repeat; background-color: transparent; }', $header_selector, $header_selector, esc_url( $header_image ), $header_selector );
+
+	//* Header text color CSS, if showing text
+	if ( display_header_text() && $text_color !== get_theme_support( 'custom-header', 'default-text-color' ) )
+		$output .= sprintf( '%2$s a, %2$s a:hover, %3$s { color: #%1$s !important; }', esc_html( $text_color ), esc_html( $title_selector ), esc_html( $desc_selector ) );
+
+	if ( $output )
+		printf( '<style type="text/css">%s</style>' . "\n", $output );
+
+}
+

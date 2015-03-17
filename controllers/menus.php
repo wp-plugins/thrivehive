@@ -361,7 +361,7 @@ class JSON_API_Menus_Controller {	/**
 	  	$line = "
 	  			/* HEADER RESIZING */ \n
 	  			#header, .header-image .site-title a {
-	  				min-height: %dpx;
+	  				mins-height: %dpx;
 	  			}
 	  			";
 		$line = sprintf($line, $height);
