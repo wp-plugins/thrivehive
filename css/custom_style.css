@@ -22,10 +22,6 @@ iframe {
 	border-width: 0 !important;
 }
 
-#header .thrivehive-button {
-	float: right;
-}
-
 .content img {
 	margin: 5px;
 }
@@ -86,6 +82,10 @@ body .sugar-slider {
 	.site-header .thrivehive-button {
 		width: 80%;
 	}
+}
+
+#header .thrivehive-button, .site-header .thrivehive-button {
+	float: right;
 }
 
 /************************************
