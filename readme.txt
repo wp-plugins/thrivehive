@@ -34,12 +34,13 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
-* V 1.65 Added default margin to images in .content
-* V 1.64 Added float right to <li> elements in #menu-main
-* V 1.63
+* V 1.64
+	* Added default margin to images in .content
+	* Added float right to <li> elements in #menu-main
     * Adding in endpoints for getting and setting genesis layout for pages.
     * Adding in sharing for pinterest and linked in on blog pages and phone widget header editing
     * Adding in plugin versioning checks to detect version issues in TH
+* V 1.63 Adding dynamic logo tweaks
 * V 1.62 Fixing but with landing page template showing nav menu
 * V 1.61 Fixing a bug with displaying landing pages in TH
 * V 1.60 Fixing a bug introduced with pdf uploads in 1.59
