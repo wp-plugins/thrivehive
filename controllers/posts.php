@@ -214,7 +214,8 @@ class JSON_API_Posts_Controller {
         //Create our file name based off the base name of the upload
         $file_name = basename($_FILES["attachment"]["name"], ".pdf").".jpg";
         //URL for the pdf we uploaded
-        $pdf_url = './'.parse_url( wp_get_attachment_url( $id) )["path"];
+        $pdf_url_path = './'.parse_url( wp_get_attachment_url( $id) );
+        $pdf_url =$pdf_url_path["path"];
         //The image we will be creating for the thumbnail
         $output_image = $target_upload_dir."/$file_name";
         $output = null;
