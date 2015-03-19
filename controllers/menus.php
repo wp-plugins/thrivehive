@@ -46,19 +46,22 @@ class JSON_API_Menus_Controller {	/**
 		if(isset($_REQUEST['target_id'])){
 			$pages = $json_api->introspector->get_single_post($_REQUEST['target_id']);
 			$page = $pages[0];
+			$menu_item = $this->map_page($page);
+		}
+		else if(isset($_REQUEST['custom_url'])){
+			$menu_item = $this->map_custom_url($_REQUEST['custom_url'], $_REQUEST['title'], $_REQUEST['target']);
 		}
 		else{
 			$json_api->error("No target_id provided");
 		}
 
-			$menu_item = $this->map_page($page);
 			$menu_items = array($menu_item);
-
 
 			//save  call should be on an array
 			$saved_items = wp_save_nav_menu_items($nav_menu_id, $menu_items);
 
 			wp_update_nav_menu_item($nav_menu_id, $saved_items[0], $menu_item);
+			update_post_meta($saved_items[0]->ID, "_menu_item_target", $_REQUEST['target']);
 
 
 		return array(
@@ -161,7 +164,7 @@ class JSON_API_Menus_Controller {	/**
 					$item_data['title'] = $item->title;
 					$item_data['post_title'] = $item->title;
 					wp_update_post($item_data);
-					update_post_meta($item->ID, "_menu_item_target", $item->target);
+					update_post_meta($item->ID, "_menu_item_target", $item['target']);
 				}
 			}
 		}
@@ -216,6 +219,25 @@ class JSON_API_Menus_Controller {	/**
 			'menu-item-position' => 0,
 			'menu-item-type' => "post_type",
 			'menu-item-title' => $page['post_title']);
+
+		return $menu_item;
+	}
+
+	/**
+	*Maps a page to a menu item so that we can create it
+	*@param mixed[] $page the page to be mapped
+	*@api
+	*@return array containing all the menu item objects
+	**/
+	private function map_custom_url($custom_url, $title, $target){
+		$menu_item = array(
+			'menu-item-object' => "custom",
+			'menu-item-position' => 0,
+			'menu-item-type' => "custom",
+			'menu-item-title' => $title,
+			'menu-item-url' => $custom_url,
+			'menu-item-target' => $target
+		);
 
 		return $menu_item;
 	}
