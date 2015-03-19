@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.65 Fix for issues with PDF uploads and poor thumbnails for them
 * V 1.64 Fix for older PHP version
 * V 1.63 Adding dynamic logo tweaks
 * V 1.62 Fixing but with landing page template showing nav menu
