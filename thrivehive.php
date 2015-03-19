@@ -45,12 +45,13 @@ function bg_repeat_body_class($classes) {
 
 $has_th_environment = get_option('th_environment') ? true : false;
 if ($has_th_environment) {
-	add_action( 'wp_enqueue_scripts', 'add_custom_stylesheet' );
+	add_action( 'wp_enqueue_scripts', 'thrivehive_enqueue_assets' );
 }
 
-function add_custom_stylesheet() {
-	// fourth argument is the version number for caching
-    wp_enqueue_style( 'custom-style', plugins_url('css/custom_style.css', __FILE__, false, 'v1') );
+function thrivehive_enqueue_assets(){
+	wp_enqueue_style( 'custom-style', plugins_url('css/custom_style.css', __FILE__, false, 'v1') );
+	wp_register_style( 'thrivehive-grid', plugins_url('css/minimal_foundation_grid.min.css', __FILE__), null, '1' );
+	wp_enqueue_style( 'thrivehive-grid' );
 }
 
 // create menu
@@ -383,6 +384,9 @@ function thrivehive_settings_page() {
 *@return string text containing the form html
 **/
 function th_display_form( $atts ){
+
+	wp_enqueue_style('thrivehive-grid');
+
 	$account_id = get_option('th_tracking_code');
 	if(!isset($atts['id'])){
 	 	$contact_form_id = get_option('th_contactform_id');
