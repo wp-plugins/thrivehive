@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Landing Page (ThriveHive)
- * 
+ *
  * A template for making a ThriveHive-powered landing page with SEO benefits and the best practices for a well-performing landing page.
  *
 */
@@ -106,6 +106,10 @@ function renderForm() {
     */
     $redirect_url = !empty($redirect[0]) == true ? json_decode( $redirect[0], true )['redirectUrl'] : '/'; //default to homepage
     if( $landing_form_id !== false || $landing_form_id == 0 && $tracker_id !== false){
+        if($id = get_option("th_default_landingform_id")){
+            echo th_display_form(array('id' => $id));
+        }
+        else{
         ?>
         <style>
             #img-holder {
@@ -149,7 +153,7 @@ function renderForm() {
             }
 
             .left-inner {
-            	padding-right: 30px;
+                padding-right: 30px;
             }
 
             .right-column-container {
@@ -157,11 +161,11 @@ function renderForm() {
                 margin-bottom: 30px;
             }
 
-			.right-column-container, .right-column-container *, .right-column-container *:before, .right-column-container *:after {
-			    -moz-box-sizing: border-box; 
-			    -webkit-box-sizing: 
-			    border-box; box-sizing: border-box;
-			}
+            .right-column-container, .right-column-container *, .right-column-container *:before, .right-column-container *:after {
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing:
+                border-box; box-sizing: border-box;
+            }
 
             .left-column-container, .right-column-container {
                 float: left;
@@ -181,7 +185,7 @@ function renderForm() {
                 -moz-border-radius-bottomleft: 5px;
                 -moz-border-radius-bottomright: 5px;
                 border-bottom-left-radius: 5px;
-                border-bottom-right-radius: 5px;                
+                border-bottom-right-radius: 5px;
             }
 
             form.hiveform label {
@@ -190,7 +194,7 @@ function renderForm() {
                 clear: both;
                 margin-bottom: 5px;
                 width: 135px;
-         	}
+            }
 
             form.hiveform span.required-star {
                 color: red;
@@ -206,7 +210,7 @@ function renderForm() {
 
             form.hiveform textarea {
                 resize: vertical;
-         	}
+            }
 
             form.hiveform input.hivesubmit {
                 color: white;
@@ -226,121 +230,122 @@ function renderForm() {
                 font-family: sans-serif;
             }
 
-            .error-block {     
-                min-height: 1.6em; 
-                clear: both; 
-                color: #E10707; 
-            } 
+            .error-block {
+                min-height: 1.6em;
+                clear: both;
+                color: #E10707;
+            }
 
-			@media only screen and (max-width: 1023px) {
-				.left-column-container, .right-column-container {
-					float: none;
-					width: 100%;
-				}
-			}
+            @media only screen and (max-width: 1023px) {
+                .left-column-container, .right-column-container {
+                    float: none;
+                    width: 100%;
+                }
+            }
 
-            @media only screen and (max-width : 600px) { 
-                form.hiveform input[type=text], form.hiveform textarea,  form.hiveform select {                 
-                    clear: both; 
-                    display: block; 
-                    float: none;  
-                    width: 220px; 
-                } 
-               form.hiveform input.hivesubmit {             
-                    clear: both; 
-                    float: none; 
+            @media only screen and (max-width : 600px) {
+                form.hiveform input[type=text], form.hiveform textarea,  form.hiveform select {
+                    clear: both;
+                    display: block;
+                    float: none;
+                    width: 220px;
+                }
+               form.hiveform input.hivesubmit {
+                    clear: both;
+                    float: none;
                     margin-top: 10px;
-                } 
-            } 
+                }
+            }
 
-			@media only screen and (max-width: 480px) {
-				form.hiveform {
-					width: 253px;
-				}
-			}
-			
+            @media only screen and (max-width: 480px) {
+                form.hiveform {
+                    width: 253px;
+                }
+            }
+
             </style>
 
             <a name="contact-form"></a>
 
-            <form class="hiveform" action="//<?php echo $env; ?>/Webform/FormHandler" method="post" id="thrivehive-form278"> 
-                  <label for="input5-form278">First Name<span class="required-star">*</span></label><input type="text" name="list.first_name" id="input5-form278" /> 
-                <div id="input5-form278-errors" class="error-block"></div> 
-                  <label for="input6-form278">Last Name</label><input type="text" name="list.last_name" id="input6-form278" /> 
-                <div id="input6-form278-errors" class="error-block"></div> 
-                  <label for="input7-form278">Phone</label><input type="text" name="list.phone" id="input7-form278" /> 
-                <div id="input7-form278-errors" class="error-block"></div> 
-                  <label for="input8-form278">Email<span class="required-star">*</span></label><input type="text" name="list.email" id="input8-form278" /> 
-                <div id="input8-form278-errors" class="error-block"></div> 
-                  <label for="input14-form278">Comments</label><textarea type="text" name="list.comments" id="input14-form278"></textarea> 
-                  
-                 <div id="input14-form278-errors" class="error-block"></div> 
-                
-                <input type="hidden" name="meta.redirectUrl" id="meta_redirectUrl" value="<?php echo $redirect_url; ?>" /> 
-                <input type="submit" value="Submit" class="hivesubmit"/> 
-            </form> 
-             
-            <script type="text/javascript"> 
-                var domreadyScriptUrl = (("https:" == document.location.protocol) ? "https://" : "http://") + "<?php echo $env?>/content/js/domready.js"; 
-                document.write(unescape("%3Cscript src%3D%27" + domreadyScriptUrl + "%27 type%3D'text/javascript'%3E%3C/script%3E")); 
-                var validateScriptUrl = (("https:" == document.location.protocol) ? "https://" : "http://") + "<?php echo $env?>/content/js/validate.min.js"; 
-                document.write(unescape("%3Cscript src%3D%27" + validateScriptUrl + "%27 type%3D'text/javascript'%3E%3C/script%3E")); 
-            </script> 
-            <script type="text/javascript"> 
-                DomReady.ready(function () { 
-                    $util.SetFormHiddenID("CA-uid","thrivehive-form278"); 
-                    $util.SetFormSessionID("CA-sess","thrivehive-form278"); 
-                    $util.AddHiddenFieldInForm("meta.form-id","thrivehive-form278","<?php echo $landing_form_id; ?>"); 
-                    $util.AddHiddenFieldInForm("meta.trackerid","thrivehive-form278","<?php echo $tracker_id; ?>"); 
-                
-                        new FormValidator("thrivehive-form278", [{ 
-                            name: "input5-form278", 
-                            display: "First Name", 
-                            rules: "required" 
-                        }], function (errors) { 
-                            var errorString = ""; 
-                            if (errors.length > 0) { 
-                                for (var i = 0, errorLength = errors.length; i < errorLength; i++) { 
-                                    errorString += errors[i].message + "<br />"; 
-                                } 
-                            } 
-                            document.getElementById("input5-form278-errors").innerHTML = errorString; 
-                        }) 
-                 
-                        new FormValidator("thrivehive-form278", [{ 
-                            name: "input7-form278", 
-                            display: "Phone", 
-                            rules: "valid_phone_us" 
-                        }], function (errors) { 
-                            var errorString = ""; 
-                            if (errors.length > 0) { 
-                                for (var i = 0, errorLength = errors.length; i < errorLength; i++) { 
-                                    errorString += errors[i].message + "<br />"; 
-                                } 
-                            } 
-                            document.getElementById("input7-form278-errors").innerHTML = errorString; 
-                        }) 
-                 
-                        new FormValidator("thrivehive-form278", [{ 
-                            name: "input8-form278", 
-                            display: "Email", 
-                            rules: "required|valid_email" 
-                        }], function (errors) { 
-                            var errorString = ""; 
-                            if (errors.length > 0) { 
-                                for (var i = 0, errorLength = errors.length; i < errorLength; i++) { 
-                                    errorString += errors[i].message + "<br />"; 
-                                } 
-                            } 
-                            document.getElementById("input8-form278-errors").innerHTML = errorString; 
-                        }) 
-                 
-                }); 
+            <form class="hiveform" action="//<?php echo $env; ?>/Webform/FormHandler" method="post" id="thrivehive-form278">
+                  <label for="input5-form278">First Name<span class="required-star">*</span></label><input type="text" name="list.first_name" id="input5-form278" />
+                <div id="input5-form278-errors" class="error-block"></div>
+                  <label for="input6-form278">Last Name</label><input type="text" name="list.last_name" id="input6-form278" />
+                <div id="input6-form278-errors" class="error-block"></div>
+                  <label for="input7-form278">Phone</label><input type="text" name="list.phone" id="input7-form278" />
+                <div id="input7-form278-errors" class="error-block"></div>
+                  <label for="input8-form278">Email<span class="required-star">*</span></label><input type="text" name="list.email" id="input8-form278" />
+                <div id="input8-form278-errors" class="error-block"></div>
+                  <label for="input14-form278">Comments</label><textarea type="text" name="list.comments" id="input14-form278"></textarea>
+
+                 <div id="input14-form278-errors" class="error-block"></div>
+
+                <input type="hidden" name="meta.redirectUrl" id="meta_redirectUrl" value="<?php echo $redirect_url; ?>" />
+                <input type="submit" value="Submit" class="hivesubmit"/>
+            </form>
+
+            <script type="text/javascript">
+                var domreadyScriptUrl = (("https:" == document.location.protocol) ? "https://" : "http://") + "<?php echo $env?>/content/js/domready.js";
+                document.write(unescape("%3Cscript src%3D%27" + domreadyScriptUrl + "%27 type%3D'text/javascript'%3E%3C/script%3E"));
+                var validateScriptUrl = (("https:" == document.location.protocol) ? "https://" : "http://") + "<?php echo $env?>/content/js/validate.min.js";
+                document.write(unescape("%3Cscript src%3D%27" + validateScriptUrl + "%27 type%3D'text/javascript'%3E%3C/script%3E"));
+            </script>
+            <script type="text/javascript">
+                DomReady.ready(function () {
+                    $util.SetFormHiddenID("CA-uid","thrivehive-form278");
+                    $util.SetFormSessionID("CA-sess","thrivehive-form278");
+                    $util.AddHiddenFieldInForm("meta.form-id","thrivehive-form278","<?php echo $landing_form_id; ?>");
+                    $util.AddHiddenFieldInForm("meta.trackerid","thrivehive-form278","<?php echo $tracker_id; ?>");
+
+                        new FormValidator("thrivehive-form278", [{
+                            name: "input5-form278",
+                            display: "First Name",
+                            rules: "required"
+                        }], function (errors) {
+                            var errorString = "";
+                            if (errors.length > 0) {
+                                for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
+                                    errorString += errors[i].message + "<br />";
+                                }
+                            }
+                            document.getElementById("input5-form278-errors").innerHTML = errorString;
+                        })
+
+                        new FormValidator("thrivehive-form278", [{
+                            name: "input7-form278",
+                            display: "Phone",
+                            rules: "valid_phone_us"
+                        }], function (errors) {
+                            var errorString = "";
+                            if (errors.length > 0) {
+                                for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
+                                    errorString += errors[i].message + "<br />";
+                                }
+                            }
+                            document.getElementById("input7-form278-errors").innerHTML = errorString;
+                        })
+
+                        new FormValidator("thrivehive-form278", [{
+                            name: "input8-form278",
+                            display: "Email",
+                            rules: "required|valid_email"
+                        }], function (errors) {
+                            var errorString = "";
+                            if (errors.length > 0) {
+                                for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
+                                    errorString += errors[i].message + "<br />";
+                                }
+                            }
+                            document.getElementById("input8-form278-errors").innerHTML = errorString;
+                        })
+
+                });
             </script>
 
         <?php
-
-    } else {
+        }
+    }
+     else {
         echo '<p class="error" style="color: red;">Landing page ID or Account ID is not set. Could not render landing page form. Create a form in ThriveHive and get the form id from that form.</p>';
     };
 }

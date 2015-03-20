@@ -606,7 +606,11 @@ function create_option_css(){
 		return '';
 	}
 	$css = "";
+	$imports = "";
 	foreach ($options as $opt) {
+		if(isset($opt["Import"])){
+			$imports .= "@import url(".$opt['Import']."); \n";
+		}
 		$name = $opt['Option'];
 		$selector = $opt['Selector'];
 		$value = $opt['Value'];
@@ -620,7 +624,6 @@ function create_option_css(){
 	}
 	echo "<style type='text/css'>$css</style>";
 }
-
 register_activation_hook(__FILE__, 'th_activate');
 register_activation_hook(__FILE__, 'th_permalinks');
 register_activation_hook(__FILE__, 'thrivehive_create_button_db');

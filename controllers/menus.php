@@ -1444,5 +1444,34 @@ class JSON_API_Menus_Controller {	/**
 
 		return array();
 	}
+	public function set_default_landing_form_id(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_default_landing_form_id');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		if(!isset($_REQUEST['id'])){
+			$json_api->error("You must provide an `id` to set for the option");
+		}
+
+		update_option("th_default_landingform_id", $_REQUEST['id']);
+	}
+	public function get_default_landing_form_id(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'get_default_landing_form_id');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+		$id = get_option("th_default_landingform_id");
+
+		return array('id' => $id);
+	}
 
 }
