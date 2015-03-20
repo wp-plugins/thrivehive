@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.63
+   *Version: 1.66
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -16,7 +16,7 @@ add_action('init', 'version_check');
 
 function version_check(){
 	//UPDATE THIS WHEN WE MAKE VERSION CHANGES
-	$db_version = '1.63';
+	$db_version = '1.66';
 	$update = null;
 
 	$ver = get_option('thrivehive_vers');

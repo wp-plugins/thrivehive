@@ -214,17 +214,18 @@ class JSON_API_Posts_Controller {
         //Create our file name based off the base name of the upload
         $file_name = basename($_FILES["attachment"]["name"], ".pdf").".jpg";
         //URL for the pdf we uploaded
-        $pdf_url_path = './'.parse_url( wp_get_attachment_url( $id) );
-        $pdf_url =$pdf_url_path["path"];
+        $parsed_url = parse_url( wp_get_attachment_url( $id) );
+        $pdf_url = './'.$parsed_url[ 'path' ];
         //The image we will be creating for the thumbnail
         $output_image = $target_upload_dir."/$file_name";
         $output = null;
         //Create a thumbnail from the first page of our PDF
-        exec("convert -thumbnail x180 -define pdf:use-trimbox=true \"{$pdf_url}[0]\" \"{$output_image}\" 2>&1", $output);
+        exec("convert -thumbnail x180 -background white -alpha remove -define pdf:use-trimbox=true \"{$pdf_url}[0]\" \"{$output_image}\" 2>&1", $output);
+
         unset($_FILES['attachment']);
         $output_image_url = $upload_dir['baseurl']."/$PDF_UPLOAD_DIR/$file_name";
         update_post_meta($id, "th_pdf_thumbnail", $output_image_url);
-        return array('id' => $id, 'thumbnail' => $output_image_url, 'url' => wp_get_attachment_url($id));
+        return array('id' => $id, 'thumbnail' => $output_image_url, 'url' => $wp_get_attachment_url($id));
       }
 
       unset($_FILES['attachment']);

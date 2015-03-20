@@ -824,7 +824,7 @@ class JSON_API_Menus_Controller {	/**
 				echo '<div class=\"creds\"><p>';
 				echo 'Copyright &copy; ';
 				echo date('Y');
-				echo ' &middot; <a href=\"/\">'.\$name.'</a> &middot; '.\$address.' &middot; Powered by <a href=\"http://www.thrivehive.com\" target=\"_new\" title=\"ThriveHive\">ThriveHive</a>';
+				echo ' &middot; <a href=\"/\">'.\$name.'</a> &middot; '.\$address.' &middot; Powered by <a href=\"http://www.thrivehive.com\" target=\"_new\" title=\"ThriveHive\" rel=\"nofollow\">ThriveHive</a>';
 				echo '</p></div>';
 				}
 				";
@@ -844,7 +844,7 @@ class JSON_API_Menus_Controller {	/**
 				echo '<div class=\"creds\"><p>';
 				echo 'Copyright &copy; ';
 				echo date('Y');
-				echo ' &middot; <a href=\"/\">'.\$name.'</a> &middot; '.\$address.' &middot; Powered by <a href=\"http://www.thrivehive.com\" target=\"_new\" title=\"ThriveHive\">ThriveHive</a>';
+				echo ' &middot; <a href=\"/\">'.\$name.'</a> &middot; '.\$address.' &middot; Powered by <a href=\"http://www.thrivehive.com\" target=\"_new\" title=\"ThriveHive\" rel=\"nofollow\">ThriveHive</a>';
 				echo '</p></div>';
 				}
 				";
