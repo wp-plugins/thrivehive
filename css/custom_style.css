@@ -777,7 +777,7 @@ body .sugar-slider {
 }
 
 
-@media only screen and (max-width: 998px) {
+@media only screen and (max-width: 960px) {
 	.theme-name-streamline #header {
 		margin-bottom: 100px;
 		position: relative;
