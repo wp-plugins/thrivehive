@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.66
+   *Version: 1.67
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -1766,4 +1766,3 @@ function genesis_custom_header_style_override() {
 		printf( '<style type="text/css">%s</style>' . "\n", $output );
 
 }
-
