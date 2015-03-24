@@ -171,7 +171,13 @@ class JSON_API_Post {
 
 
     function update_post_slug($data, $postarr){
-      $data['post_name'] = sanitize_title($data['post_title']);
+      $computed_slug = wp_unique_post_slug(
+                                            sanitize_title($data['post_title']),
+                                            $postarr['ID'],
+                                            $data['post_status'],
+                                            $data['post_type'],
+                                            $data['post_parent']);
+      $data['post_name'] = $computed_slug;
       return $data;
     }
 
