@@ -17,26 +17,10 @@ class JSON_API_Core_Controller {
     if (!empty($json_api->query->controller)) {
       return $json_api->controller_info($json_api->query->controller);
     } else {
-      $dir = json_api_dir();
-      if (file_exists("$dir/json-api.php")) {
-        $php = file_get_contents("$dir/json-api.php");
-      } else {
-        // Check one directory up, in case json-api.php was moved
-        $dir = dirname($dir);
-        if (file_exists("$dir/json-api.php")) {
-          $php = file_get_contents("$dir/json-api.php");
-        }
-      }
-      if (preg_match('/^\s*Version:\s*(.+)$/m', $php, $matches)) {
-        $version = $matches[1];
-      } else {
-        $version = '(Unknown)';
-      }
       $active_controllers = explode(',', get_option('json_api_controllers', 'core'));
       $controllers = array_intersect($json_api->get_controllers(), $active_controllers);
       return array(
-        'json_api_version' => $version,
-        'controllers' => array_values($controllers)
+        'controllers' => array_values($controllers),
       );
     }
   }
@@ -239,6 +223,7 @@ class JSON_API_Core_Controller {
 
     foreach( $query_images->posts as $image) {
       $id = $image->ID;
+      $caption = $image->post_excerpt;
       $imageurl = wp_get_attachment_url($id);
       if(!$_REQUEST["show_pdfs"]){
         $thumbnail = wp_get_attachment_image_src($id, 'thumbnail');
@@ -250,7 +235,7 @@ class JSON_API_Core_Controller {
         $alttext = null;
       }
 
-      $images[] = array('id' => $id, 'url' => $imageurl, 'alt_text' => $alttext, 'thumbnail' => $thumbnail);
+      $images[] = array('id' => $id, 'url' => $imageurl, 'alt_text' => $alttext, 'thumbnail' => $thumbnail, 'caption' => $caption);
     }
     return array('images' => $images);
   }

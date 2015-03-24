@@ -201,7 +201,7 @@ class JSON_API_Posts_Controller {
         $json_api->error_code($id->errors['upload_error'][0], "error", "413 ERROR");
       }
 
-      //We're uploading a PDF, we need to do some magic to get a thumbnail for it
+       //We're uploading a PDF, we need to do some magic to get a thumbnail for it
       if($_FILES['attachment']['type'] == "application/pdf"){
         //Const for PDF dir
         $PDF_UPLOAD_DIR = "TH_PDFS";
@@ -283,8 +283,9 @@ class JSON_API_Posts_Controller {
     {
       $json_api->error("You must log into an account with 'upload_files' capacity", '**auth**');
     }
-
-     $res = update_post_meta($_REQUEST['post_id'], '_wp_attachment_image_alt', $_REQUEST['alt_text']);
+    $post_details = array('ID' => $_REQUEST['post_id'], 'post_excerpt' => $_REQUEST['caption']);
+    wp_update_post($post_details);
+    $res = update_post_meta($_REQUEST['post_id'], '_wp_attachment_image_alt', $_REQUEST['alt_text']);
 
      return array('modified' => $res);
   }
@@ -791,6 +792,50 @@ class JSON_API_Posts_Controller {
       return $upload;
     }
   }
-}
 
+  public function get_page_genesis_layout(){
+    global $json_api;
+    $nonce_id = $json_api->get_nonce_id('posts', 'get_page_genesis_layout');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    if(!isset($_REQUEST["post_id"])){
+      $json_api->error("You must specify the `post_id` of the page to access");
+    }
+
+    $layout = get_post_meta($_REQUEST["post_id"], "_genesis_layout", true);
+
+    if(!$layout){
+      return array();
+    }
+
+    return array("option" => $layout);
+  }
+
+  public function set_page_genesis_layout(){
+    global $json_api;
+    $nonce_id = $json_api->get_nonce_id('posts', 'set_page_genesis_layout');
+
+    $nonce = wp_create_nonce($nonce_id);
+
+    if (!wp_verify_nonce($nonce, $nonce_id)) {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    if(!isset($_REQUEST["post_id"])){
+      $json_api->error("You must specify the `post_id` of the page to access");
+    }
+    if(!isset($_REQUEST["layout"])){
+      $json_api->error("You must specify the `layout` of the page to set");
+    }
+
+    update_post_meta($_REQUEST["post_id"], "_genesis_layout", $_REQUEST["layout"]);
+
+    return array();
+  }
+}
 ?>

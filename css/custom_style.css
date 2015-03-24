@@ -22,6 +22,10 @@ iframe {
 	border-width: 0 !important;
 }
 
+.content img {
+	margin: 5px;
+}
+
 /************************************
 *       Sugar slider                *
 *************************************/
@@ -78,6 +82,10 @@ body .sugar-slider {
 	.site-header .thrivehive-button {
 		width: 80%;
 	}
+}
+
+#header .thrivehive-button, .site-header .thrivehive-button {
+	float: right;
 }
 
 /************************************

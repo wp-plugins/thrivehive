@@ -354,7 +354,7 @@ class JSON_API_Post {
           if (in_array($key, $keys)) {
             $this->custom_fields->$key = $wp_custom_fields[$key];
           }
-        } else if (substr($key, 0, 1) != '_') {
+        } else if (substr($key, 0, 1) != '_' || $key == "_genesis_layout") {
           $this->custom_fields->$key = $wp_custom_fields[$key];
         }
       }
