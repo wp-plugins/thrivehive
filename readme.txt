@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.68 Temporary fix for plugin version check
 * V 1.67
     * Added default margin to images in .content
     * Added float right to <li> elements in #menu-main
