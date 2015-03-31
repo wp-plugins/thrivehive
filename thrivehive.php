@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.7
+   *Version: 1.71
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -461,6 +461,7 @@ function th_display_pdf($atts){
 		if(($attName == "url" || $attName == "file") && !empty($attValue)){
 			$file_found = true;
 			$url = $attValue;
+			$attName = "url";
 		}
 		if($attName == "save" && $attValue == 1){
 			$download = true;
