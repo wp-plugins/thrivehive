@@ -463,6 +463,7 @@ function th_display_gallery($atts){
 function th_display_pdf($atts){
 	$fake_shortcode = '<div>[pdf-embedder';
 	$file_found = false;
+	$show_image = true;
 	$download = false;
 	$url = null;
 
@@ -478,11 +479,17 @@ function th_display_pdf($atts){
 		if($attName == "width" && strpos($attValue, "%") !== false){
 			$attValue = "max";
 		}
+		if($attName == "hide" && $attValue == 1){
+			$show_image = false;
+		}
 		$fake_shortcode .= " $attName = \"$attValue\"";
 	}
 
 	if(!$file_found){
 		return;
+	}
+	if(!$show_image){
+		echo '<div><a href="'.$url.'">Download PDF</a></div>';
 	}
 	if($download){
 		$fake_shortcode .= ']<a href="'.$url.'">Download PDF</a></div>';
