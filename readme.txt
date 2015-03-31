@@ -34,12 +34,16 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
-* V 1.66
-	* Added default margin to images in .content
-	* Added float right to <li> elements in #menu-main
-    * Adding in endpoints for getting and setting genesis layout for pages.
-    * Adding in sharing for pinterest and linked in on blog pages and phone widget header editing
-    * Adding in plugin versioning checks to detect version issues in TH
+* V 1.71 Fixing minor bug in new pdf properties
+* V 1.7 Adding mappings so that we can move to our new PDF embedder plugin
+* V 1.69 Fix for slugs switching back and forth on post update
+* V 1.68 Temporary fix for plugin version check
+* V 1.67
+  * Added default margin to images in .content
+  * Added float right to <li> elements in #menu-main
+  * Adding in endpoints for getting and setting genesis layout for pages.
+  * Adding in sharing for pinterest and linked in on blog pages and phone widget header editing
+  * Adding in plugin versioning checks to detect version issues in TH
 * V 1.65 Fix for issues with PDF uploads and poor thumbnails for them
 * V 1.64 Fix for older PHP version
 * V 1.63 Adding dynamic logo tweaks
@@ -87,4 +91,3 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Upgrade notice ==
-

@@ -37,10 +37,19 @@ class JSON_API_Response {
     if($check_latest_version){
       $latest_version = $this->th_latest_ver();
       update_option('th_last_version_check', new DateTime('NOW'));
-      update_option('th_latest_ver', $latest_version);
+      if(is_numeric($latest_version)){
+        update_option('th_latest_ver', $latest_version);
+      }
+      else{
+        $latest_version = 0;
+      }
     }
     else{
       $latest_version = get_option('th_latest_ver');
+      if(!is_numeric($latest_version)){
+        $latest_version = 0;
+        update_option('th_last_version_check', null);
+      }
     }
     // Include a status value with the response
     if (is_array($data)) {
