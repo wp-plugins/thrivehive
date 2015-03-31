@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.69
+   *Version: 1.7
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -452,12 +452,21 @@ function th_display_gallery($atts){
 }
 
 function th_display_pdf($atts){
-	$fake_shortcode = '<div>[gview';
+	$fake_shortcode = '<div>[pdf-embedder';
 	$file_found = false;
+	$download = false;
+	$url = null;
 
 	foreach($atts as $attName => $attValue){
-		if($attName == "file" && !empty($attValue)){
+		if(($attName == "url" || $attName == "file") && !empty($attValue)){
 			$file_found = true;
+			$url = $attValue;
+		}
+		if($attName == "save" && $attValue == 1){
+			$download = true;
+		}
+		if($attName == "width" && strpos($attValue, "%") !== false){
+			$attValue = "max";
 		}
 		$fake_shortcode .= " $attName = \"$attValue\"";
 	}
@@ -465,8 +474,12 @@ function th_display_pdf($atts){
 	if(!$file_found){
 		return;
 	}
-
-	$fake_shortcode .= ']</div>';
+	if($download){
+		$fake_shortcode .= ']<a href="'.$url.'">Download PDF</a></div>';
+	}
+	else{
+		$fake_shortcode .= ']</div>';
+	}
 
 	return do_shortcode($fake_shortcode);
 }
