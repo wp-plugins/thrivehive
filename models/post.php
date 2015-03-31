@@ -182,7 +182,7 @@ class JSON_API_Post {
     }
 
     if (isset($wp_values['ID'])) {
-      add_filter('wp_insert_post_data', 'update_post_slug');
+      add_filter('wp_insert_post_data', 'update_post_slug', 10, 2);
       $this->id = wp_update_post($wp_values);
       remove_filter('wp_insert_post_data', array(&$this, 'update_post_slug'));
     } else {
