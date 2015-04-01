@@ -37,7 +37,8 @@ function set_thrivehive_button($id, $data){
 															norm_text_color = %s,
 															hover_text_color = %s,
 															generated_css = %s,
-															url = %s WHERE id = %d ", 
+															url = %s,
+															target = %s WHERE id = %d ", 
 															$data['text'],
 															$data['norm_gradient1'],
 															$data['norm_gradient2'],
@@ -48,7 +49,8 @@ function set_thrivehive_button($id, $data){
 															$data['norm_text_color'],
 															$data['hover_text_color'],
 															$data['generated_css'],
-															$data['url'], $id));
+															$data['url'],
+															$data['target'], $id));
 	return get_thrivehive_button($id);
 }
 /**
