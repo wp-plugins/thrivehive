@@ -48,8 +48,8 @@ class JSON_API_Menus_Controller {	/**
 			$page = $pages[0];
 			$menu_item = $this->map_page($page);
 		}
-		else if(isset($_REQUEST['custom_url'])){
-			$menu_item = $this->map_custom_url($_REQUEST['custom_url'], $_REQUEST['title'], $_REQUEST['target']);
+		else if(isset($_REQUEST['url'])){
+			$menu_item = $this->map_custom_url($_REQUEST['url'], $_REQUEST['title'], $_REQUEST['target']);
 		}
 		else{
 			$json_api->error("No target_id provided");
