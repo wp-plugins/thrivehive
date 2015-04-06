@@ -1154,7 +1154,7 @@ class JSON_API_Menus_Controller {	/**
 		if($blog){
 			$settings['blog'] = $blog;
 		}
-		if($blog){
+		if($sidebar){
 			$settings['sidebar'] = $sidebar;
 		}
 		return array('accounts' => $accounts, 'settings' => $settings);
