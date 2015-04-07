@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.72 Adding support for form types to aid in managing default form html
 * V 1.71 Fixing minor bug in new pdf properties
 * V 1.7 Adding mappings so that we can move to our new PDF embedder plugin
 * V 1.69 Fix for slugs switching back and forth on post update
