@@ -490,6 +490,7 @@ function th_display_pdf($atts){
 	}
 	if(!$show_image){
 		echo '<div><a href="'.$url.'">Download PDF</a></div>';
+		return;
 	}
 	if($download){
 		$fake_shortcode .= ']<a href="'.$url.'">Download PDF</a></div>';
