@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.73 Fixed small bug with margin on gallery slider images
 * V 1.72 Fixing a small bug with social widget settings on the sidebar
 * V 1.71 Fixing minor bug in new pdf properties
 * V 1.7 Adding mappings so that we can move to our new PDF embedder plugin
