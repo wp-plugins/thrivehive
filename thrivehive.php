@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.73
+   *Version: 1.74
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -1676,6 +1676,12 @@ function renderSocialStuff($content){
         $image = wp_get_attachment_url( get_post_thumbnail_id(get_the_ID()));
         if($image == ""){
             $image = get_header_image();
+            if($image != ""){
+            	list($width, $height, $type, $attr) = getimagesize($image);
+            	if($width < 84 || $height < 84){
+            		$image = "";
+            	}
+            }
         }
         if($image == ""){
             $image = includes_url("images/wlw/wp-watermark.png");

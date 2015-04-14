@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.74 Fixing a bug with pinterest pinning and images that are too small
 * V 1.73 Fixed small bug with margin on gallery slider images
 * V 1.72 Fixing a small bug with social widget settings on the sidebar
 * V 1.71 Fixing minor bug in new pdf properties
