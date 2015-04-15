@@ -88,6 +88,14 @@ body .sugar-slider {
 	float: right;
 }
 
+/*****************************************
+*  Fix For Aigning Nested Nav Menu Items *
+*****************************************/
+
+.nav-primary .sub-menu .sub-menu, .menu-primary li ul ul, .genesis-nav-menu .sub-menu .sub-menu, #nav li ul ul {
+	top: 0px;
+}
+
 /************************************
 *       Adorable                    *
 *************************************/
