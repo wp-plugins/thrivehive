@@ -119,6 +119,12 @@ class JSON_API_Menus_Controller {	/**
 		}
 
 		$ret = wp_get_nav_menu_items($_REQUEST['menu_id'], array());
+		foreach ($ret as $item) {
+			$page = get_post( (int) $item->object_id );
+			if($page){
+				$item->post_title = $page->post_title;
+			}
+		}
 
 		return array('menu_items' => $ret);
 	}
@@ -158,6 +164,7 @@ class JSON_API_Menus_Controller {	/**
 				if($item->ID == $current_item->ID)
 				{
 					$item_data = (array) wp_setup_nav_menu_item( get_post( $current_item->ID ) );
+					$page = get_post( (int) $current_item->object_id );
 					update_post_meta($current_item->ID, '_menu_item_menu_item_parent', (int) $item->menu_item_parent);
 					update_post_meta($current_item->ID, '_menu_item_url', $item->url);
 					$item_data['menu_order'] = $item->menu_order;
