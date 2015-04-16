@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.81 Minor bug fix with displaying PDF links only
 * V 1.8 Minor Release Featuring:
     * Added target setting to buttons
     * Added target setting to nav items

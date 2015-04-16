@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.8
+   *Version: 1.81
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -489,8 +489,7 @@ function th_display_pdf($atts){
 		return;
 	}
 	if(!$show_image){
-		echo '<div><a href="'.$url.'">Download PDF</a></div>';
-		return;
+		return do_shortcode('<div><a href="'.$url.'">Download PDF</a></div>');
 	}
 	if($download){
 		$fake_shortcode .= ']<a href="'.$url.'">Download PDF</a></div>';
