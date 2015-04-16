@@ -34,6 +34,10 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.8 Minor Release Featuring:
+    * Added target setting to buttons
+    * Added target setting to nav items
+    * Added links only for PDFs
 * V 1.74 Fixing a bug with pinterest pinning and images that are too small
 * V 1.73 Fixed small bug with margin on gallery slider images
 * V 1.72 Fixing a small bug with social widget settings on the sidebar
@@ -47,7 +51,6 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
     * Adding in endpoints for getting and setting genesis layout for pages.
     * Adding in sharing for pinterest and linked in on blog pages and phone widget header editing
     * Adding in plugin versioning checks to detect version issues in TH
-* V 1.66 Fix for slug overwriting existing slugs on duplicate titles
 * V 1.65 Fix for issues with PDF uploads and poor thumbnails for them
 * V 1.64 Fix for older PHP version
 * V 1.63 Adding dynamic logo tweaks

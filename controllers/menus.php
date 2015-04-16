@@ -46,19 +46,22 @@ class JSON_API_Menus_Controller {	/**
 		if(isset($_REQUEST['target_id'])){
 			$pages = $json_api->introspector->get_single_post($_REQUEST['target_id']);
 			$page = $pages[0];
+			$menu_item = $this->map_page($page);
+		}
+		else if(isset($_REQUEST['custom_url'])){
+			$menu_item = $this->map_custom_url($_REQUEST['custom_url'], $_REQUEST['title'], $_REQUEST['target']);
 		}
 		else{
 			$json_api->error("No target_id provided");
 		}
 
-			$menu_item = $this->map_page($page);
 			$menu_items = array($menu_item);
-
 
 			//save  call should be on an array
 			$saved_items = wp_save_nav_menu_items($nav_menu_id, $menu_items);
 
 			wp_update_nav_menu_item($nav_menu_id, $saved_items[0], $menu_item);
+			update_post_meta($saved_items[0]->ID, "_menu_item_target", $_REQUEST['target']);
 
 
 		return array(
@@ -116,6 +119,12 @@ class JSON_API_Menus_Controller {	/**
 		}
 
 		$ret = wp_get_nav_menu_items($_REQUEST['menu_id'], array());
+		foreach ($ret as $item) {
+			$page = get_post( (int) $item->object_id );
+			if($page){
+				$item->post_title = $page->post_title;
+			}
+		}
 
 		return array('menu_items' => $ret);
 	}
@@ -155,13 +164,14 @@ class JSON_API_Menus_Controller {	/**
 				if($item->ID == $current_item->ID)
 				{
 					$item_data = (array) wp_setup_nav_menu_item( get_post( $current_item->ID ) );
+					$page = get_post( (int) $current_item->object_id );
 					update_post_meta($current_item->ID, '_menu_item_menu_item_parent', (int) $item->menu_item_parent);
 					update_post_meta($current_item->ID, '_menu_item_url', $item->url);
 					$item_data['menu_order'] = $item->menu_order;
 					$item_data['title'] = $item->title;
 					$item_data['post_title'] = $item->title;
 					wp_update_post($item_data);
-					update_post_meta($item-ID, "_menu_item_target", $item->target);
+					update_post_meta($item->ID, "_menu_item_target", $item->target == null ? "_self" : $item->target);
 				}
 			}
 		}
@@ -216,6 +226,25 @@ class JSON_API_Menus_Controller {	/**
 			'menu-item-position' => 0,
 			'menu-item-type' => "post_type",
 			'menu-item-title' => $page['post_title']);
+
+		return $menu_item;
+	}
+
+	/**
+	*Maps a page to a menu item so that we can create it
+	*@param mixed[] $page the page to be mapped
+	*@api
+	*@return array containing all the menu item objects
+	**/
+	private function map_custom_url($custom_url, $title, $target){
+		$menu_item = array(
+			'menu-item-object' => "custom",
+			'menu-item-position' => 0,
+			'menu-item-type' => "custom",
+			'menu-item-title' => $title,
+			'menu-item-url' => $custom_url,
+			'menu-item-target' => $target
+		);
 
 		return $menu_item;
 	}
@@ -580,6 +609,9 @@ class JSON_API_Menus_Controller {	/**
 		if(!isset($_REQUEST['url'])){
 			$json_api->error("You must include the redirect `url` value");
 		}
+		if(!isset($_REQUEST['target'])){
+			$json_api->error("You must include the window `target` value");
+		}
 		/*if(!isset($_REQUEST['nonce'])){
 			$json_api->error("You must include the `nonce` value");
 		}*/
@@ -603,7 +635,8 @@ class JSON_API_Menus_Controller {	/**
 			'norm_text_color'=>$_REQUEST['norm_text_color'],
 			'hover_text_color'=>$_REQUEST['hover_text_color'],
 			'generated_css'=>$_REQUEST['generated_css'],
-			'url'=>$_REQUEST['url']
+			'url'=>$_REQUEST['url'],
+			'target'=>$_REQUEST['target']
 			);
 
 		$button = set_thrivehive_button($_REQUEST['id'], $data);
@@ -654,6 +687,9 @@ class JSON_API_Menus_Controller {	/**
 		if(!isset($_REQUEST['url'])){
 			$json_api->error("You must include the redirect `url` value");
 		}
+		if(!isset($_REQUEST['target'])){
+			$json_api->error("You must include the window `target` value");
+		}
 		/*if(!isset($_REQUEST['nonce'])){
 			$json_api->error("You must include the `nonce` value");
 		}*/
@@ -676,7 +712,8 @@ class JSON_API_Menus_Controller {	/**
 			'norm_text_color'=>$_REQUEST['norm_text_color'],
 			'hover_text_color'=>$_REQUEST['hover_text_color'],
 			'generated_css'=>$_REQUEST['generated_css'],
-			'url'=>$_REQUEST['url']
+			'url'=>$_REQUEST['url'],
+			'target'=>$_REQUEST['target']
 			);
 		$button = create_thrivehive_button($data);
 		return array('button' => $button);
@@ -1413,6 +1450,35 @@ class JSON_API_Menus_Controller {	/**
 		update_option('th_page_nav_autoadd', $value);
 
 		return array();
+	}
+	public function set_default_landing_form_id(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'set_default_landing_form_id');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+
+		if(!isset($_REQUEST['id'])){
+			$json_api->error("You must provide an `id` to set for the option");
+		}
+
+		update_option("th_default_landingform_id", $_REQUEST['id']);
+	}
+	public function get_default_landing_form_id(){
+		global $json_api;
+
+		$nonce_id = $json_api->get_nonce_id('menus', 'get_default_landing_form_id');
+		$nonce = wp_create_nonce($nonce_id);
+
+		if(!wp_verify_nonce($nonce, $nonce_id)){
+			$json_api->error("Your 	`nonce` value was incorrect");
+		}
+		$id = get_option("th_default_landingform_id");
+
+		return array('id' => $id);
 	}
 
 }
