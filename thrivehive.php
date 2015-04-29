@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.82
+   *Version: 1.83
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -1608,7 +1608,12 @@ class ThriveHiveSocialButtons extends WP_Widget {
 					}
 					if($linkedin){
 						$linkedin_icon = plugins_url('/images/icon-linkedin-32.png', __FILE__);
-						echo "<a target='_blank' href='$linkedin' style='margin-left: 10px'><img src='$linkedin_icon' /></a>";
+						if (strpos($linkedin, 'http') === 0) {
+							echo "<a target='_blank' href='$linkedin' style='margin-left: 10px'><img src='$linkedin_icon' /></a>";
+						}
+						else{
+							echo "<a target='_blank' href='https://$linkedin' style='margin-left: 10px'><img src='$linkedin_icon' /></a>";
+						}
 					}
 					if($yelp){
 						$yelp_icon = plugins_url('/images/icon-yelp-32.png', __FILE__);
@@ -1616,7 +1621,12 @@ class ThriveHiveSocialButtons extends WP_Widget {
 					}
 					if($googleplus){
 						$googleplus_icon = plugins_url('/images/icon-gplus-32.png', __FILE__);
-						echo "<a target='_blank' href='$googleplus' style='margin-left: 10px'><img src='$googleplus_icon' /></a>";
+						if (strpos($googleplus, 'http') === 0) {
+							echo "<a target='_blank' href='$googleplus' style='margin-left: 10px'><img src='$googleplus_icon' /></a>";
+						}
+						else{
+							echo "<a target='_blank' href='https://$googleplus' style='margin-left: 10px'><img src='$googleplus_icon' /></a>";
+						}
 					}
 					if($instagram){
 						$instagram_icon = plugins_url('/images/icon-instagram-32.png', __FILE__);
@@ -1633,11 +1643,22 @@ class ThriveHiveSocialButtons extends WP_Widget {
 					}
 					if($houzz){
 						$houzz_icon = plugins_url('/images/icon-houzz-32.png', __FILE__);
-						echo "<a target='_blank' href='$houzz' style='margin-left: 10px'><img src='$houzz_icon' /></a>";
+
+						if (strpos($houzz, 'http') === 0) {
+							echo "<a target='_blank' href='$houzz' style='margin-left: 10px'><img src='$houzz_icon' /></a>";
+						}
+						else{
+							echo "<a target='_blank' href='https://$houzz' style='margin-left: 10px'><img src='$houzz_icon' /></a>";
+						}
 					}
 					if($angieslist){
 						$angieslist_icon = plugins_url('/images/icon-angieslist-32.png', __FILE__);
-						echo "<a target='_blank' href='$angieslist' style='margin-left: 10px'><img src='$angieslist_icon' /></a>";
+						if (strpos($angieslist, 'http') === 0) {
+							echo "<a target='_blank' href='$angieslist' style='margin-left: 10px'><img src='$angieslist_icon' /></a>";
+						}
+						else{
+							echo "<a target='_blank' href='https://$angieslist' style='margin-left: 10px'><img src='$angieslist_icon' /></a>";
+						}
 					}
 					if($pinterest){
 						$pinterest_icon = plugins_url('/images/icon-pinterest-32.png', __FILE__);
@@ -1650,11 +1671,21 @@ class ThriveHiveSocialButtons extends WP_Widget {
 					}
 					if($foursquare){
 						$foursquare_icon = plugins_url('/images/icon-foursquare-32.png', __FILE__);
-						echo "<a target='_blank' href='$foursquare' style='margin-left: 10px'><img src='$foursquare_icon' /></a>";
+						if (strpos($foursquare, 'http') === 0) {
+							echo "<a target='_blank' href='$foursquare' style='margin-left: 10px'><img src='$foursquare_icon' /></a>";
+						}
+						else{
+							echo "<a target='_blank' href='https://$foursquare' style='margin-left: 10px'><img src='$foursquare_icon' /></a>";
+						}
 					}
                     if($tripadvisor){
                         $tripadvisor_icon = plugins_url('/images/icon-tripadvisor-32.png', __FILE__);
-                        echo "<a target='_blank' href='$tripadvisor' style='margin-left: 10px'><img src='$tripadvisor_icon' /></a>";
+                       	if (strpos($tripadvisor, 'http') === 0) {
+							echo "<a target='_blank' href='$tripadvisor' style='margin-left: 10px'><img src='$tripadvisor_icon' /></a>";
+						}
+						else{
+							echo "<a target='_blank' href='https://$tripadvisor' style='margin-left: 10px'><img src='$tripadvisor_icon' /></a>";
+						}
                     }
 				echo "</div>";
 				echo "</div>";
