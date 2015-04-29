@@ -36,7 +36,6 @@ class JSON_API_Posts_Controller {
     $categories = strtolower(str_replace('\\', '', $_REQUEST['categories']));
     $categories = json_decode($categories);
     $this->create_categories($categories);
-    $categories = implode(",", $categories);
     $_REQUEST['categories'] = $categories;
 
     nocache_headers();

@@ -141,7 +141,7 @@ class JSON_API_Post {
     }
 
     if (isset($values['categories'])) {
-      $categories = explode(',', $values['categories']);
+      $categories = $values['categories'];
       foreach ($categories as $category_slug) {
         $category_name = $category_slug;
         $category_slug = trim($category_slug);

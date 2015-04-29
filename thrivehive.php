@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.71
+   *Version: 1.82
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -16,7 +16,7 @@ add_action('init', 'version_check');
 
 function version_check(){
 	//UPDATE THIS WHEN WE MAKE VERSION CHANGES
-	$db_version = '1.72';
+	$db_version = '1.8';
 	$update = null;
 
 	$ver = get_option('thrivehive_vers');
@@ -497,7 +497,7 @@ function th_display_pdf($atts){
 		return;
 	}
 	if(!$show_image){
-		echo '<div><a href="'.$url.'">Download PDF</a></div>';
+		return do_shortcode('<div><a href="'.$url.'">Download PDF</a></div>');
 	}
 	if($download){
 		$fake_shortcode .= ']<a href="'.$url.'">Download PDF</a></div>';
