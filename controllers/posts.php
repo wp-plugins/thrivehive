@@ -87,10 +87,13 @@ class JSON_API_Posts_Controller {
     $categories = json_decode($categories);
     $this->create_categories($categories);
     $_REQUEST['categories'] = $categories;
+    if(!isset($_REQUEST["slug_update"])){
+      $slug_update = false;
+    }
 
     nocache_headers();
     $post = new JSON_API_Post($post);
-    $post->update($_REQUEST);
+    $post->update($_REQUEST, $slug_update);
     if(isset($_REQUEST['extra_type']))
     {
       update_post_meta($id, 'th_extra_type', $_REQUEST['extra_type']);

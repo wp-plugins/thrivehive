@@ -105,12 +105,12 @@ class JSON_API_Post {
     return $this->save($values);
   }
 
-  function update($values) {
+  function update($values, $slug_update = false) {
     $values['id'] = $this->id;
-    return $this->save($values);
+    return $this->save($values, $slug_update);
   }
 
-  function save($values = null) {
+  function save($values = null, $slug_update = false) {
     global $json_api, $user_ID;
 
     $wp_values = array();
@@ -182,9 +182,14 @@ class JSON_API_Post {
     }
 
     if (isset($wp_values['ID'])) {
-      add_filter('wp_insert_post_data', 'update_post_slug', 10, 2);
+      if($slug_update){
+        add_filter('wp_insert_post_data', 'update_post_slug', 10, 2);
+      }
       $this->id = wp_update_post($wp_values);
-      remove_filter('wp_insert_post_data', array(&$this, 'update_post_slug'));
+
+      if($slug_update){
+        remove_filter('wp_insert_post_data', array(&$this, 'update_post_slug'));
+      }
     } else {
       $this->id = wp_insert_post($wp_values);
     }

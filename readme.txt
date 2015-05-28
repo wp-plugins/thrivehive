@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.84 Temporarily removing auto slug generation when titles change
 * V 1.83
     * Fixed a bug with updating blog post categories
     * Fixed a bug with relative urls for social media links (patch for frontend bug)
