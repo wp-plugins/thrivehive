@@ -16,7 +16,7 @@ add_action('init', 'version_check');
 
 function version_check(){
 	//UPDATE THIS WHEN WE MAKE VERSION CHANGES
-	$db_version = '1.66';
+	$db_version = '1.8';
 	$update = null;
 
 	$ver = get_option('thrivehive_vers');
@@ -389,6 +389,7 @@ function th_display_form( $atts ){
 
 	$account_id = get_option('th_tracking_code');
 	if(!isset($atts['id'])){
+		if(!isset($atts['type'])){
 	 	$contact_form_id = get_option('th_contactform_id');
 
 		if( $contact_form_id ){
@@ -398,6 +399,13 @@ function th_display_form( $atts ){
 			 return get_option('th_form_html');
 		}
 	}
+		else{
+			//write query to get database form with the type and return the html
+			$form = get_default_form_by_type($atts['type']);
+			return $form['html'];
+		}
+	}
+
 	$id = $atts['id'];
 	$form = get_form_from_id($id);
 	$html = $form['html'];
@@ -848,6 +856,7 @@ function thrivehive_create_forms_db() {
 			id INT NOT NULL AUTO_INCREMENT,
 			th_id INT NOT NULL,
 			html TEXT NULL,
+			type VARCHAR(100) NULL,
 			PRIMARY KEY (id)
 			);";
 	if(!thrivehive_buttons_table_exists($table_name)){

@@ -1249,6 +1249,7 @@ class JSON_API_Menus_Controller {	/**
 
 		$th_id = $_REQUEST['th_id'];
 		$html = stripslashes($_REQUEST['html']);
+		$type = $_REQUEST['type'];
 
 		$form = get_form_from_id($th_id);
 
@@ -1256,7 +1257,7 @@ class JSON_API_Menus_Controller {	/**
 			update_thrivehive_form($th_id, $html);
 		}
 		else{
-			add_thrivehive_form($th_id, $html);
+			add_thrivehive_form($th_id, $html, $type);
 	  	}
 
 		return array();

@@ -5,9 +5,15 @@ function get_form_from_id($id){
 	return $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE th_id = %d;", $id), ARRAY_A);
 }
 
-function add_thrivehive_form($th_id, $html){
+function get_default_form_by_type($type){
 	global $wpdb;
-	$data = array('th_id' => $th_id, 'html' => $html);
+	$table_name = thrivehive_forms_table_name();
+	return $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE type = %d;", $type), ARRAY_A);
+}
+
+function add_thrivehive_form($th_id, $html, $type){
+	global $wpdb;
+	$data = array('th_id' => $th_id, 'html' => $html, 'type' => $type);
 	$table_name = thrivehive_forms_table_name();
 	$wpdb->insert($table_name, $data);
 }
