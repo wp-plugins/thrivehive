@@ -4,7 +4,8 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.85   *Author: ThriveHive
+   *Version: 1.9   
+   *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
 
