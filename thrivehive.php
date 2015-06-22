@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.9   
+   *Version: 1.91  
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -16,7 +16,8 @@ add_action('init', 'version_check');
 
 function version_check(){
 	//UPDATE THIS WHEN WE MAKE VERSION CHANGES
-	$db_version = '1.9';	$update = null;
+	$db_version = '1.91';	
+	$update = null;
 
 	$ver = get_option('thrivehive_vers');
 	if($ver != $db_version){
@@ -25,8 +26,8 @@ function version_check(){
 	if(!$ver || $update){
 		//update_option('thrivehive_vers', $db_version);
 		thrivehive_create_button_db($update);
-		thrivehive_create_theme_options_table();
-		thrivehive_create_forms_db();
+		thrivehive_create_theme_options_table($update);
+		thrivehive_create_forms_db($update);
 	}
 }
 
@@ -848,7 +849,7 @@ function thrivehive_create_button_db($version=null) {
 	}
 
 }
-function thrivehive_create_forms_db() {
+function thrivehive_create_forms_db($version=null) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . "TH_" . "forms";
 	$sql = "CREATE TABLE " . $table_name . " (
@@ -858,13 +859,13 @@ function thrivehive_create_forms_db() {
 			type VARCHAR(100) NULL,
 			PRIMARY KEY (id)
 			);";
-	if(!thrivehive_buttons_table_exists($table_name)){
+	if(!thrivehive_buttons_table_exists($table_name) || $version){
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 	}
 }
 
-function thrivehive_create_theme_options_table(){
+function thrivehive_create_theme_options_table($version=null){
 	global $wpdb;
 	$table_name = $wpdb->prefix . "TH_" . "theme_options";
 	$sql = "CREATE TABLE " . $table_name . "(
@@ -874,7 +875,7 @@ function thrivehive_create_theme_options_table(){
 			version INT(11) DEFAULT 0,
 			PRIMARY KEY (id)
 			);";
-	if(!thrivehive_buttons_table_exists($table_name)){
+	if(!thrivehive_buttons_table_exists($table_name) || $version){
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 	}
