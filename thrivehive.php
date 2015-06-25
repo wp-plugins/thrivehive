@@ -4,7 +4,7 @@
    *Plugin Name: ThriveHive
    *Plugin URI: http://thrivehive.com
    *Description: A plugin to include ThriveHive's tracking code
-   *Version: 1.82
+   *Version: 1.83
    *Author: ThriveHive
    *Author URI: http://thrivehive.com
    */
@@ -1811,4 +1811,32 @@ function genesis_custom_header_style_override() {
 	if ( $output )
 		printf( '<style type="text/css">%s</style>' . "\n", $output );
 
+}
+
+add_action('wp_insert_comment', 'th_comment_inserted', 99, 2);
+function th_comment_inserted($comment_id, $comment_object) {
+	if($comment_object->user_id == 0){
+		$post = get_post($comment_object->comment_post_ID);
+		$comment_object->post_title = $post->post_title;
+		$comment_json = json_encode($comment_object);
+		$api_key = get_option("th_api_key");
+		$env = 'localhost:9100';
+		if(!$env){
+			$env = "my.thrivehive.com";
+		}
+		if(!$api_key){
+			$web_tracker = get_option("th_tracking_code");
+			$api_resp = wp_remote_post("http://$env/blogwebhook/GenerateWordpressApiKey",
+				array("body" =>
+					array("webTracker" => $web_tracker)
+			));
+			$api_decoded = json_decode($api_resp["body"],true);
+			if($api_decoded["message"] != "error"){
+				$api_key = $api_decoded["payload"];
+				update_option("th_api_key", $api_key);
+			}
+		}
+		wp_remote_post("http://$env/blogwebhook/insertblogcomment", array("body"
+			=> array("apiKey" => $api_key, "commentObject" => $comment_json)));
+	}
 }
