@@ -1857,7 +1857,7 @@ function th_comment_inserted($comment_id, $comment_object) {
 		$comment_object->post_title = $post->post_title;
 		$comment_json = json_encode($comment_object);
 		$api_key = get_option("th_api_key");
-		$env = 'localhost:9100';
+		$env = get_option('th_environment');
 		if(!$env){
 			$env = "my.thrivehive.com";
 		}
