@@ -1850,9 +1850,9 @@ function genesis_custom_header_style_override() {
 
 }
 
-add_action('wp_insert_comment', 'th_comment_inserted', 99, 2);
+add_action('wp_insert_comment', 'th_comment_inserted', 99, 500);
 function th_comment_inserted($comment_id, $comment_object) {
-	if($comment_object->user_id == 0){
+	if($comment_object->user_id == 0 && $comment_object->comment_approved != "spam"){
 		$post = get_post($comment_object->comment_post_ID);
 		$comment_object->post_title = $post->post_title;
 		$comment_json = json_encode($comment_object);
