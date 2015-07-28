@@ -34,6 +34,7 @@ Answer: There are two ways to insert the forms and phone numbers. The first uses
 
 
 == Changelog ==
+* V 1.94 Fixing a bug with pdf uploads
 * V 1.93 Blocking comments marked as spam from syndicating
 * V 1.92 Syndicating blog comments
 * V 1.91 Fixing a bug with the update call when we upgrade tables

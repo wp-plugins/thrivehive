@@ -226,7 +226,8 @@ class JSON_API_Posts_Controller {
         unset($_FILES['attachment']);
         $output_image_url = $upload_dir['baseurl']."/$PDF_UPLOAD_DIR/$file_name";
         update_post_meta($id, "th_pdf_thumbnail", $output_image_url);
-        return array('id' => $id, 'thumbnail' => $output_image_url, 'url' => $wp_get_attachment_url($id));
+        $url = wp_get_attachment_url($id);
+        return array('id' => $id, 'thumbnail' => $output_image_url, 'url' => $url);
       }
 
       unset($_FILES['attachment']);
